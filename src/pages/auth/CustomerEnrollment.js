@@ -23,7 +23,12 @@ import { Navigate } from 'react-router-dom';
 
 // Redux
 import { useDispatch, useSelector } from 'react-redux';
-import { signUpUser, createUser, clearUserData } from 'store/slices/userSlice';
+import {
+  signUpUser,
+  createUser,
+  updateUser,
+  clearUserData,
+} from 'store/slices/userSlice';
 import { createCustomer } from 'store/slices/customerSlice';
 
 export default function CustomerEnrollment() {
@@ -39,6 +44,7 @@ export default function CustomerEnrollment() {
   const { data, loading, isAuthenticated, error } = useSelector(
     (state) => state.user
   );
+  const { data: dataCustomer } = useSelector((state) => state.customer);
 
   const handleClickShowPassword = () => setShowPassword((show) => !show);
 
@@ -75,8 +81,20 @@ export default function CustomerEnrollment() {
       const { email, fullName } = getValues();
       dispatch(
         createUser({ email, uid: data.uid, fullName, userType: 'customer' })
-      );
-      dispatch(createCustomer({ testTitle: 'test title', ownerId: data.uid }));
+      ).then(() => {
+        dispatch(
+          createCustomer({ testTitle: 'test title', ownerId: data.uid })
+        ).then((action) => {
+          console.log(action);
+          const {
+            payload: { uid },
+          } = action;
+          const updateData = {
+            customerId: uid,
+          };
+          dispatch(updateUser({ uid: data.uid, updateData }));
+        });
+      });
     }
   }, [data]);
 

@@ -102,20 +102,49 @@ app.post('/create-customer', async (req, res) => {
     const newCustomer = {
       recordOwner: ownerId,
       testTitle,
+      uid: '',
     };
+
     const newCustomerRef = await admin
       .firestore()
       .collection('customer')
       .add(newCustomer);
+
+    // Retrieve the document ID
+    const customerId = newCustomerRef.id;
+    await newCustomerRef.update({ uid: customerId });
+
     // Retrieve the created customer data from Firestore
     const createdCustomerDoc = await newCustomerRef.get();
     const createdCustomer = createdCustomerDoc.data();
+
     return res.status(201).json({
       message: 'Customer document created successfully',
       customer: createdCustomer,
     });
   } catch (error) {
     console.error('Error creating customer document', error);
+    return res.status(500).json({ message: 'Internal Server Error' });
+  }
+});
+
+app.get('/get-customer-details', async (req, res) => {
+  try {
+    const customerId = req.query.uid;
+    const customerRef = admin
+      .firestore()
+      .collection('customer')
+      .doc(customerId);
+    const customerDoc = await customerRef.get();
+
+    if (!customerDoc.exists) {
+      return res.status(404).json({ message: 'Customer not found' });
+    }
+
+    const customerDetails = customerDoc.data();
+    return res.status(200).json(customerDetails);
+  } catch (error) {
+    console.error('Error retrieving customer details:', error);
     return res.status(500).json({ message: 'Internal Server Error' });
   }
 });
@@ -128,20 +157,49 @@ app.post('/create-contractor', async (req, res) => {
     const newContractor = {
       recordOwner: ownerId,
       testTitle,
+      uid: '',
     };
+
     const newContractorRef = await admin
       .firestore()
       .collection('contractor')
       .add(newContractor);
+
+    // Retrieve the document ID
+    const contractorId = newContractorRef.id;
+    await newContractorRef.update({ uid: contractorId });
+
     // Retrieve the created contractor data from Firestore
     const createdContractorDoc = await newContractorRef.get();
     const createdContractor = createdContractorDoc.data();
+
     return res.status(201).json({
       message: 'Contractor document created successfully',
       contractor: createdContractor,
     });
   } catch (error) {
     console.error('Error creating contractor document', error);
+    return res.status(500).json({ message: 'Internal Server Error' });
+  }
+});
+
+app.get('/get-contractor-details', async (req, res) => {
+  try {
+    const contractorId = req.query.uid;
+    const contractorRef = admin
+      .firestore()
+      .collection('contractor')
+      .doc(contractorId);
+    const contractorDoc = await contractorRef.get();
+
+    if (!contractorDoc.exists) {
+      return res.status(404).json({ message: 'Contractor not found' });
+    }
+
+    const contractorDetails = contractorDoc.data();
+    return res.status(200).json(contractorDetails);
+  } catch (error) {
+    console.error('Error retrieving contractor details:', error);
     return res.status(500).json({ message: 'Internal Server Error' });
   }
 });

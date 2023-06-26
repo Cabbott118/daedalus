@@ -17,9 +17,25 @@ const createCustomer = createAsyncThunk(
         ownerId,
         testTitle,
       });
+      console.log(response);
       return response.customer;
     } catch (error) {
       throw new Error('Failed to create customer data.');
+    }
+  }
+);
+
+// Async thunk to fetch contractor data
+// const uid = '123'
+// dispatch(fetchCustomer(uid));
+const fetchCustomer = createAsyncThunk(
+  'contractor/fetchCustomer',
+  async (uid) => {
+    try {
+      const response = await get('/get-customer-details', { uid });
+      return response;
+    } catch {
+      throw new Error('Failed to fetch customer data.');
     }
   }
 );
@@ -70,4 +86,4 @@ const customerSlice = createSlice({
 
 // Export the async thunk and reducer
 export const { reducer: customerReducer } = customerSlice;
-export { createCustomer, clearCustomerData };
+export { createCustomer, fetchCustomer, clearCustomerData };

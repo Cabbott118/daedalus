@@ -23,7 +23,12 @@ import { Navigate } from 'react-router-dom';
 
 // Redux
 import { useDispatch, useSelector } from 'react-redux';
-import { signUpUser, createUser, clearUserData } from 'store/slices/userSlice';
+import {
+  signUpUser,
+  createUser,
+  updateUser,
+  clearUserData,
+} from 'store/slices/userSlice';
 import { createContractor } from 'store/slices/contractorSlice';
 
 export default function ContractorEnrollment() {
@@ -75,10 +80,20 @@ export default function ContractorEnrollment() {
       const { email, fullName } = getValues();
       dispatch(
         createUser({ email, uid: data.uid, fullName, userType: 'contractor' })
-      );
-      dispatch(
-        createContractor({ testTitle: 'test title', ownerId: data.uid })
-      );
+      ).then(() => {
+        dispatch(
+          createContractor({ testTitle: 'test title', ownerId: data.uid })
+        ).then((action) => {
+          console.log(action);
+          const {
+            payload: { uid },
+          } = action;
+          const updateData = {
+            contractorId: uid,
+          };
+          dispatch(updateUser({ uid: data.uid, updateData }));
+        });
+      });
     }
   }, [data]);
 
