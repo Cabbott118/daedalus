@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 // Components
 import DeleteDialog from 'pages/dashboard/components/DeleteDialog';
 import UpdateDialog from 'pages/dashboard/components/UpdateDialog';
+import AccountComponent from 'pages/dashboard/components/AccountComponent';
 import Logout from 'components/common/Logout';
 
 // Helpers
@@ -24,6 +25,7 @@ import { Person, LocationOn, CreditCard, Security } from '@mui/icons-material';
 // Redux
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchUser } from 'store/slices/userSlice';
+import AddressComponent from './components/AddressComponent';
 
 export default function Dashboard() {
   const theme = useTheme();
@@ -66,9 +68,10 @@ export default function Dashboard() {
   }, []);
 
   const renderContent = () => {
-    if (activeItem === 'Account') return <div>Account</div>;
-    if (activeItem === 'Address') return <div>Address</div>;
-    if (activeItem === 'Payment details') return <div>Payment details</div>;
+    if (activeItem === 'Account') return <AccountComponent uid={data?.uid} />;
+    if (activeItem === 'Address') return <AddressComponent uid={data?.uid} />;
+    if (activeItem === 'Payment details')
+      return <div>Placeholder for Payment details</div>;
     return <div>Security</div>;
   };
 
