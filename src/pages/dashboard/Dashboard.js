@@ -34,86 +34,79 @@ export default function Dashboard() {
     ? `${data.fullName.firstName}'s Dashboard`
     : 'Dashboard';
 
+  const [activeItem, setActiveItem] = useState('Account');
+  const dashboardNavList = [
+    {
+      text: 'Account',
+    },
+    {
+      text: 'Address',
+    },
+    {
+      text: 'Payment method',
+    },
+    {
+      text: 'Security',
+    },
+  ];
+
+  const handleItemClick = (item) => {
+    setActiveItem(item);
+  };
+
   useEffect(() => {
     if (data && data.uid) {
       dispatch(fetchUser(data.uid));
+      console.log(data);
     }
   }, []);
 
+  const renderContent = () => {
+    if (activeItem === 'Account') return <div>Account</div>;
+    if (activeItem === 'Address') return <div>Address</div>;
+    if (activeItem === 'Payment method') return <div>Payment method</div>;
+    return <div>Security</div>;
+  };
+
   return (
-    <Container maxWidth='sm'>
-      <Paper>
-        <Grid
-          container
-          direction='column'
-          justifyContent='center'
-          alignItems='center'
-          sx={{ bgcolor: theme.palette.primary.light, borderRadius: '4px' }}
-        >
-          <Grid
-            item
-            sx={{
-              my: '1rem',
-            }}
-          >
-            <Avatar
-              alt={data?.fullName?.firstName}
-              sx={{
-                width: 100,
-                height: 100,
-                bgcolor: theme.palette.primary.main,
-                mb: '-4rem',
-              }}
-            >
-              {getUserInitials(data?.fullName)}
-            </Avatar>
-          </Grid>
-        </Grid>
-        <Grid
-          container
-          direction='column'
-          justifyContent='center'
-          alignItems='center'
-          sx={{ mt: '3rem' }}
-        >
-          <Grid
-            item
-            sx={{
-              mt: '1rem',
-            }}
-          >
-            {!loading ? (
-              <Typography
-                variant='h4'
-                component='h1'
-                sx={{ color: theme.palette.secondary.dark }}
-              >
-                {data?.fullName?.firstName} {data?.fullName?.lastName}
-              </Typography>
-            ) : (
-              <Skeleton variant='rounded' width='15rem' height='4rem' />
-            )}
+    <Container maxWidth='md'>
+      <Grid container spacing={2}>
+        <Grid item container direction='column' xs={12} sm={4} spacing={2}>
+          <Grid item>
+            <Typography variant='h6'>Settings</Typography>
           </Grid>
           <Grid item>
-            <Typography
-              variant='p'
-              component='p'
-              sx={{ color: theme.palette.secondary.main }}
-            >
-              {data?.email}
-            </Typography>
-          </Grid>
-          <Grid item sx={{ m: '3rem 0 1rem' }}>
-            <Logout />
-          </Grid>
-          <Grid item sx={{ m: '3rem 0 1rem' }}>
-            <UpdateDialog userId={data?.uid} />
-          </Grid>
-          <Grid item sx={{ m: '3rem 0 1rem' }}>
-            <DeleteDialog userId={data?.uid} />
+            <Paper>
+              <Grid container>
+                {dashboardNavList.map((navListItem) => (
+                  <Grid item xs={12} key={navListItem.text}>
+                    <Button
+                      fullWidth
+                      variant={
+                        activeItem === navListItem.text ? 'contained' : 'text'
+                      }
+                      onClick={() => handleItemClick(navListItem.text)}
+                      sx={{ textTransform: 'none' }}
+                    >
+                      {navListItem.text}
+                    </Button>
+                  </Grid>
+                ))}
+              </Grid>
+            </Paper>
           </Grid>
         </Grid>
-      </Paper>
+
+        <Grid item container direction='column' xs={12} sm={8} spacing={2}>
+          <Grid item>
+            <Typography variant='h6'>{activeItem}</Typography>
+          </Grid>
+
+          <Grid item>
+            <Paper>{renderContent()}</Paper>
+          </Grid>
+        </Grid>
+      </Grid>
     </Container>
   );
 }

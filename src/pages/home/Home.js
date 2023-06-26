@@ -21,7 +21,6 @@ export default function Home() {
   useEffect(() => {
     if (data && data.uid) {
       dispatch(fetchUser(data.uid));
-      console.log(data);
     }
   }, []);
 
