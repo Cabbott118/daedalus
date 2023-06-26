@@ -1,8 +1,5 @@
 import { Navigate, useLocation } from 'react-router-dom';
 
-// Firebase
-// import { useSigninCheck } from 'reactfire';
-
 // Redux
 import { useSelector } from 'react-redux';
 

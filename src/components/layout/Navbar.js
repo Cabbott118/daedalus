@@ -50,7 +50,7 @@ export default function Navbar() {
       if (user) {
         setNavLinks([
           {
-            name: `${data?.legalName?.firstName ?? 'Profile'}`,
+            name: `${data?.fullName?.firstName ?? 'Profile'}`,
             onClick: handleMenu,
             icon: ArrowDropDownIcon,
           },
@@ -64,6 +64,7 @@ export default function Navbar() {
           {
             name: 'Signup',
             route: routes.SIGNUP,
+            buttonType: 'contained',
           },
         ]);
       }
@@ -84,7 +85,7 @@ export default function Navbar() {
                 <Button
                   sx={{
                     textTransform: 'none',
-                    color: theme.palette.secondary.dark,
+                    // color: theme.palette.secondary.dark,
                   }}
                 >
                   Home
@@ -95,9 +96,10 @@ export default function Navbar() {
                 <Link key={navLink.name} to={navLink.route}>
                   <Button
                     onClick={navLink.onClick}
+                    variant={navLink.buttonType}
                     sx={{
                       textTransform: 'none',
-                      color: theme.palette.secondary.dark,
+                      // color: theme.palette.secondary.dark,
                     }}
                   >
                     {navLink.name} {navLink.icon && <navLink.icon />}
@@ -126,9 +128,7 @@ export default function Navbar() {
                   Dashboard
                 </MenuItem>
                 <Divider />
-                <MenuItem>
-                  <Logout />
-                </MenuItem>
+                <MenuItem>{/* <Logout /> */}</MenuItem>
               </Menu>
             </Toolbar>
           </AppBar>

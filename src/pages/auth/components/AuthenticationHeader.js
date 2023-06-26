@@ -13,13 +13,13 @@ const AuthenticationHeader = ({ title }) => {
         mb: 3,
         display: 'flex',
         flexDirection: 'column',
-        alignItems: 'center',
+        // alignItems: 'center',
       }}
     >
-      <Avatar sx={{ m: 1, bgcolor: theme.palette.secondary.main }}>
+      {/* <Avatar sx={{ m: 1, bgcolor: theme.palette.secondary.main }}>
         <LockOutlinedIcon />
-      </Avatar>
-      <Typography component='h1' variant='h5'>
+      </Avatar> */}
+      <Typography component='h1' variant='h3'>
         {title}
       </Typography>
     </Box>

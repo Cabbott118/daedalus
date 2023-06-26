@@ -6,7 +6,9 @@ import { useNavigate, useLocation } from 'react-router-dom';
 
 // Redux
 import { useDispatch } from 'react-redux';
-import { clearData, logoutUser } from 'store/slices/userSlice';
+import { clearUserData, logoutUser } from 'store/slices/userSlice';
+import { clearCustomerData } from 'store/slices/customerSlice';
+import { clearContractorData } from 'store/slices/contractorSlice';
 
 // Routes
 import routes from 'constants/routes';
@@ -19,7 +21,9 @@ export default function Logout() {
   function handleLogout(event) {
     event.preventDefault();
     dispatch(logoutUser());
-    dispatch(clearData());
+    dispatch(clearUserData());
+    dispatch(clearCustomerData());
+    dispatch(clearContractorData());
     navigate(routes.LOGIN, { state: { from: location } });
   }
 

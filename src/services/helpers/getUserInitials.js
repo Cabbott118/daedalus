@@ -1,11 +1,11 @@
 // Function to get user initials
-export default function getUserInitials(legalName) {
-  if (!legalName) {
+export default function getUserInitials(fullName) {
+  if (!fullName) {
     return '';
   }
 
-  const firstNameInitial = legalName.firstName ? legalName.firstName[0] : '';
-  const lastNameInitial = legalName.lastName ? legalName.lastName[0] : '';
+  const firstNameInitial = fullName.firstName ? fullName.firstName[0] : '';
+  const lastNameInitial = fullName.lastName ? fullName.lastName[0] : '';
 
   return `${firstNameInitial}${lastNameInitial}`;
 }

@@ -10,7 +10,7 @@ import {
   signup,
   logout,
   deleteCredentials,
-} from 'services/userServices';
+} from 'services/firebaseServices';
 
 // Async thunk to log in a user
 const loginUser = createAsyncThunk(
@@ -58,7 +58,7 @@ const logoutUser = createAsyncThunk(
 const deleteUser = createAsyncThunk('user/deleteUser', async (uid) => {
   try {
     await deleteCredentials();
-    const response = await del('/deleteUserRecord', { uid });
+    const response = await del('/delete-user', { uid });
     return response;
   } catch (error) {
     throw new Error('Failed to delete user data.');
@@ -73,9 +73,14 @@ const deleteUser = createAsyncThunk('user/deleteUser', async (uid) => {
 // dispatch(createUser({ email, uid }));
 const createUser = createAsyncThunk(
   'user/createUser',
-  async ({ email, uid, legalName }) => {
+  async ({ email, uid, fullName, userType }) => {
     try {
-      const response = await post('/createUser', { email, uid, legalName });
+      const response = await post('/create-user', {
+        email,
+        uid,
+        fullName,
+        userType,
+      });
       return response.user;
     } catch (error) {
       throw new Error('Failed to create user data.');
@@ -88,7 +93,7 @@ const createUser = createAsyncThunk(
 // dispatch(fetchUser(uid));
 const fetchUser = createAsyncThunk('user/fetchUser', async (uid) => {
   try {
-    const response = await get('/getUserDetails', { uid });
+    const response = await get('/get-user-details', { uid });
     return response;
   } catch (error) {
     throw new Error('Failed to fetch user data.');
@@ -109,7 +114,7 @@ const updateUser = createAsyncThunk(
   'user/updateUser',
   async ({ uid, updateData }) => {
     try {
-      const response = await patch('/updateUser', { uid, updateData });
+      const response = await patch('/update-user', { uid, updateData });
       return response.user;
     } catch (error) {
       throw new Error('Failed to update user data.');
@@ -118,7 +123,7 @@ const updateUser = createAsyncThunk(
 );
 
 // Action to clear user data, typically after logout
-const clearData = createAction('user/clearData');
+const clearUserData = createAction('user/clearUserData');
 
 const userSlice = createSlice({
   name: 'user',
@@ -129,7 +134,7 @@ const userSlice = createSlice({
     error: null,
   },
   reducers: {
-    clearData: (state) => {
+    clearUserData: (state) => {
       return {
         data: null,
         isAuthenticated: false,
@@ -300,5 +305,5 @@ export {
   createUser,
   fetchUser,
   updateUser,
-  clearData,
+  clearUserData,
 };

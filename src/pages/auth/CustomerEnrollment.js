@@ -24,9 +24,10 @@ import { Navigate } from 'react-router-dom';
 // Redux
 import { useDispatch, useSelector } from 'react-redux';
 import { signUpUser, createUser, clearUserData } from 'store/slices/userSlice';
+import { createCustomer } from 'store/slices/customerSlice';
 
-export default function Signup() {
-  const pageName = 'Sign up';
+export default function CustomerEnrollment() {
+  const pageName = 'Sign up as a Customer';
   document.title = pageName;
 
   const [showPassword, setShowPassword] = useState(false);
@@ -72,7 +73,10 @@ export default function Signup() {
   useEffect(() => {
     if (data?.uid) {
       const { email, fullName } = getValues();
-      dispatch(createUser({ email, uid: data.uid, fullName }));
+      dispatch(
+        createUser({ email, uid: data.uid, fullName, userType: 'customer' })
+      );
+      dispatch(createCustomer({ testTitle: 'test title', ownerId: data.uid }));
     }
   }, [data]);
 

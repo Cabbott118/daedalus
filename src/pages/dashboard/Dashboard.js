@@ -30,8 +30,8 @@ export default function Dashboard() {
   const dispatch = useDispatch();
   const { data, loading } = useSelector((state) => state.user);
 
-  document.title = data?.legalName?.firstName
-    ? `${data.legalName.firstName}'s Dashboard`
+  document.title = data?.fullName?.firstName
+    ? `${data.fullName.firstName}'s Dashboard`
     : 'Dashboard';
 
   useEffect(() => {
@@ -57,7 +57,7 @@ export default function Dashboard() {
             }}
           >
             <Avatar
-              alt={data?.legalName?.firstName}
+              alt={data?.fullName?.firstName}
               sx={{
                 width: 100,
                 height: 100,
@@ -65,7 +65,7 @@ export default function Dashboard() {
                 mb: '-4rem',
               }}
             >
-              {getUserInitials(data?.legalName)}
+              {getUserInitials(data?.fullName)}
             </Avatar>
           </Grid>
         </Grid>
@@ -88,7 +88,7 @@ export default function Dashboard() {
                 component='h1'
                 sx={{ color: theme.palette.secondary.dark }}
               >
-                {data?.legalName?.firstName} {data?.legalName?.lastName}
+                {data?.fullName?.firstName} {data?.fullName?.lastName}
               </Typography>
             ) : (
               <Skeleton variant='rounded' width='15rem' height='4rem' />

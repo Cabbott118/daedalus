@@ -49,9 +49,9 @@ const DeleteDialog = ({ userId: uid }) => {
 
   const { register, handleSubmit } = useForm({
     defaultValues: {
-      legalName: {
-        firstName: data?.legalName?.firstName,
-        lastName: data?.legalName?.lastName,
+      fullName: {
+        firstName: data?.fullName?.firstName,
+        lastName: data?.fullName?.lastName,
       },
       email: data?.email,
     },
@@ -60,9 +60,9 @@ const DeleteDialog = ({ userId: uid }) => {
   const onSubmit = (data) => {
     console.log(data);
     const updateData = {
-      legalName: {
-        firstName: data.legalName.firstName,
-        lastName: data.legalName.lastName,
+      fullName: {
+        firstName: data.fullName.firstName,
+        lastName: data.fullName.lastName,
       },
       email: data.email,
     };
@@ -92,13 +92,13 @@ const DeleteDialog = ({ userId: uid }) => {
                   <TextField
                     autoFocus
                     label='First Name'
-                    {...register('legalName.firstName')}
+                    {...register('fullName.firstName')}
                   />
                 </Grid>
                 <Grid item xs={6}>
                   <TextField
                     label='Last Name'
-                    {...register('legalName.lastName')}
+                    {...register('fullName.lastName')}
                   />
                 </Grid>
                 <Grid item xs={12}>

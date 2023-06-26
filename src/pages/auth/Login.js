@@ -22,7 +22,8 @@ import { Navigate } from 'react-router-dom';
 
 // Redux
 import { useDispatch, useSelector } from 'react-redux';
-import { loginUser, clearData } from 'store/slices/userSlice';
+import { loginUser, clearUserData } from 'store/slices/userSlice';
+import { fetchContractor } from 'store/slices/contractorSlice';
 
 export default function Login() {
   const pageName = 'Login';
@@ -47,7 +48,7 @@ export default function Login() {
 
   const onSubmit = (data) => {
     const { email, password } = data;
-    dispatch(clearData());
+    dispatch(clearUserData());
     dispatch(loginUser({ email, password }));
   };
 
@@ -56,11 +57,11 @@ export default function Login() {
       setErrorMessage(errorTransformer(error));
       setIsAlertShowing(true);
       setTimeout(() => {
-        dispatch(clearData());
+        dispatch(clearUserData());
         setIsAlertShowing(false);
       }, 5000);
     }
-  }, [error]);
+  }, [error, data]);
 
   if (isAuthenticated) {
     return <Navigate to={routes.HOME} replace />;

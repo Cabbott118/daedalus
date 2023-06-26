@@ -41,6 +41,28 @@ const AuthenticationFooter = ({ type }) => {
         </Grid>
       );
 
+    case 'Sign up as a Customer':
+      return (
+        <Grid container justifyContent='flex-end' sx={{ mt: '1rem' }}>
+          <Grid item>
+            <Link to={routes.LOGIN} style={linkStyles}>
+              Already have an account? Sign in
+            </Link>
+          </Grid>
+        </Grid>
+      );
+
+    case 'Sign up as a Contractor':
+      return (
+        <Grid container justifyContent='flex-end' sx={{ mt: '1rem' }}>
+          <Grid item>
+            <Link to={routes.LOGIN} style={linkStyles}>
+              Already have an account? Sign in
+            </Link>
+          </Grid>
+        </Grid>
+      );
+
     default:
       return;
   }
