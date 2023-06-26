@@ -19,6 +19,7 @@ import {
   Typography,
   useTheme,
 } from '@mui/material';
+import { Person, LocationOn, CreditCard, Security } from '@mui/icons-material';
 
 // Redux
 import { useDispatch, useSelector } from 'react-redux';
@@ -38,15 +39,19 @@ export default function Dashboard() {
   const dashboardNavList = [
     {
       text: 'Account',
+      icon: Person,
     },
     {
       text: 'Address',
+      icon: LocationOn,
     },
     {
-      text: 'Payment method',
+      text: 'Payment details',
+      icon: CreditCard,
     },
     {
       text: 'Security',
+      icon: Security,
     },
   ];
 
@@ -57,14 +62,13 @@ export default function Dashboard() {
   useEffect(() => {
     if (data && data.uid) {
       dispatch(fetchUser(data.uid));
-      console.log(data);
     }
   }, []);
 
   const renderContent = () => {
     if (activeItem === 'Account') return <div>Account</div>;
     if (activeItem === 'Address') return <div>Address</div>;
-    if (activeItem === 'Payment method') return <div>Payment method</div>;
+    if (activeItem === 'Payment details') return <div>Payment details</div>;
     return <div>Security</div>;
   };
 
@@ -76,24 +80,36 @@ export default function Dashboard() {
             <Typography variant='h6'>Settings</Typography>
           </Grid>
           <Grid item>
-            <Paper>
-              <Grid container>
-                {dashboardNavList.map((navListItem) => (
-                  <Grid item xs={12} key={navListItem.text}>
+            <Grid container>
+              {dashboardNavList.map((navListItem) => (
+                <Grid item xs={12} key={navListItem.text} sx={{ m: 0.5 }}>
+                  <Paper variant='outlined'>
                     <Button
+                      startIcon={
+                        <navListItem.icon
+                          color={
+                            activeItem === navListItem.text
+                              ? 'primary'
+                              : 'disabled'
+                          }
+                        />
+                      }
                       fullWidth
                       variant={
-                        activeItem === navListItem.text ? 'contained' : 'text'
+                        activeItem === navListItem.text ? 'outlined' : 'text'
                       }
                       onClick={() => handleItemClick(navListItem.text)}
-                      sx={{ textTransform: 'none' }}
+                      sx={{
+                        textTransform: 'none',
+                        justifyContent: 'flex-start',
+                      }}
                     >
                       {navListItem.text}
                     </Button>
-                  </Grid>
-                ))}
-              </Grid>
-            </Paper>
+                  </Paper>
+                </Grid>
+              ))}
+            </Grid>
           </Grid>
         </Grid>
 
@@ -102,8 +118,8 @@ export default function Dashboard() {
             <Typography variant='h6'>{activeItem}</Typography>
           </Grid>
 
-          <Grid item>
-            <Paper>{renderContent()}</Paper>
+          <Grid item sx={{ m: 0.5 }}>
+            <Paper variant='outlined'>{renderContent()}</Paper>
           </Grid>
         </Grid>
       </Grid>
