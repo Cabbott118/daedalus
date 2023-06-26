@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import DeleteDialog from 'pages/dashboard/components/DeleteDialog';
 import UpdateDialog from 'pages/dashboard/components/UpdateDialog';
 import AccountComponent from 'pages/dashboard/components/AccountComponent';
+import AddressComponent from 'pages/dashboard/components/AddressComponent';
 import Logout from 'components/common/Logout';
 
 // Helpers
@@ -25,7 +26,8 @@ import { Person, LocationOn, CreditCard, Security } from '@mui/icons-material';
 // Redux
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchUser } from 'store/slices/userSlice';
-import AddressComponent from './components/AddressComponent';
+import { fetchContractor } from 'store/slices/contractorSlice';
+import { fetchCustomer } from 'store/slices/customerSlice';
 
 export default function Dashboard() {
   const theme = useTheme();
@@ -64,6 +66,11 @@ export default function Dashboard() {
   useEffect(() => {
     if (data && data.uid) {
       dispatch(fetchUser(data.uid));
+      if (data.userType === 'customer') {
+        fetchCustomer(data.customerId);
+      } else {
+        fetchContractor(data.contractorId);
+      }
     }
   }, []);
 
@@ -124,6 +131,10 @@ export default function Dashboard() {
           <Grid item sx={{ m: 0.5 }}>
             <Paper variant='outlined'>{renderContent()}</Paper>
           </Grid>
+        </Grid>
+
+        <Grid item>
+          <Logout />
         </Grid>
       </Grid>
     </Container>

@@ -1,6 +1,7 @@
 import {
   signInWithEmailAndPassword,
   createUserWithEmailAndPassword,
+  updateEmail,
   deleteUser,
 } from 'firebase/auth';
 
@@ -45,6 +46,21 @@ export const logout = async () => {
   try {
     await auth.signOut();
   } catch (error) {
+    throw new Error(error.message);
+  }
+};
+
+// Function to update user's email address
+export const changeEmail = async (email) => {
+  try {
+    const user = auth.currentUser;
+    if (user) {
+      await updateEmail(user, email);
+    } else {
+      throw new Error('User not found.');
+    }
+  } catch (error) {
+    console.error(error);
     throw new Error(error.message);
   }
 };
