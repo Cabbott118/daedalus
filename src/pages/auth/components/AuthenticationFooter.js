@@ -22,11 +22,11 @@ const AuthenticationFooter = ({ type }) => {
               Forgot password?
             </Link>
           </Grid>
-          <Grid item>
+          {/* <Grid item>
             <Link to={routes.SIGNUP} style={linkStyles}>
               Don't have an account? Sign up
             </Link>
-          </Grid>
+          </Grid> */}
         </Grid>
       );
 

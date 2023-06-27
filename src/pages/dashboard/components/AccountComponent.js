@@ -29,7 +29,7 @@ const AccountComponent = ({ uid }) => {
   );
 
   const handleEditSwitch = () => {
-    setEditMode(true);
+    setEditMode(!editMode);
   };
 
   const { register, handleSubmit } = useForm({
@@ -59,10 +59,10 @@ const AccountComponent = ({ uid }) => {
     <Box component='form' onSubmit={handleSubmit(onSubmit)}>
       <Container maxWidth='xs'>
         <Grid container spacing={3} sx={{ mt: 0, mb: 3 }}>
-          <Grid item xs={10}>
+          <Grid item xs={9}>
             <Typography variant='h6'>Personal Information</Typography>
           </Grid>
-          <Grid item xs={2}>
+          <Grid item xs={3}>
             <Button
               onClick={handleEditSwitch}
               disabled={editMode}
@@ -102,17 +102,30 @@ const AccountComponent = ({ uid }) => {
             )}
           </Grid>
           {editMode && (
-            <Grid item xs={12}>
-              <Button
-                fullWidth
-                variant='contained'
-                type='submit'
-                disabled={loading}
-                sx={{ textTransform: 'none' }}
-              >
-                Update Details
-              </Button>
-            </Grid>
+            <>
+              <Grid item xs={12}>
+                <Button
+                  fullWidth
+                  variant='contained'
+                  type='submit'
+                  disabled={loading}
+                  sx={{ textTransform: 'none' }}
+                >
+                  Update Details
+                </Button>
+              </Grid>
+              <Grid item xs={12}>
+                <Button
+                  fullWidth
+                  variant='text'
+                  onClick={handleEditSwitch}
+                  disabled={loading}
+                  sx={{ textTransform: 'none' }}
+                >
+                  Cancel
+                </Button>
+              </Grid>
+            </>
           )}
         </Grid>
       </Container>

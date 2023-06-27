@@ -80,6 +80,26 @@ const customerSlice = createSlice({
           loading: false,
           error: action.error.message,
         };
+      })
+      // Get contractor record details
+      .addCase(fetchCustomer.pending, (state) => {
+        return {
+          loading: true,
+          error: null,
+        };
+      })
+      .addCase(fetchCustomer.fulfilled, (state, action) => {
+        return {
+          data: action.payload,
+          loading: false,
+          error: null,
+        };
+      })
+      .addCase(fetchCustomer.rejected, (state, action) => {
+        return {
+          loading: false,
+          error: action.error.message,
+        };
       });
   },
 });

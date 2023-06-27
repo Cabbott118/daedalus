@@ -1,13 +1,5 @@
-import { useEffect, useState } from 'react';
-
-// Components
-import Logout from 'components/common/Logout';
-
 // Constants
 import routes from 'constants/routes';
-
-// Firebase
-import { getAuth, onAuthStateChanged } from 'firebase/auth';
 
 // MUI
 import {
@@ -15,13 +7,10 @@ import {
   Box,
   Button,
   Container,
-  Divider,
-  Menu,
-  MenuItem,
   Toolbar,
   useTheme,
 } from '@mui/material';
-import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
+// import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 
 // React Router
 import { Link, Outlet } from 'react-router-dom';
@@ -31,45 +20,9 @@ import { useSelector } from 'react-redux';
 
 export default function Navbar() {
   const theme = useTheme();
-  const { data } = useSelector((state) => state.user);
-
-  const [navLinks, setNavLinks] = useState([]);
-  const [anchorEl, setAnchorEl] = useState(null);
-  const auth = getAuth();
-
-  const handleMenu = (event) => {
-    setAnchorEl(event.currentTarget);
-  };
-
-  const handleClose = () => {
-    setAnchorEl(null);
-  };
-
-  useEffect(() => {
-    onAuthStateChanged(auth, (user) => {
-      if (user) {
-        setNavLinks([
-          {
-            name: `${data?.fullName?.firstName ?? 'Profile'}`,
-            onClick: handleMenu,
-            icon: ArrowDropDownIcon,
-          },
-        ]);
-      } else {
-        setNavLinks([
-          {
-            name: 'Login',
-            route: routes.LOGIN,
-          },
-          {
-            name: 'Signup',
-            route: routes.SIGNUP,
-            buttonType: 'contained',
-          },
-        ]);
-      }
-    });
-  }, [onAuthStateChanged, data]);
+  const { data: userData } = useSelector((state) => state.user);
+  const { data: customerData } = useSelector((state) => state.customer);
+  const { data: contractorData } = useSelector((state) => state.contractor);
 
   return (
     <>
@@ -85,51 +38,47 @@ export default function Navbar() {
                 <Button
                   sx={{
                     textTransform: 'none',
-                    // color: theme.palette.secondary.dark,
                   }}
                 >
                   Home
                 </Button>
               </Link>
 
-              {navLinks.map((navLink) => (
-                <Link key={navLink.name} to={navLink.route}>
+              {userData?.userType === 'customer' && (
+                <Link to={`${routes.CUSTOMER}/${customerData?.uid}/dashboard`}>
                   <Button
-                    onClick={navLink.onClick}
-                    variant={navLink.buttonType}
                     sx={{
                       textTransform: 'none',
-                      // color: theme.palette.secondary.dark,
                     }}
                   >
-                    {navLink.name} {navLink.icon && <navLink.icon />}
+                    {customerData?.testTitle}
                   </Button>
                 </Link>
-              ))}
-              <Menu
-                anchorEl={anchorEl}
-                anchorOrigin={{
-                  vertical: 'bottom',
-                  horizontal: 'right',
-                }}
-                keepMounted
-                transformOrigin={{
-                  vertical: 'top',
-                  horizontal: 'right',
-                }}
-                open={Boolean(anchorEl)}
-                onClose={handleClose}
-              >
-                <MenuItem
-                  component={Link}
-                  to={`${routes.USER}/${data?.uid}/dashboard`}
-                  onClick={handleClose}
+              )}
+
+              {userData?.userType === 'contractor' && (
+                <Link
+                  to={`${routes.CONTRACTOR}/${contractorData?.uid}/dashboard`}
                 >
-                  Dashboard
-                </MenuItem>
-                <Divider />
-                <MenuItem>{/* <Logout /> */}</MenuItem>
-              </Menu>
+                  <Button
+                    sx={{
+                      textTransform: 'none',
+                    }}
+                  >
+                    {contractorData?.testTitle}
+                  </Button>
+                </Link>
+              )}
+
+              <Link to={`${routes.USER}/${userData?.uid}/dashboard`}>
+                <Button
+                  sx={{
+                    textTransform: 'none',
+                  }}
+                >
+                  {userData?.fullName?.firstName}
+                </Button>
+              </Link>
             </Toolbar>
           </AppBar>
         </Container>

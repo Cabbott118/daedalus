@@ -1,49 +1,34 @@
 import { useEffect, useState } from 'react';
 
-// Components
-import DeleteDialog from 'pages/dashboard/components/DeleteDialog';
-import UpdateDialog from 'pages/dashboard/components/UpdateDialog';
-import AccountComponent from 'pages/dashboard/components/AccountComponent';
-import AddressComponent from 'pages/dashboard/components/AddressComponent';
-import Logout from 'components/common/Logout';
-
-// Helpers
-import getUserInitials from 'services/helpers/getUserInitials';
-
 // MUI
 import {
-  Avatar,
+  Box,
   Button,
   Container,
   Grid,
   Paper,
-  Skeleton,
   Typography,
   useTheme,
 } from '@mui/material';
-import { Person, LocationOn, CreditCard, Security } from '@mui/icons-material';
+import { AddBox, Pageview, CreditCard, Security } from '@mui/icons-material';
 
 // Redux
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
-export default function Dashboard() {
+const Customer = () => {
   const theme = useTheme();
 
-  const { data, loading } = useSelector((state) => state.user);
+  const { data, loading } = useSelector((state) => state.customer);
 
-  document.title = data?.fullName?.firstName
-    ? `${data.fullName.firstName}'s Dashboard`
-    : 'Dashboard';
-
-  const [activeItem, setActiveItem] = useState('Account');
+  const [activeItem, setActiveItem] = useState('Create service ticket');
   const dashboardNavList = [
     {
-      text: 'Account',
-      icon: Person,
+      text: 'Create service ticket',
+      icon: AddBox,
     },
     {
-      text: 'Address',
-      icon: LocationOn,
+      text: 'View service tickets',
+      icon: Pageview,
     },
     {
       text: 'Payment details',
@@ -60,8 +45,9 @@ export default function Dashboard() {
   };
 
   const renderContent = () => {
-    if (activeItem === 'Account') return <AccountComponent uid={data?.uid} />;
-    if (activeItem === 'Address') return <AddressComponent uid={data?.uid} />;
+    if (activeItem === 'Create service ticket') return <p>Ticket component</p>;
+    if (activeItem === 'View service tickets')
+      return <p>View Tickets component</p>;
     if (activeItem === 'Payment details')
       return <div>Placeholder for Payment details</div>;
     return <div>Security</div>;
@@ -117,11 +103,9 @@ export default function Dashboard() {
             <Paper variant='outlined'>{renderContent()}</Paper>
           </Grid>
         </Grid>
-
-        <Grid item>
-          <Logout />
-        </Grid>
       </Grid>
     </Container>
   );
-}
+};
+
+export default Customer;
