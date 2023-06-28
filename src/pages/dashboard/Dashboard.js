@@ -3,9 +3,12 @@ import { useEffect, useState } from 'react';
 // Components
 import DeleteDialog from 'pages/dashboard/components/DeleteDialog';
 import UpdateDialog from 'pages/dashboard/components/UpdateDialog';
+import CreateServiceTicketDialog from 'pages/customer/components/CreateServiceTicketDialog';
 import AccountComponent from 'pages/dashboard/components/AccountComponent';
 import AddressComponent from 'pages/dashboard/components/AddressComponent';
 import Logout from 'components/common/Logout';
+
+import Notifications from 'pages/notifications/Notifications';
 
 // Helpers
 import getUserInitials from 'services/helpers/getUserInitials';
@@ -138,11 +141,18 @@ export default function Dashboard() {
             <Paper variant='outlined'>{renderContent()}</Paper>
           </Grid>
         </Grid>
-
+        <Grid item>
+          <CreateServiceTicketDialog
+            userId={userData?.uid}
+            companyReceivingServies={customerData?.customerName}
+          />
+        </Grid>
         <Grid item>
           <Logout />
         </Grid>
       </Grid>
+
+      {/* <Notifications uid={userData?.uid} /> */}
       {userData && (
         <>
           <Typography>User name:</Typography>

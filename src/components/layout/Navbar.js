@@ -9,9 +9,12 @@ import { getAuth, onAuthStateChanged } from 'firebase/auth';
 // MUI
 import {
   AppBar,
+  Badge,
   Box,
   Button,
   Container,
+  Menu,
+  MenuItem,
   Toolbar,
   useTheme,
 } from '@mui/material';
@@ -22,15 +25,22 @@ import { Link, Outlet } from 'react-router-dom';
 // Redux
 import { useSelector } from 'react-redux';
 
+// Notifications component
+import Notifications from 'pages/notifications/Notifications';
+
 export default function Navbar() {
   const auth = getAuth();
   const theme = useTheme();
 
   const [navLinks, setNavLinks] = useState([]);
+  const [anchorEl, setAnchorEl] = useState(null);
 
   const { data: userData } = useSelector((state) => state.user);
   const { data: customerData } = useSelector((state) => state.customer);
   const { data: contractorData } = useSelector((state) => state.contractor);
+  const { data: notificationsData } = useSelector(
+    (state) => state.notifications
+  );
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
@@ -42,21 +52,6 @@ export default function Navbar() {
             variant: 'text',
           },
         ];
-
-        // if (userData?.userType === 'customer') {
-        //   newNavLinks.unshift({
-        //     name: customerData?.[0]?.customerName ?? 'Customer Dashboard',
-        //     route: `${routes.CUSTOMER}/${customerData?.[0]?.uid}/dashboard`,
-        //     variant: 'text',
-        //   });
-        // } else if (userData?.userType === 'contractor') {
-        //   newNavLinks.unshift({
-        //     name: contractorData?.[0]?.contractorName ?? 'Contractor Dashboard',
-        //     route: `${routes.CONTRACTOR}/${contractorData?.[0]?.uid}/dashboard`,
-        //     variant: 'text',
-        //   });
-        // }
-
         setNavLinks(newNavLinks);
       } else {
         setNavLinks([
@@ -71,6 +66,14 @@ export default function Navbar() {
 
     return () => unsubscribe();
   }, [auth, userData, customerData, contractorData]);
+
+  const handleNotificationsClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleNotificationsClose = () => {
+    setAnchorEl(null);
+  };
 
   return (
     <>
@@ -99,6 +102,29 @@ export default function Navbar() {
                   </Button>
                 </Link>
               ))}
+
+              <Button
+                aria-haspopup='true'
+                aria-controls='notifications-menu'
+                onClick={handleNotificationsClick}
+                sx={{
+                  textTransform: 'none',
+                }}
+              >
+                <Badge badgeContent={notificationsData?.length} color='error'>
+                  Notifications
+                </Badge>
+              </Button>
+              <Menu
+                id='notifications-menu'
+                anchorEl={anchorEl}
+                open={Boolean(anchorEl)}
+                onClose={handleNotificationsClose}
+              >
+                <MenuItem>
+                  <Notifications uid={userData?.uid} />
+                </MenuItem>
+              </Menu>
             </Toolbar>
           </AppBar>
         </Container>

@@ -9,6 +9,8 @@ import { useDispatch } from 'react-redux';
 import { clearUserData, logoutUser } from 'store/slices/userSlice';
 import { clearCustomerData } from 'store/slices/customerSlice';
 import { clearContractorData } from 'store/slices/contractorSlice';
+import { clearServiceTicketData } from 'store/slices/serviceTicketSlice';
+import { clearNotificationData } from 'store/slices/notificationsSlice';
 
 // Routes
 import routes from 'constants/routes';
@@ -24,6 +26,9 @@ export default function Logout() {
     dispatch(clearUserData());
     dispatch(clearCustomerData());
     dispatch(clearContractorData());
+    dispatch(clearServiceTicketData());
+    dispatch(clearNotificationData());
+
     navigate(routes.LOGIN, { state: { from: location } });
   }
 

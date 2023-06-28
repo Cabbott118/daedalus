@@ -5,10 +5,12 @@ const router = express.Router();
 
 router.post('/create-service-ticket', async (req, res) => {
   try {
-    const { uid } = req.body;
+    const { uid, companyReceivingServies, reasonForServices } = req.body;
     const newTicket = {
       createdBy: uid,
       status: 'new',
+      companyReceivingServies,
+      reasonForServices,
     };
 
     const ticketRef = admin.firestore().collection('serviceTickets').doc();
@@ -38,12 +40,13 @@ const createNotificationOnTicketCreation = functions.firestore
   .document('serviceTickets/{ticketId}')
   .onCreate(async (snapshot, context) => {
     try {
-      const { ticketId } = context.params;
+      const ticketId = context.params.ticketId;
 
       // Create a new notification document
       const notificationData = {
         ticketId,
-        message: 'New ticket created',
+        ticketOwner: snapshot.data().createdBy, // Access createdBy from the snapshot data
+        message: 'A new service ticket has been created',
         createdAt: admin.firestore.FieldValue.serverTimestamp(),
       };
 
@@ -70,7 +73,8 @@ const createNotificationOnStatusChange = functions.firestore
       // Set the notification properties
       await notificationRef.set({
         ticketId: context.params.ticketId,
-        message: 'Ticket assigned. Please take action.',
+        ticketOwner: newValue.createdBy, // Access createdBy from the newValue object
+        message: 'Your ticket has been assigned',
         createdAt: admin.firestore.FieldValue.serverTimestamp(),
       });
 
