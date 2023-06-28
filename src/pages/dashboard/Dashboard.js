@@ -24,16 +24,29 @@ import {
 import { Person, LocationOn, CreditCard, Security } from '@mui/icons-material';
 
 // Redux
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchContractor } from 'store/slices/contractorSlice';
+import { fetchCustomer } from 'store/slices/customerSlice';
 
 export default function Dashboard() {
   const theme = useTheme();
+  const dispatch = useDispatch();
 
-  const { data, loading } = useSelector((state) => state.user);
+  const { data: userData, loading } = useSelector((state) => state.user);
+  const { data: customerData } = useSelector((state) => state.customer);
+  const { data: contractorData } = useSelector((state) => state.contractor);
 
-  document.title = data?.fullName?.firstName
-    ? `${data.fullName.firstName}'s Dashboard`
+  document.title = userData?.fullName?.firstName
+    ? `${userData.fullName.firstName}'s Dashboard`
     : 'Dashboard';
+
+  useEffect(() => {
+    if (userData?.userType === 'customer') {
+      dispatch(fetchCustomer(userData?.uid));
+    } else if (userData?.userType === 'contractor') {
+      dispatch(fetchContractor(userData?.uid));
+    }
+  }, []);
 
   const [activeItem, setActiveItem] = useState('Account');
   const dashboardNavList = [
@@ -60,8 +73,10 @@ export default function Dashboard() {
   };
 
   const renderContent = () => {
-    if (activeItem === 'Account') return <AccountComponent uid={data?.uid} />;
-    if (activeItem === 'Address') return <AddressComponent uid={data?.uid} />;
+    if (activeItem === 'Account')
+      return <AccountComponent uid={userData?.uid} />;
+    if (activeItem === 'Address')
+      return <AddressComponent uid={userData?.uid} />;
     if (activeItem === 'Payment details')
       return <div>Placeholder for Payment details</div>;
     return <div>Security</div>;
@@ -122,6 +137,26 @@ export default function Dashboard() {
           <Logout />
         </Grid>
       </Grid>
+      {userData && (
+        <>
+          <Typography>User name:</Typography>
+          <Typography>
+            {userData?.fullName?.firstName} {userData?.fullName?.lastName}
+          </Typography>
+        </>
+      )}
+      {customerData && (
+        <>
+          <Typography>Customer name: </Typography>{' '}
+          <Typography>{customerData?.customerName}</Typography>
+        </>
+      )}
+      {contractorData && (
+        <>
+          <Typography>Contractor name: </Typography>{' '}
+          <Typography>{contractorData?.contractorName}</Typography>
+        </>
+      )}
     </Container>
   );
 }

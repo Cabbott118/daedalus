@@ -22,15 +22,17 @@ export default function Home() {
   const theme = useTheme();
   const dispatch = useDispatch();
 
-  const { data, loading } = useSelector((state) => state.user);
+  const { data: userData, loading } = useSelector((state) => state.user);
+  const { data: customerData } = useSelector((state) => state.customer);
+  const { data: contractorData } = useSelector((state) => state.contractor);
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
       if (user) {
         await dispatch(fetchUser(user.uid));
-        if (data?.userType === 'customer') {
+        if (userData?.userType === 'customer') {
           dispatch(fetchCustomer(user.uid));
-        } else if (data?.userType === 'contractor') {
+        } else if (userData?.userType === 'contractor') {
           dispatch(fetchContractor(user.uid));
         }
       }
@@ -39,15 +41,37 @@ export default function Home() {
     return () => unsubscribe();
   }, [auth, dispatch]);
 
-  if (loading) return <p>Loading...</p>;
+  if (loading)
+    return (
+      <Container maxWidth='sm'>
+        <Typography>Loading...</Typography>
+      </Container>
+    );
 
-  if (!data) return <EnrollmentBanner />;
+  if (!userData) return <EnrollmentBanner />;
 
   return (
     <Container maxWidth='sm'>
-      <Typography>
-        {data?.fullName?.firstName} {data.userType}
-      </Typography>
+      {userData && (
+        <>
+          <Typography>User name:</Typography>
+          <Typography>
+            {userData?.fullName?.firstName} {userData?.fullName?.lastName}
+          </Typography>
+        </>
+      )}
+      {customerData && (
+        <>
+          <Typography>Customer name: </Typography>{' '}
+          <Typography>{customerData?.customerName}</Typography>
+        </>
+      )}
+      {contractorData && (
+        <>
+          <Typography>Contractor name: </Typography>{' '}
+          <Typography>{contractorData?.contractorName}</Typography>
+        </>
+      )}
     </Container>
   );
 }

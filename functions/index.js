@@ -40,9 +40,8 @@ app.post('/create-user', async (req, res) => {
 
 app.get('/get-user-details', async (req, res) => {
   try {
-    const userId = req.query.uid;
-    console.log(req.auth);
-    const userRef = admin.firestore().collection('users').doc(userId);
+    const uid = req.query.uid;
+    const userRef = admin.firestore().collection('users').doc(uid);
     const userDoc = await userRef.get();
 
     if (!userDoc.exists) {
@@ -108,7 +107,7 @@ app.post('/create-customer', async (req, res) => {
 
     const newCustomerRef = await admin
       .firestore()
-      .collection('customer')
+      .collection('customers')
       .add(newCustomer);
 
     // Retrieve the document ID
@@ -132,24 +131,21 @@ app.post('/create-customer', async (req, res) => {
 app.get('/get-customer-details', async (req, res) => {
   try {
     const ownerId = req.query.ownerId;
-    const customersRef = admin.firestore().collection('customer');
+    const customersRef = admin.firestore().collection('customers');
     const querySnapshot = await customersRef
-      .where('recordOwner', '==', ownerId)
+      .where('ownerId', '==', ownerId)
       .get();
 
     if (querySnapshot.empty) {
       return res
         .status(404)
-        .json({ message: 'No customers found for the specified owner' });
+        .json({ message: 'No customer found for the specified owner' });
     }
 
-    const customerDetails = [];
-    querySnapshot.forEach((doc) => {
-      const customerData = doc.data();
-      customerDetails.push(customerData);
-    });
+    const doc = querySnapshot.docs[0]; // Assuming only one document is returned
+    const customerData = doc.data();
 
-    return res.status(200).json(customerDetails);
+    return res.status(200).json(customerData);
   } catch (error) {
     console.error('Error retrieving customer details:', error);
     return res.status(500).json({ message: 'Internal Server Error' });
@@ -169,7 +165,7 @@ app.post('/create-contractor', async (req, res) => {
 
     const newContractorRef = await admin
       .firestore()
-      .collection('contractor')
+      .collection('contractors')
       .add(newContractor);
 
     // Retrieve the document ID
@@ -193,24 +189,21 @@ app.post('/create-contractor', async (req, res) => {
 app.get('/get-contractor-details', async (req, res) => {
   try {
     const ownerId = req.query.ownerId;
-    const contractorRef = admin.firestore().collection('contractor');
-    const querySnapshot = await contractorRef
-      .where('recordOwner', '==', ownerId)
+    const contractorsRef = admin.firestore().collection('contractors');
+    const querySnapshot = await contractorsRef
+      .where('ownerId', '==', ownerId)
       .get();
 
     if (querySnapshot.empty) {
       return res
         .status(404)
-        .json({ message: 'No contractors found for the specified owner' });
+        .json({ message: 'No contractor found for the specified owner' });
     }
 
-    const contractorDetails = [];
-    querySnapshot.forEach((doc) => {
-      const contractorData = doc.data();
-      contractorDetails.push(contractorData);
-    });
+    const doc = querySnapshot.docs[0]; // Assuming only one document is returned
+    const contractorData = doc.data();
 
-    return res.status(200).json(contractorDetails);
+    return res.status(200).json(contractorData);
   } catch (error) {
     console.error('Error retrieving contractor details:', error);
     return res.status(500).json({ message: 'Internal Server Error' });

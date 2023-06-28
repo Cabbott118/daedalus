@@ -37,25 +37,25 @@ export default function Navbar() {
       if (user) {
         const newNavLinks = [
           {
-            name: userData?.fullName?.firstName ?? 'Profile',
+            name: 'Dashboard',
             route: `${routes.USER}/${userData?.uid}/dashboard`,
             variant: 'text',
           },
         ];
 
-        if (userData?.userType === 'customer') {
-          newNavLinks.unshift({
-            name: customerData?.[0]?.customerName ?? 'Customer Dashboard',
-            route: `${routes.CUSTOMER}/${customerData?.[0]?.uid}/dashboard`,
-            variant: 'text',
-          });
-        } else if (userData?.userType === 'contractor') {
-          newNavLinks.unshift({
-            name: contractorData?.[0]?.contractorName ?? 'Contractor Dashboard',
-            route: `${routes.CONTRACTOR}/${contractorData?.[0]?.uid}/dashboard`,
-            variant: 'text',
-          });
-        }
+        // if (userData?.userType === 'customer') {
+        //   newNavLinks.unshift({
+        //     name: customerData?.[0]?.customerName ?? 'Customer Dashboard',
+        //     route: `${routes.CUSTOMER}/${customerData?.[0]?.uid}/dashboard`,
+        //     variant: 'text',
+        //   });
+        // } else if (userData?.userType === 'contractor') {
+        //   newNavLinks.unshift({
+        //     name: contractorData?.[0]?.contractorName ?? 'Contractor Dashboard',
+        //     route: `${routes.CONTRACTOR}/${contractorData?.[0]?.uid}/dashboard`,
+        //     variant: 'text',
+        //   });
+        // }
 
         setNavLinks(newNavLinks);
       } else {
