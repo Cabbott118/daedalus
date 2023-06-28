@@ -13,7 +13,7 @@ const createCustomer = createAsyncThunk(
   'customer/createCustomer',
   async ({ customerName, ownerId }) => {
     try {
-      const response = await post('/create-customer', {
+      const response = await post('/customer/create-customer', {
         ownerId,
         customerName,
       });
@@ -31,7 +31,7 @@ const fetchCustomer = createAsyncThunk(
   'contractor/fetchCustomer',
   async (ownerId) => {
     try {
-      const response = await get('/get-customer-details', { ownerId });
+      const response = await get('/customer/get-customer-details', { ownerId });
       return response;
     } catch {
       throw new Error('Failed to fetch customer data.');

@@ -22,18 +22,24 @@ export default function Home() {
   const theme = useTheme();
   const dispatch = useDispatch();
 
-  const { data: userData, loading } = useSelector((state) => state.user);
-  const { data: customerData } = useSelector((state) => state.customer);
-  const { data: contractorData } = useSelector((state) => state.contractor);
+  const { data: userData, loading: userLoading } = useSelector(
+    (state) => state.user
+  );
+  const { data: customerData, loading: customerLoading } = useSelector(
+    (state) => state.customer
+  );
+  const { data: contractorData, loading: contractorLoading } = useSelector(
+    (state) => state.contractor
+  );
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
       if (user) {
         await dispatch(fetchUser(user.uid));
         if (userData?.userType === 'customer') {
-          dispatch(fetchCustomer(user.uid));
+          await dispatch(fetchCustomer(user.uid));
         } else if (userData?.userType === 'contractor') {
-          dispatch(fetchContractor(user.uid));
+          await dispatch(fetchContractor(user.uid));
         }
       }
     });
@@ -41,7 +47,7 @@ export default function Home() {
     return () => unsubscribe();
   }, [auth, dispatch]);
 
-  if (loading)
+  if (userLoading)
     return (
       <Container maxWidth='sm'>
         <Typography>Loading...</Typography>

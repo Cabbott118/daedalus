@@ -32,9 +32,15 @@ export default function Dashboard() {
   const theme = useTheme();
   const dispatch = useDispatch();
 
-  const { data: userData, loading } = useSelector((state) => state.user);
-  const { data: customerData } = useSelector((state) => state.customer);
-  const { data: contractorData } = useSelector((state) => state.contractor);
+  const { data: userData, loading: userLoading } = useSelector(
+    (state) => state.user
+  );
+  const { data: customerData, loading: customerLoading } = useSelector(
+    (state) => state.customer
+  );
+  const { data: contractorData, loading: contractorLoading } = useSelector(
+    (state) => state.contractor
+  );
 
   document.title = userData?.fullName?.firstName
     ? `${userData.fullName.firstName}'s Dashboard`

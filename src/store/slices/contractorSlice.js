@@ -13,7 +13,7 @@ const createContractor = createAsyncThunk(
   'contractor/createContractor',
   async ({ contractorName, ownerId }) => {
     try {
-      const response = await post('/create-contractor', {
+      const response = await post('/contractor/create-contractor', {
         ownerId,
         contractorName,
       });
@@ -31,7 +31,9 @@ const fetchContractor = createAsyncThunk(
   'contractor/fetchContractor',
   async (ownerId) => {
     try {
-      const response = await get('/get-contractor-details', { ownerId });
+      const response = await get('/contractor/get-contractor-details', {
+        ownerId,
+      });
       return response;
     } catch {
       throw new Error('Failed to fetch contractor data.');
