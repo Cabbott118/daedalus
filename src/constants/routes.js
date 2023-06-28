@@ -1,3 +1,5 @@
+// React Routes - ** Not API Routes **
+
 const routes = {
   // Auth
   LOGIN: '/login',
@@ -11,6 +13,9 @@ const routes = {
   // Contractor
   CONTRACTOR_ENROLLMENT: '/enrollment-contractor',
   CONTRACTOR: '/contractor',
+
+  // Service Ticket
+  SERVICE_TICKET: '/service-ticket',
 
   // General
   HOME: '/',

@@ -23,6 +23,28 @@ const fetchNotifications = createAsyncThunk(
   }
 );
 
+// Async thunk to update notification data
+// const uid = '123'
+// const updateData = {
+//   hasNotificationBeenRead: true,
+// };
+
+// dispatch(updateUpdateNotification({ uid, updateData }));
+const updateNotification = createAsyncThunk(
+  'notifications/updateNotification',
+  async ({ uid, updateData }) => {
+    try {
+      const response = await patch('/notification/update-notification', {
+        uid,
+        updateData,
+      });
+      return response.notification;
+    } catch (error) {
+      throw new Error('Failed to update notification data.');
+    }
+  }
+);
+
 // Action to clear user data, typically after logout
 const clearNotificationData = createAction(
   'notifications/clearNotificationData'
@@ -65,10 +87,29 @@ const notificationsSlice = createSlice({
           loading: false,
           error: action.error.message,
         };
+      })
+      // Update notification details
+      .addCase(updateNotification.pending, (state) => {
+        return {
+          loading: true,
+          error: null,
+        };
+      })
+      .addCase(updateNotification.fulfilled, (state, action) => {
+        return {
+          data: action.payload,
+          loading: false,
+        };
+      })
+      .addCase(updateNotification.rejected, (state, action) => {
+        return {
+          loading: false,
+          error: action.error.message,
+        };
       });
   },
 });
 
 // Export the async thunk and reducer
 export const { reducer: notificationsReducer } = notificationsSlice;
-export { fetchNotifications, clearNotificationData };
+export { fetchNotifications, updateNotification, clearNotificationData };

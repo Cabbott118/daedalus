@@ -23,7 +23,8 @@ import {
 import { Link, Outlet } from 'react-router-dom';
 
 // Redux
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchNotifications } from 'store/slices/notificationsSlice';
 
 // Notifications component
 import Notifications from 'pages/notifications/Notifications';
@@ -31,9 +32,11 @@ import Notifications from 'pages/notifications/Notifications';
 export default function Navbar() {
   const auth = getAuth();
   const theme = useTheme();
+  const dispatch = useDispatch();
 
   const [navLinks, setNavLinks] = useState([]);
   const [anchorEl, setAnchorEl] = useState(null);
+  const [unreadNotifications, setUnreadNotifications] = useState([]);
 
   const { data: userData } = useSelector((state) => state.user);
   const { data: customerData } = useSelector((state) => state.customer);
@@ -45,6 +48,7 @@ export default function Navbar() {
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       if (user) {
+        dispatch(fetchNotifications(user?.uid));
         const newNavLinks = [
           {
             name: 'Dashboard',
@@ -65,7 +69,19 @@ export default function Navbar() {
     });
 
     return () => unsubscribe();
-  }, [auth, userData, customerData, contractorData]);
+  }, [
+    auth,
+    // userData, customerData, contractorData
+  ]);
+
+  // useEffect(() => {
+  //   if (notificationsData) {
+  //     const filteredNotifications = notificationsData?.filter(
+  //       (notification) => !notification?.notificationHasBeenRead
+  //     );
+  //     setUnreadNotifications(filteredNotifications);
+  //   }
+  // }, [notificationsData]);
 
   const handleNotificationsClick = (event) => {
     setAnchorEl(event.currentTarget);
@@ -102,28 +118,31 @@ export default function Navbar() {
                   </Button>
                 </Link>
               ))}
-
-              <Button
-                aria-haspopup='true'
-                aria-controls='notifications-menu'
-                onClick={handleNotificationsClick}
-                sx={{
-                  textTransform: 'none',
-                }}
-              >
-                <Badge badgeContent={notificationsData?.length} color='error'>
-                  Notifications
-                </Badge>
-              </Button>
+              {auth?.currentUser && (
+                <Button
+                  aria-haspopup='true'
+                  aria-controls='notifications-menu'
+                  onClick={handleNotificationsClick}
+                  sx={{
+                    textTransform: 'none',
+                  }}
+                >
+                  <Badge
+                    // badgeContent={unreadNotifications?.length}
+                    badgeContent={notificationsData?.length}
+                    color='error'
+                  >
+                    Notifications
+                  </Badge>
+                </Button>
+              )}
               <Menu
                 id='notifications-menu'
                 anchorEl={anchorEl}
                 open={Boolean(anchorEl)}
                 onClose={handleNotificationsClose}
               >
-                <MenuItem>
-                  <Notifications uid={userData?.uid} />
-                </MenuItem>
+                <Notifications onClose={handleNotificationsClose} />
               </Menu>
             </Toolbar>
           </AppBar>

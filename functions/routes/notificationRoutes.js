@@ -27,4 +27,29 @@ router.get('/get-notifications', async (req, res) => {
   }
 });
 
+router.patch('/update-notification', async (req, res) => {
+  try {
+    const { uid, updateData } = req.body;
+    await admin
+      .firestore()
+      .collection('notifications')
+      .doc(uid)
+      .update(updateData);
+    // Retrieve the updated notification data from Firestore
+    const updatedNotificationDoc = await admin
+      .firestore()
+      .collection('notifications')
+      .doc(uid)
+      .get();
+    const updatedNotification = updatedNotificationDoc.data();
+    return res.status(200).json({
+      message: 'Notification document updated successfully',
+      notification: updatedNotification,
+    });
+  } catch (error) {
+    console.error('Error updating notification document', error);
+    return res.status(500).json({ message: 'Internal Server Error' });
+  }
+});
+
 module.exports = router;

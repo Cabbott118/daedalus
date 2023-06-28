@@ -8,19 +8,15 @@ import AccountComponent from 'pages/dashboard/components/AccountComponent';
 import AddressComponent from 'pages/dashboard/components/AddressComponent';
 import Logout from 'components/common/Logout';
 
-import Notifications from 'pages/notifications/Notifications';
-
-// Helpers
-import getUserInitials from 'services/helpers/getUserInitials';
+// Constants
+import UserType from 'constants/userType';
 
 // MUI
 import {
-  Avatar,
   Button,
   Container,
   Grid,
   Paper,
-  Skeleton,
   Typography,
   useTheme,
 } from '@mui/material';
@@ -50,9 +46,9 @@ export default function Dashboard() {
     : 'Dashboard';
 
   useEffect(() => {
-    if (userData?.userType === 'customer') {
+    if (userData?.userType === UserType.CUSTOMER) {
       dispatch(fetchCustomer(userData?.uid));
-    } else if (userData?.userType === 'contractor') {
+    } else if (userData?.userType === UserType.CONTRACTOR) {
       dispatch(fetchContractor(userData?.uid));
     }
   }, []);
@@ -142,9 +138,15 @@ export default function Dashboard() {
           </Grid>
         </Grid>
         <Grid item>
+          {' '}
+          <Typography>
+            Catch-all (not the final place for the below items)
+          </Typography>
+        </Grid>
+        <Grid item>
           <CreateServiceTicketDialog
             userId={userData?.uid}
-            companyReceivingServies={customerData?.customerName}
+            companyReceivingServices={customerData?.customerName}
           />
         </Grid>
         <Grid item>
@@ -152,27 +154,28 @@ export default function Dashboard() {
         </Grid>
       </Grid>
 
-      {/* <Notifications uid={userData?.uid} /> */}
-      {userData && (
-        <>
-          <Typography>User name:</Typography>
-          <Typography>
-            {userData?.fullName?.firstName} {userData?.fullName?.lastName}
-          </Typography>
-        </>
-      )}
-      {customerData && (
-        <>
-          <Typography>Customer name: </Typography>{' '}
-          <Typography>{customerData?.customerName}</Typography>
-        </>
-      )}
-      {contractorData && (
-        <>
-          <Typography>Contractor name: </Typography>{' '}
-          <Typography>{contractorData?.contractorName}</Typography>
-        </>
-      )}
+      <Container>
+        {userData && (
+          <>
+            <Typography>User name:</Typography>
+            <Typography>
+              {userData?.fullName?.firstName} {userData?.fullName?.lastName}
+            </Typography>
+          </>
+        )}
+        {customerData && (
+          <>
+            <Typography>Customer name: </Typography>{' '}
+            <Typography>{customerData?.customerName}</Typography>
+          </>
+        )}
+        {contractorData && (
+          <>
+            <Typography>Contractor name: </Typography>{' '}
+            <Typography>{contractorData?.contractorName}</Typography>
+          </>
+        )}
+      </Container>
     </Container>
   );
 }

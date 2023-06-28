@@ -10,12 +10,11 @@ import { createSlice, createAction, createAsyncThunk } from '@reduxjs/toolkit';
 // dispatch(createServiceTicket({ uid, companyName, reasonForServices }));
 const createServiceTicket = createAsyncThunk(
   'serviceTicket/createServiceTicket',
-  async ({ uid, companyReceivingServies, reasonForServices }) => {
-    console.log(uid, companyReceivingServies, reasonForServices);
+  async ({ uid, companyReceivingServices, reasonForServices }) => {
     try {
       const response = await post('/service-ticket/create-service-ticket', {
         uid,
-        companyReceivingServies,
+        companyReceivingServices,
         reasonForServices,
       });
       return response.ticket;
@@ -30,14 +29,36 @@ const createServiceTicket = createAsyncThunk(
 // dispatch(fetchCustomer(uid));
 const fetchServiceTicket = createAsyncThunk(
   'serviceTicket/fetchServiceTicket',
-  async (ownerId) => {
+  async (uid) => {
     try {
-      const response = await get('/service-ticket/get-customer-details', {
-        ownerId,
+      const response = await get('/service-ticket/get-service-ticket-details', {
+        uid,
       });
       return response;
     } catch {
-      throw new Error('Failed to fetch customer data.');
+      throw new Error('Failed to fetch service ticket data.');
+    }
+  }
+);
+
+// Async thunk to update service ticket data
+// const uid = '123'
+// const updateData = {
+//   something: 'some value'
+// };
+
+// dispatch(updateUser({ uid, updateData }));
+const updateServiceTicket = createAsyncThunk(
+  'serviceTicket/updateServiceTicket',
+  async ({ uid, updateData }) => {
+    try {
+      const response = await patch('/service-ticket/update-service-ticket', {
+        uid,
+        updateData,
+      });
+      return response.ticket;
+    } catch (error) {
+      throw new Error('Failed to update service ticket data.');
     }
   }
 );
@@ -104,10 +125,34 @@ const serviceTicketSlice = createSlice({
           loading: false,
           error: action.error.message,
         };
+      })
+      // Update service ticket record details
+      .addCase(updateServiceTicket.pending, (state) => {
+        return {
+          loading: true,
+          error: null,
+        };
+      })
+      .addCase(updateServiceTicket.fulfilled, (state, action) => {
+        return {
+          data: action.payload,
+          loading: false,
+        };
+      })
+      .addCase(updateServiceTicket.rejected, (state, action) => {
+        return {
+          loading: false,
+          error: action.error.message,
+        };
       });
   },
 });
 
 // Export the async thunk and reducer
 export const { reducer: serviceTicketReducer } = serviceTicketSlice;
-export { createServiceTicket, fetchServiceTicket, clearServiceTicketData };
+export {
+  createServiceTicket,
+  fetchServiceTicket,
+  updateServiceTicket,
+  clearServiceTicketData,
+};

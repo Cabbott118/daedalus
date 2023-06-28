@@ -1,4 +1,5 @@
-import { useEffect } from 'react';
+// Constants
+import routes from 'constants/routes';
 
 // MUI
 import {
@@ -8,25 +9,33 @@ import {
   ListItem,
   ListItemText,
   ListItemButton,
+  MenuItem,
   Typography,
 } from '@mui/material';
+import CircleIcon from '@mui/icons-material/Circle';
+
+// React Router
+import { Link } from 'react-router-dom';
 
 // Redux
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchNotifications } from 'store/slices/notificationsSlice';
+import { updateNotification } from 'store/slices/notificationsSlice';
 
-const Notifications = ({ uid }) => {
+const Notifications = ({ onClose }) => {
   const dispatch = useDispatch();
 
   const { data, loading } = useSelector((state) => state.notifications);
 
-  useEffect(() => {
-    dispatch(fetchNotifications(uid));
-  }, []);
-
   const formatCreatedAt = (createdAt) => {
     const date = new Date(createdAt._seconds * 1000);
     return date.toLocaleString();
+  };
+
+  const handleMarkRead = (uid) => {
+    const updateData = {
+      notificationHasBeenRead: true,
+    };
+    dispatch(updateNotification({ uid, updateData }));
   };
 
   return (
@@ -36,25 +45,34 @@ const Notifications = ({ uid }) => {
       {loading ? (
         <Typography variant='p'>Loading notifications...</Typography>
       ) : (
-        <List>
-          {data?.map((notification, index) => (
-            <ListItem key={index} disablePadding>
-              <ListItemButton component='a'>
-                <ListItemText
-                  primary={notification.message}
-                  primaryTypographyProps={
-                    {
-                      // sx: {
-                      //   fontSize: '.8rem',
-                      //   wordWrap: 'break-word',
-                      // },
-                    }
-                  }
-                />
-              </ListItemButton>
-            </ListItem>
-          ))}
-        </List>
+        <>
+          {data ? (
+            <List>
+              {data?.map((notification, index) => (
+                <ListItem key={index} disablePadding>
+                  <ListItemButton
+                    component={Link}
+                    to={`${routes.SERVICE_TICKET}/${notification.ticketId}`}
+                    onClick={() => {
+                      onClose();
+                      handleMarkRead(notification.uid);
+                    }}
+                  >
+                    {!notification.notificationHasBeenRead && (
+                      <CircleIcon
+                        color='primary'
+                        sx={{ fontSize: '.5rem', mr: '1rem' }}
+                      />
+                    )}
+                    <ListItemText primary={notification.message} />
+                  </ListItemButton>
+                </ListItem>
+              ))}
+            </List>
+          ) : (
+            <Typography variant='p'>No notifications to display</Typography>
+          )}
+        </>
       )}
     </Container>
   );

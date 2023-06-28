@@ -100,10 +100,10 @@ const fetchUser = createAsyncThunk('user/fetchUser', async (uid) => {
   }
 });
 
-// Async thunk to create user data
+// Async thunk to update user data
 // const uid = '123'
 // const updateData = {
-//   name: {
+//   fullName: {
 //     firstName: 'Caleb',
 //     lastName: 'Abbott',
 //   },

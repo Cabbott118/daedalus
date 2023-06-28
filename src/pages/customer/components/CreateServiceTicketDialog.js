@@ -32,7 +32,7 @@ import {
 
 const CreateServiceTicketDialog = ({
   userId: uid,
-  companyReceivingServies,
+  companyReceivingServices,
 }) => {
   const [isAlertShowing, setIsAlertShowing] = useState(false);
   const [dialogOpen, setDialogOpen] = useState(false);
@@ -51,7 +51,7 @@ const CreateServiceTicketDialog = ({
 
   const onSubmit = ({ reasonForServices }) => {
     dispatch(
-      createServiceTicket({ uid, companyReceivingServies, reasonForServices })
+      createServiceTicket({ uid, companyReceivingServices, reasonForServices })
     );
     setDialogOpen(false);
   };
@@ -69,7 +69,7 @@ const CreateServiceTicketDialog = ({
       </Button>
       <Dialog open={dialogOpen} onClose={handleCloseDialog}>
         <Box component='form' onSubmit={handleSubmit(onSubmit)}>
-          <DialogTitle>{`Create Service Ticket for ${companyReceivingServies}`}</DialogTitle>
+          <DialogTitle>{`Create Service Ticket for ${companyReceivingServices}`}</DialogTitle>
           <DialogContent>
             <Grid container spacing={3} sx={{ mt: 0 }}>
               <Grid item xs={12}>

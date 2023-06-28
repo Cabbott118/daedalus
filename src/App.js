@@ -18,6 +18,9 @@ import Dashboard from 'pages/dashboard/Dashboard';
 import CustomerEnrollment from 'pages/auth/CustomerEnrollment';
 import Customer from 'pages/customer/Customer';
 
+// Service Ticket
+import ServiceTicket from 'pages/serviceTicket/ServiceTicket';
+
 // Contractor
 import ContractorEnrollment from 'pages/auth/ContractorEnrollment';
 import Contractor from 'pages/contractor/Contractor';
@@ -54,7 +57,7 @@ function App() {
               <Route index path=':uid/dashboard' element={<Dashboard />} />
             </Route>
             <Route
-              path={routes.CUSTOMER} // place all routes that need user logged in under /user/
+              path={routes.CUSTOMER} // place all routes that need user logged in under /customer/
               element={
                 <RequireAuth>
                   <Outlet />
@@ -65,7 +68,7 @@ function App() {
               <Route index path=':uid/dashboard' element={<Customer />} />
             </Route>
             <Route
-              path={routes.CONTRACTOR} // place all routes that need user logged in under /user/
+              path={routes.CONTRACTOR} // place all routes that need user logged in under /contractor/
               element={
                 <RequireAuth>
                   <Outlet />
@@ -74,6 +77,17 @@ function App() {
             >
               {/* Place your 'authenticated routes in here! They can be referenced by /contractor/<route> */}
               <Route index path=':uid/dashboard' element={<Contractor />} />
+            </Route>
+            <Route
+              path={routes.SERVICE_TICKET} // place all routes that need user logged in under /service-ticket/
+              element={
+                <RequireAuth>
+                  <Outlet />
+                </RequireAuth>
+              }
+            >
+              {/* Place your 'authenticated routes in here! They can be referenced by /service-ticket/<route> */}
+              <Route index path=':uid' element={<ServiceTicket />} />
             </Route>
             <Route
               path='*' // Providing a 404 page for '/' and thus the whole site.
