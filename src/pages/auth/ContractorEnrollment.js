@@ -55,10 +55,22 @@ export default function ContractorEnrollment() {
   } = useForm();
 
   const onSubmit = (data) => {
-    const { email, password, confirmPassword } = data;
+    const { contractorName, fullName, email, password, confirmPassword } = data;
     if (passwordMatch(password, confirmPassword)) {
       dispatch(clearUserData());
-      dispatch(signUpUser({ email, password }));
+      dispatch(signUpUser({ email, password })).then((action) => {
+        dispatch(
+          createUser({
+            email,
+            uid: action.payload.uid,
+            fullName,
+            userType: 'contractor',
+          })
+        );
+        dispatch(
+          createContractor({ contractorName, ownerId: action.payload.uid })
+        );
+      });
     } else {
       setPasswordMissmatch(true);
     }
@@ -75,28 +87,6 @@ export default function ContractorEnrollment() {
     }
   }, [error]);
 
-  useEffect(() => {
-    if (data?.uid) {
-      const { email, fullName } = getValues();
-      dispatch(
-        createUser({ email, uid: data.uid, fullName, userType: 'contractor' })
-      ).then(() => {
-        dispatch(
-          createContractor({ testTitle: 'test title', ownerId: data.uid })
-        ).then((action) => {
-          console.log(action);
-          const {
-            payload: { uid },
-          } = action;
-          const updateData = {
-            contractorId: uid,
-          };
-          dispatch(updateUser({ uid: data.uid, updateData }));
-        });
-      });
-    }
-  }, [data]);
-
   if (isAuthenticated) {
     return <Navigate to={routes.HOME} replace />;
   }
@@ -106,10 +96,22 @@ export default function ContractorEnrollment() {
       <Container maxWidth='xs'>
         <AuthenticationHeader title={pageName} />
         <Grid container spacing={3}>
-          <Grid item xs={6}>
+          <Grid item xs={12}>
             <TextField
               autoFocus
-              label='First Name'
+              label='Business name'
+              fullWidth
+              {...register('contractorName', { required: true })}
+              error={errors.contractorName?.type === 'required'}
+              helperText={
+                errors.contractorName?.type === 'required' &&
+                'Business name is required'
+              }
+            />
+          </Grid>
+          <Grid item xs={6}>
+            <TextField
+              label='First name'
               {...register('fullName.firstName', { required: true })}
               error={errors.fullName?.firstName?.type === 'required'}
               helperText={
@@ -120,7 +122,7 @@ export default function ContractorEnrollment() {
           </Grid>
           <Grid item xs={6}>
             <TextField
-              label='Last Name'
+              label='Last name'
               {...register('fullName.lastName', { required: true })}
               error={errors.fullName?.lastName?.type === 'required'}
               helperText={
@@ -166,7 +168,7 @@ export default function ContractorEnrollment() {
           </Grid>
           <Grid item xs={12}>
             <TextField
-              label='Confirm Password'
+              label='Confirm password'
               type='password'
               fullWidth
               {...register('confirmPassword', { required: true })}

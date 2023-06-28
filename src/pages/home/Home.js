@@ -3,6 +3,9 @@ import { useEffect } from 'react';
 // Components
 import EnrollmentBanner from './components/EnrollmentBanner';
 
+// Firebase
+import { getAuth, onAuthStateChanged } from 'firebase/auth';
+
 // MUI
 import { Box, Container, Typography, useTheme } from '@mui/material';
 
@@ -15,20 +18,26 @@ import { fetchCustomer } from 'store/slices/customerSlice';
 export default function Home() {
   document.title = 'Daedalus';
 
+  const auth = getAuth();
   const theme = useTheme();
-
   const dispatch = useDispatch();
+
   const { data, loading } = useSelector((state) => state.user);
 
   useEffect(() => {
-    if (data && data.uid && !data.customerId && !data.contractorId) {
-      dispatch(fetchUser(data.uid));
-    } else if (data?.userType === 'customer' && data?.customerId) {
-      dispatch(fetchCustomer(data.customerId));
-    } else if (data?.userType !== 'customer' && data?.contractorId) {
-      dispatch(fetchContractor(data.contractorId));
-    }
-  }, [data, dispatch]);
+    const unsubscribe = onAuthStateChanged(auth, async (user) => {
+      if (user) {
+        await dispatch(fetchUser(user.uid));
+        if (data?.userType === 'customer') {
+          dispatch(fetchCustomer(user.uid));
+        } else if (data?.userType === 'contractor') {
+          dispatch(fetchContractor(user.uid));
+        }
+      }
+    });
+
+    return () => unsubscribe();
+  }, [auth, dispatch]);
 
   if (loading) return <p>Loading...</p>;
 

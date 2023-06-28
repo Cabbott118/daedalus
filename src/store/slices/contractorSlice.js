@@ -11,11 +11,11 @@ import { createSlice, createAction, createAsyncThunk } from '@reduxjs/toolkit';
 // dispatch(createContractor({ testTitle}));
 const createContractor = createAsyncThunk(
   'contractor/createContractor',
-  async ({ testTitle, ownerId }) => {
+  async ({ contractorName, ownerId }) => {
     try {
       const response = await post('/create-contractor', {
         ownerId,
-        testTitle,
+        contractorName,
       });
       return response.contractor;
     } catch (error) {
@@ -29,9 +29,9 @@ const createContractor = createAsyncThunk(
 // dispatch(fetchContractor(uid));
 const fetchContractor = createAsyncThunk(
   'contractor/fetchContractor',
-  async (uid) => {
+  async (ownerId) => {
     try {
-      const response = await get('/get-contractor-details', { uid });
+      const response = await get('/get-contractor-details', { ownerId });
       return response;
     } catch {
       throw new Error('Failed to fetch contractor data.');

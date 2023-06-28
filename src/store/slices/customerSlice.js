@@ -11,13 +11,12 @@ import { createSlice, createAction, createAsyncThunk } from '@reduxjs/toolkit';
 // dispatch(createCustomer({ testTitle}));
 const createCustomer = createAsyncThunk(
   'customer/createCustomer',
-  async ({ testTitle, ownerId }) => {
+  async ({ customerName, ownerId }) => {
     try {
       const response = await post('/create-customer', {
         ownerId,
-        testTitle,
+        customerName,
       });
-      console.log(response);
       return response.customer;
     } catch (error) {
       throw new Error('Failed to create customer data.');
@@ -30,9 +29,9 @@ const createCustomer = createAsyncThunk(
 // dispatch(fetchCustomer(uid));
 const fetchCustomer = createAsyncThunk(
   'contractor/fetchCustomer',
-  async (uid) => {
+  async (ownerId) => {
     try {
-      const response = await get('/get-customer-details', { uid });
+      const response = await get('/get-customer-details', { ownerId });
       return response;
     } catch {
       throw new Error('Failed to fetch customer data.');

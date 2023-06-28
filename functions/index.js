@@ -41,6 +41,7 @@ app.post('/create-user', async (req, res) => {
 app.get('/get-user-details', async (req, res) => {
   try {
     const userId = req.query.uid;
+    console.log(req.auth);
     const userRef = admin.firestore().collection('users').doc(userId);
     const userDoc = await userRef.get();
 
@@ -98,10 +99,10 @@ app.delete('/delete-user', async (req, res) => {
 
 app.post('/create-customer', async (req, res) => {
   try {
-    const { ownerId, testTitle } = req.body;
+    const { ownerId, customerName } = req.body;
     const newCustomer = {
-      recordOwner: ownerId,
-      testTitle,
+      ownerId,
+      customerName,
       uid: '',
     };
 
@@ -130,18 +131,24 @@ app.post('/create-customer', async (req, res) => {
 
 app.get('/get-customer-details', async (req, res) => {
   try {
-    const customerId = req.query.uid;
-    const customerRef = admin
-      .firestore()
-      .collection('customer')
-      .doc(customerId);
-    const customerDoc = await customerRef.get();
+    const ownerId = req.query.ownerId;
+    const customersRef = admin.firestore().collection('customer');
+    const querySnapshot = await customersRef
+      .where('recordOwner', '==', ownerId)
+      .get();
 
-    if (!customerDoc.exists) {
-      return res.status(404).json({ message: 'Customer not found' });
+    if (querySnapshot.empty) {
+      return res
+        .status(404)
+        .json({ message: 'No customers found for the specified owner' });
     }
 
-    const customerDetails = customerDoc.data();
+    const customerDetails = [];
+    querySnapshot.forEach((doc) => {
+      const customerData = doc.data();
+      customerDetails.push(customerData);
+    });
+
     return res.status(200).json(customerDetails);
   } catch (error) {
     console.error('Error retrieving customer details:', error);
@@ -153,10 +160,10 @@ app.get('/get-customer-details', async (req, res) => {
 
 app.post('/create-contractor', async (req, res) => {
   try {
-    const { ownerId, testTitle } = req.body;
+    const { ownerId, contractorName } = req.body;
     const newContractor = {
-      recordOwner: ownerId,
-      testTitle,
+      ownerId,
+      contractorName,
       uid: '',
     };
 
@@ -185,18 +192,24 @@ app.post('/create-contractor', async (req, res) => {
 
 app.get('/get-contractor-details', async (req, res) => {
   try {
-    const contractorId = req.query.uid;
-    const contractorRef = admin
-      .firestore()
-      .collection('contractor')
-      .doc(contractorId);
-    const contractorDoc = await contractorRef.get();
+    const ownerId = req.query.ownerId;
+    const contractorRef = admin.firestore().collection('contractor');
+    const querySnapshot = await contractorRef
+      .where('recordOwner', '==', ownerId)
+      .get();
 
-    if (!contractorDoc.exists) {
-      return res.status(404).json({ message: 'Contractor not found' });
+    if (querySnapshot.empty) {
+      return res
+        .status(404)
+        .json({ message: 'No contractors found for the specified owner' });
     }
 
-    const contractorDetails = contractorDoc.data();
+    const contractorDetails = [];
+    querySnapshot.forEach((doc) => {
+      const contractorData = doc.data();
+      contractorDetails.push(contractorData);
+    });
+
     return res.status(200).json(contractorDetails);
   } catch (error) {
     console.error('Error retrieving contractor details:', error);

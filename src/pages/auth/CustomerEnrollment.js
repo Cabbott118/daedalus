@@ -44,7 +44,6 @@ export default function CustomerEnrollment() {
   const { data, loading, isAuthenticated, error } = useSelector(
     (state) => state.user
   );
-  const { data: dataCustomer } = useSelector((state) => state.customer);
 
   const handleClickShowPassword = () => setShowPassword((show) => !show);
 
@@ -56,10 +55,20 @@ export default function CustomerEnrollment() {
   } = useForm();
 
   const onSubmit = (data) => {
-    const { email, password, confirmPassword } = data;
+    const { customerName, fullName, email, password, confirmPassword } = data;
     if (passwordMatch(password, confirmPassword)) {
       dispatch(clearUserData());
-      dispatch(signUpUser({ email, password }));
+      dispatch(signUpUser({ email, password })).then((action) => {
+        dispatch(
+          createUser({
+            email,
+            uid: action.payload.uid,
+            fullName,
+            userType: 'customer',
+          })
+        );
+        dispatch(createCustomer({ customerName, ownerId: action.payload.uid }));
+      });
     } else {
       setPasswordMissmatch(true);
     }
@@ -76,28 +85,6 @@ export default function CustomerEnrollment() {
     }
   }, [error]);
 
-  useEffect(() => {
-    if (data?.uid) {
-      const { email, fullName } = getValues();
-      dispatch(
-        createUser({ email, uid: data.uid, fullName, userType: 'customer' })
-      ).then(() => {
-        dispatch(
-          createCustomer({ testTitle: 'test title', ownerId: data.uid })
-        ).then((action) => {
-          console.log(action);
-          const {
-            payload: { uid },
-          } = action;
-          const updateData = {
-            customerId: uid,
-          };
-          dispatch(updateUser({ uid: data.uid, updateData }));
-        });
-      });
-    }
-  }, [data]);
-
   if (isAuthenticated) {
     return <Navigate to={routes.HOME} replace />;
   }
@@ -107,10 +94,22 @@ export default function CustomerEnrollment() {
       <Container maxWidth='xs'>
         <AuthenticationHeader title={pageName} />
         <Grid container spacing={3}>
-          <Grid item xs={6}>
+          <Grid item xs={12}>
             <TextField
               autoFocus
-              label='First Name'
+              label='Business name'
+              fullWidth
+              {...register('customerName', { required: true })}
+              error={errors.customerName?.type === 'required'}
+              helperText={
+                errors.customerName?.type === 'required' &&
+                'Business name is required'
+              }
+            />
+          </Grid>
+          <Grid item xs={6}>
+            <TextField
+              label='First name'
               {...register('fullName.firstName', { required: true })}
               error={errors.fullName?.firstName?.type === 'required'}
               helperText={
@@ -121,7 +120,7 @@ export default function CustomerEnrollment() {
           </Grid>
           <Grid item xs={6}>
             <TextField
-              label='Last Name'
+              label='Last name'
               {...register('fullName.lastName', { required: true })}
               error={errors.fullName?.lastName?.type === 'required'}
               helperText={
@@ -167,7 +166,7 @@ export default function CustomerEnrollment() {
           </Grid>
           <Grid item xs={12}>
             <TextField
-              label='Confirm Password'
+              label='Confirm password'
               type='password'
               fullWidth
               {...register('confirmPassword', { required: true })}
