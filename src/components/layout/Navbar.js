@@ -45,7 +45,6 @@ export default function Navbar() {
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       if (user) {
-        dispatch(fetchNotifications(user?.uid));
         const newNavLinks = [
           {
             name: 'Dashboard',
@@ -70,6 +69,17 @@ export default function Navbar() {
     auth,
     // userData, customerData, contractorData
   ]);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      // Function to run every 10 seconds
+      console.log('Running every 10 seconds');
+      dispatch(fetchNotifications(userData?.uid));
+    }, 10000);
+
+    // Clean up the interval on component unmount
+    return () => clearInterval(interval);
+  }, []);
 
   useEffect(() => {
     const filteredNotifications = notificationsData?.filter(
