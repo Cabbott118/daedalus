@@ -9,11 +9,9 @@ import { getAuth, onAuthStateChanged } from 'firebase/auth';
 // MUI
 import {
   AppBar,
-  Badge,
   Box,
   Button,
   Container,
-  Menu,
   Toolbar,
   useTheme,
 } from '@mui/material';
@@ -23,24 +21,17 @@ import { Link, Outlet } from 'react-router-dom';
 
 // Redux
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchNotifications } from 'store/slices/notificationsSlice';
 
 // Notifications component
 import Notifications from 'pages/notifications/Notifications';
 
 export default function Navbar() {
   const auth = getAuth();
-  const theme = useTheme();
   const dispatch = useDispatch();
 
   const [navLinks, setNavLinks] = useState([]);
-  const [anchorEl, setAnchorEl] = useState(null);
-  const [unreadNotifications, setUnreadNotifications] = useState(null);
 
   const { data: userData } = useSelector((state) => state.user);
-  const { data: notificationsData } = useSelector(
-    (state) => state.notifications
-  );
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
@@ -65,36 +56,7 @@ export default function Navbar() {
     });
 
     return () => unsubscribe();
-  }, [
-    auth,
-    // userData, customerData, contractorData
-  ]);
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      // Function to run every 10 seconds
-      console.log('Running every 10 seconds');
-      dispatch(fetchNotifications(userData?.uid));
-    }, 10000);
-
-    // Clean up the interval on component unmount
-    return () => clearInterval(interval);
-  }, []);
-
-  useEffect(() => {
-    const filteredNotifications = notificationsData?.filter(
-      (notification) => !notification?.notificationHasBeenRead
-    );
-    setUnreadNotifications(filteredNotifications?.length);
-  }, [notificationsData]);
-
-  const handleNotificationsClick = (event) => {
-    setAnchorEl(event.currentTarget);
-  };
-
-  const handleNotificationsClose = () => {
-    setAnchorEl(null);
-  };
+  }, [auth]);
 
   return (
     <>
@@ -123,32 +85,7 @@ export default function Navbar() {
                   </Button>
                 </Link>
               ))}
-              {auth?.currentUser && (
-                <Button
-                  aria-haspopup='true'
-                  aria-controls='notifications-menu'
-                  onClick={handleNotificationsClick}
-                  sx={{
-                    textTransform: 'none',
-                  }}
-                >
-                  <Badge
-                    badgeContent={unreadNotifications}
-                    // badgeContent={notificationsData?.length}
-                    color='error'
-                  >
-                    Notifications
-                  </Badge>
-                </Button>
-              )}
-              <Menu
-                id='notifications-menu'
-                anchorEl={anchorEl}
-                open={Boolean(anchorEl)}
-                onClose={handleNotificationsClose}
-              >
-                <Notifications onClose={handleNotificationsClose} />
-              </Menu>
+              <Notifications userId={userData?.uid} />
             </Toolbar>
           </AppBar>
         </Container>

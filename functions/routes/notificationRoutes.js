@@ -1,7 +1,7 @@
 //notificationRoutes.js
-const express = require('express');
+const functions = require('firebase-functions');
 const admin = require('firebase-admin');
-
+const express = require('express');
 const router = express.Router();
 
 router.get('/get-notifications', async (req, res) => {
@@ -10,6 +10,7 @@ router.get('/get-notifications', async (req, res) => {
     const notificationsRef = admin.firestore().collection('notifications');
     const querySnapshot = await notificationsRef
       .where('ticketOwner', '==', createdBy)
+      .orderBy('createdAt', 'desc') // Add orderBy clause
       .get();
 
     if (querySnapshot.empty) {
@@ -51,5 +52,14 @@ router.patch('/update-notification', async (req, res) => {
     return res.status(500).json({ message: 'Internal Server Error' });
   }
 });
+
+exports.notificationListener = functions.firestore
+  .document('notifications/{notificationId}')
+  .onCreate(async (snapshot, context) => {
+    // Get the newly created notification data
+    const newNotification = snapshot.data();
+    // Perform any desired actions with the new notification data
+    console.log('New notification:', newNotification);
+  });
 
 module.exports = router;

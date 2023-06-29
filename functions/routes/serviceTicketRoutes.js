@@ -1,3 +1,4 @@
+// serviceTicketRoutes.js
 const functions = require('firebase-functions');
 const admin = require('firebase-admin');
 const express = require('express');
@@ -90,7 +91,7 @@ const createNotificationOnTicketCreation = functions.firestore
       const notificationData = {
         ticketId,
         notificationType: 'service ticket',
-        notificationHasBeenRead: false,
+        hasBeenRead: false,
         ticketOwner: snapshot.data().createdBy,
         message: 'A new service ticket has been created',
         createdAt: admin.firestore.FieldValue.serverTimestamp(),
@@ -135,7 +136,7 @@ const createNotificationOnStatusChange = functions.firestore
           uid, // Add the uid field
           ticketId,
           notificationType: 'service ticket',
-          notificationHasBeenRead: false,
+          hasBeenRead: false,
           ticketOwner: newValue.createdBy, // Access createdBy from the newValue object
           message: 'Your ticket has been assigned',
           createdAt: admin.firestore.FieldValue.serverTimestamp(),
