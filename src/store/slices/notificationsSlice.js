@@ -53,14 +53,14 @@ const clearNotificationData = createAction(
 const notificationsSlice = createSlice({
   name: 'notifications',
   initialState: {
-    data: null,
+    data: [],
     loading: false,
     error: null,
   },
   reducers: {
     clearNotificationData: (state) => {
       return {
-        data: null,
+        data: [],
         loading: false,
         error: null,
       };
@@ -71,12 +71,14 @@ const notificationsSlice = createSlice({
       // Get notifications record details
       .addCase(fetchNotifications.pending, (state) => {
         return {
+          ...state,
           loading: true,
           error: null,
         };
       })
       .addCase(fetchNotifications.fulfilled, (state, action) => {
         return {
+          ...state,
           data: action.payload,
           loading: false,
           error: null,
@@ -84,6 +86,7 @@ const notificationsSlice = createSlice({
       })
       .addCase(fetchNotifications.rejected, (state, action) => {
         return {
+          ...state,
           loading: false,
           error: action.error.message,
         };
@@ -91,18 +94,29 @@ const notificationsSlice = createSlice({
       // Update notification details
       .addCase(updateNotification.pending, (state) => {
         return {
+          ...state,
           loading: true,
           error: null,
         };
       })
       .addCase(updateNotification.fulfilled, (state, action) => {
+        const updatedNotification = action.payload;
+        const updatedData = state.data.map((notification) => {
+          if (notification.uid === updatedNotification.uid) {
+            return updatedNotification;
+          }
+          return notification;
+        });
+
         return {
-          data: action.payload,
+          ...state,
+          data: updatedData,
           loading: false,
         };
       })
       .addCase(updateNotification.rejected, (state, action) => {
         return {
+          ...state,
           loading: false,
           error: action.error.message,
         };

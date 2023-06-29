@@ -14,7 +14,6 @@ import {
   Button,
   Container,
   Menu,
-  MenuItem,
   Toolbar,
   useTheme,
 } from '@mui/material';
@@ -36,11 +35,9 @@ export default function Navbar() {
 
   const [navLinks, setNavLinks] = useState([]);
   const [anchorEl, setAnchorEl] = useState(null);
-  const [unreadNotifications, setUnreadNotifications] = useState([]);
+  const [unreadNotifications, setUnreadNotifications] = useState(null);
 
   const { data: userData } = useSelector((state) => state.user);
-  const { data: customerData } = useSelector((state) => state.customer);
-  const { data: contractorData } = useSelector((state) => state.contractor);
   const { data: notificationsData } = useSelector(
     (state) => state.notifications
   );
@@ -74,14 +71,12 @@ export default function Navbar() {
     // userData, customerData, contractorData
   ]);
 
-  // useEffect(() => {
-  //   if (notificationsData) {
-  //     const filteredNotifications = notificationsData?.filter(
-  //       (notification) => !notification?.notificationHasBeenRead
-  //     );
-  //     setUnreadNotifications(filteredNotifications);
-  //   }
-  // }, [notificationsData]);
+  useEffect(() => {
+    const filteredNotifications = notificationsData?.filter(
+      (notification) => !notification?.notificationHasBeenRead
+    );
+    setUnreadNotifications(filteredNotifications?.length);
+  }, [notificationsData]);
 
   const handleNotificationsClick = (event) => {
     setAnchorEl(event.currentTarget);
@@ -128,8 +123,8 @@ export default function Navbar() {
                   }}
                 >
                   <Badge
-                    // badgeContent={unreadNotifications?.length}
-                    badgeContent={notificationsData?.length}
+                    badgeContent={unreadNotifications}
+                    // badgeContent={notificationsData?.length}
                     color='error'
                   >
                     Notifications

@@ -23,9 +23,7 @@ import { useParams } from 'react-router-dom';
 // Redux
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchServiceTicket } from 'store/slices/serviceTicketSlice';
-import { updateNotification } from 'store/slices/notificationsSlice';
 
-// clear notification by dispatch(updateServiceTicket({uid, updateData}))
 const ServiceTicket = () => {
   const { uid } = useParams();
   const dispatch = useDispatch();
@@ -34,11 +32,7 @@ const ServiceTicket = () => {
     useSelector((state) => state.serviceTicket);
 
   useEffect(() => {
-    // const updateData = {
-    //   notificationHasBeenRead: true,
-    // };
     dispatch(fetchServiceTicket(uid));
-    // dispatch(updateNotification({ uid, updateData }));
   }, []);
 
   const formatCreatedAt = (createdAt) => {

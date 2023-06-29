@@ -46,7 +46,7 @@ const Notifications = ({ onClose }) => {
         <Typography variant='p'>Loading notifications...</Typography>
       ) : (
         <>
-          {data ? (
+          {data?.length != 0 ? (
             <List>
               {data?.map((notification, index) => (
                 <ListItem key={index} disablePadding>
