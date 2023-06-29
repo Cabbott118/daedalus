@@ -1,5 +1,8 @@
 import { useEffect, useState } from 'react';
 
+// Components
+import Notifications from 'pages/notifications/components/Notifications';
+
 // Constants
 import routes from 'constants/routes';
 
@@ -22,9 +25,6 @@ import { Link, Outlet } from 'react-router-dom';
 // Redux
 import { useDispatch, useSelector } from 'react-redux';
 
-// Notifications component
-import Notifications from 'pages/notifications/Notifications';
-
 export default function Navbar() {
   const auth = getAuth();
   const dispatch = useDispatch();
@@ -35,11 +35,12 @@ export default function Navbar() {
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
+      console.log(user);
       if (user) {
         const newNavLinks = [
           {
             name: 'Dashboard',
-            route: `${routes.USER}/${userData?.uid}/dashboard`,
+            route: `${routes.DASHBOARD.replace(':uid', user?.uid)}`,
             variant: 'text',
           },
         ];

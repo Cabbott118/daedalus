@@ -31,6 +31,9 @@ import ForgotPassword from 'pages/forgotPassword/ForgotPassword';
 import ForgotPasswordConfirmation from 'pages/forgotPassword/ForgotPasswordConfirmation';
 import RequireAuth from 'routes/requireAuth';
 
+// Notifications
+import Notifications from 'pages/notifications/Notifications';
+
 // React Router
 import { Outlet, Route, Routes } from 'react-router-dom';
 import { BrowserRouter } from 'react-router-dom';
@@ -55,6 +58,11 @@ function App() {
             >
               {/* Place your 'authenticated routes in here! They can be referenced by /user/<route> */}
               <Route index path=':uid/dashboard' element={<Dashboard />} />
+              <Route
+                index
+                path=':uid/notifications'
+                element={<Notifications />}
+              />
             </Route>
             <Route
               path={routes.CUSTOMER} // place all routes that need user logged in under /customer/
