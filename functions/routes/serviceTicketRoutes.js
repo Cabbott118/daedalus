@@ -52,6 +52,8 @@ router.post('/create-service-ticket', async (req, res) => {
     const newTicket = {
       createdBy: uid,
       status: 'new',
+      assigned: false,
+      assignedTo: '',
       companyReceivingServices,
       reasonForServices,
       createdAt: admin.firestore.FieldValue.serverTimestamp(),
