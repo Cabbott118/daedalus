@@ -11,11 +11,11 @@ import { createSlice, createAction, createAsyncThunk } from '@reduxjs/toolkit';
 // dispatch(createCustomer({ testTitle}));
 const createCustomer = createAsyncThunk(
   'customer/createCustomer',
-  async ({ customerName, ownerId }) => {
+  async ({ businessName, ownerId }) => {
     try {
       const response = await post('/customers/create-customer', {
         ownerId,
-        customerName,
+        businessName,
       });
       return response.customer;
     } catch (error) {
@@ -37,6 +37,28 @@ const fetchCustomer = createAsyncThunk(
       return response;
     } catch {
       throw new Error('Failed to fetch customer data.');
+    }
+  }
+);
+
+// Async thunk to update customer data
+// const uid = '123'
+// const updateData = {
+//   something: 'some value'
+// };
+
+// dispatch(updateCustomer({ uid, updateData }));
+const updateCustomer = createAsyncThunk(
+  'customer/updateCustomer',
+  async ({ uid, updateData }) => {
+    try {
+      const response = await patch('/customers/update-customer', {
+        uid,
+        updateData,
+      });
+      return response.customer;
+    } catch (error) {
+      throw new Error('Failed to update customer data.');
     }
   }
 );
@@ -82,7 +104,7 @@ const customerSlice = createSlice({
           error: action.error.message,
         };
       })
-      // Get contractor record details
+      // Get customer record details
       .addCase(fetchCustomer.pending, (state) => {
         return {
           loading: true,
@@ -101,10 +123,30 @@ const customerSlice = createSlice({
           loading: false,
           error: action.error.message,
         };
+      })
+      // Update customer record details
+      .addCase(updateCustomer.pending, (state) => {
+        return {
+          loading: true,
+          error: null,
+        };
+      })
+      .addCase(updateCustomer.fulfilled, (state, action) => {
+        return {
+          data: action.payload,
+          loading: false,
+          error: null,
+        };
+      })
+      .addCase(updateCustomer.rejected, (state, action) => {
+        return {
+          loading: false,
+          error: action.error.message,
+        };
       });
   },
 });
 
 // Export the async thunk and reducer
 export const { reducer: customerReducer } = customerSlice;
-export { createCustomer, fetchCustomer, clearCustomerData };
+export { createCustomer, fetchCustomer, updateCustomer, clearCustomerData };

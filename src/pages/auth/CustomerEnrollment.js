@@ -55,7 +55,7 @@ export default function CustomerEnrollment() {
   } = useForm();
 
   const onSubmit = (data) => {
-    const { customerName, fullName, email, password, confirmPassword } = data;
+    const { businessName, fullName, email, password, confirmPassword } = data;
     if (passwordMatch(password, confirmPassword)) {
       dispatch(clearUserData());
       dispatch(signUpUser({ email, password })).then((action) => {
@@ -67,7 +67,7 @@ export default function CustomerEnrollment() {
             userType: 'customer',
           })
         );
-        dispatch(createCustomer({ customerName, ownerId: action.payload.uid }));
+        dispatch(createCustomer({ businessName, ownerId: action.payload.uid }));
       });
     } else {
       setPasswordMissmatch(true);
@@ -99,10 +99,10 @@ export default function CustomerEnrollment() {
               autoFocus
               label='Business name'
               fullWidth
-              {...register('customerName', { required: true })}
-              error={errors.customerName?.type === 'required'}
+              {...register('businessName', { required: true })}
+              error={errors.businessName?.type === 'required'}
               helperText={
-                errors.customerName?.type === 'required' &&
+                errors.businessName?.type === 'required' &&
                 'Business name is required'
               }
             />

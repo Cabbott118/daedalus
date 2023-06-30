@@ -47,7 +47,11 @@ const CreateServiceTicketDialog = ({
     setDialogOpen(false);
   };
 
-  const { register, handleSubmit } = useForm();
+  const {
+    register,
+    formState: { errors },
+    handleSubmit,
+  } = useForm();
 
   const onSubmit = ({ reasonForServices }) => {
     dispatch(
@@ -68,8 +72,12 @@ const CreateServiceTicketDialog = ({
         Create Service Ticket
       </Button>
       <Dialog open={dialogOpen} onClose={handleCloseDialog}>
-        <Box component='form' onSubmit={handleSubmit(onSubmit)}>
-          <DialogTitle>{`Create Service Ticket for ${companyReceivingServices}`}</DialogTitle>
+        <Box
+          component='form'
+          onSubmit={handleSubmit(onSubmit)}
+          sx={{ minWidth: '20rem' }}
+        >
+          <DialogTitle>{`Service Ticket for ${companyReceivingServices}`}</DialogTitle>
           <DialogContent>
             <Grid container spacing={3} sx={{ mt: 0 }}>
               <Grid item xs={12}>
@@ -79,7 +87,12 @@ const CreateServiceTicketDialog = ({
                   multiline
                   rows={4}
                   fullWidth
-                  {...register('reasonForServices')}
+                  {...register('reasonForServices', { required: true })}
+                  error={errors.reasonForServices?.type === 'required'}
+                  helperText={
+                    errors.reasonForServices?.type === 'required' &&
+                    'A description of the issue is required'
+                  }
                 />
               </Grid>
             </Grid>

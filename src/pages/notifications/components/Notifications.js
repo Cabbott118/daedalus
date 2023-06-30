@@ -158,7 +158,7 @@ const Notifications = ({ userId }) => {
                       key={notification.uid}
                       disablePadding
                       sx={{
-                        bgcolor: notification.hasBeenRead ? null : '#eee',
+                        bgcolor: notification.hasBeenRead ? null : '#f0fafa',
                         borderRadius: '5px',
                       }}
                     >
@@ -190,9 +190,11 @@ const Notifications = ({ userId }) => {
                   ))}
                 </List>
               ) : (
-                <Typography variant='body1'>
-                  No notifications to display
-                </Typography>
+                <Container sx={{ p: '1rem' }}>
+                  <Typography variant='body1'>
+                    No notifications to display
+                  </Typography>
+                </Container>
               )}
             </>
           )}

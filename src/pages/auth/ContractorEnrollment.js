@@ -55,7 +55,7 @@ export default function ContractorEnrollment() {
   } = useForm();
 
   const onSubmit = (data) => {
-    const { contractorName, fullName, email, password, confirmPassword } = data;
+    const { businessName, fullName, email, password, confirmPassword } = data;
     if (passwordMatch(password, confirmPassword)) {
       dispatch(clearUserData());
       dispatch(signUpUser({ email, password })).then((action) => {
@@ -68,7 +68,7 @@ export default function ContractorEnrollment() {
           })
         );
         dispatch(
-          createContractor({ contractorName, ownerId: action.payload.uid })
+          createContractor({ businessName, ownerId: action.payload.uid })
         );
       });
     } else {
@@ -101,10 +101,10 @@ export default function ContractorEnrollment() {
               autoFocus
               label='Business name'
               fullWidth
-              {...register('contractorName', { required: true })}
-              error={errors.contractorName?.type === 'required'}
+              {...register('businessName', { required: true })}
+              error={errors.businessName?.type === 'required'}
               helperText={
-                errors.contractorName?.type === 'required' &&
+                errors.businessName?.type === 'required' &&
                 'Business name is required'
               }
             />

@@ -6,10 +6,10 @@ const router = express.Router();
 
 router.post('/create-contractor', async (req, res) => {
   try {
-    const { ownerId, contractorName } = req.body;
+    const { ownerId, businessName } = req.body;
     const newContractor = {
       ownerId,
-      contractorName,
+      businessName,
       uid: '',
     };
 
@@ -69,6 +69,31 @@ router.get('/get-contractor-details', async (req, res) => {
     return res.status(200).json(contractorData);
   } catch (error) {
     console.error('Error retrieving contractor details:', error);
+    return res.status(500).json({ message: 'Internal Server Error' });
+  }
+});
+
+router.patch('/update-contractor', async (req, res) => {
+  try {
+    const { uid, updateData } = req.body;
+    await admin
+      .firestore()
+      .collection('contractors')
+      .doc(uid)
+      .update(updateData);
+    // Retrieve the updated contractor data from Firestore
+    const updatedContractorDoc = await admin
+      .firestore()
+      .collection('contractors')
+      .doc(uid)
+      .get();
+    const updatedContractor = updatedContractorDoc.data();
+    return res.status(200).json({
+      message: 'Contractor document updated successfully',
+      contractor: updatedContractor,
+    });
+  } catch (error) {
+    console.error('Error updating contractor document', error);
     return res.status(500).json({ message: 'Internal Server Error' });
   }
 });

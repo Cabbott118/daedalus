@@ -1,5 +1,8 @@
 import { useState } from 'react';
 
+// Constants
+import UserType from 'constants/userType';
+
 // MUI
 import {
   Box,
@@ -14,13 +17,14 @@ import {
 import { useForm } from 'react-hook-form';
 
 // Redux
-import { useDispatch, useSelector } from 'react-redux';
-import { updateUser } from 'store/slices/userSlice';
+import { useDispatch } from 'react-redux';
+import { updateCustomer } from 'store/slices/customerSlice';
+import { updateContractor } from 'store/slices/contractorSlice';
 
-const AccountComponent = ({ uid, userData, loading }) => {
-  const [editMode, setEditMode] = useState(false);
-
+const BusinessNameComponent = ({ uid, data, userType, loading }) => {
   const dispatch = useDispatch();
+
+  const [editMode, setEditMode] = useState(false);
 
   const handleEditSwitch = () => {
     setEditMode(!editMode);
@@ -28,27 +32,25 @@ const AccountComponent = ({ uid, userData, loading }) => {
 
   const { register, handleSubmit } = useForm({
     defaultValues: {
-      fullName: {
-        firstName: userData?.fullName?.firstName,
-        lastName: userData?.fullName?.lastName,
-      },
-      email: userData?.email,
+      businessName: data?.businessName,
     },
   });
 
   const onSubmit = (data) => {
     const updateData = {
-      fullName: {
-        firstName: data.fullName.firstName,
-        lastName: data.fullName.lastName,
-      },
-      email: data.email,
+      businessName: data.businessName,
     };
-    dispatch(updateUser({ uid, updateData }));
+
+    if (userType === UserType.CUSTOMER)
+      dispatch(updateCustomer({ uid, updateData }));
+
+    if (userType === UserType.CONTRACTOR)
+      dispatch(updateContractor({ uid, updateData }));
+
     setEditMode(false);
   };
 
-  if (loading) return <p>loading...</p>;
+  if (loading) return <p>Loading...</p>;
 
   return (
     <Box component='form' onSubmit={handleSubmit(onSubmit)}>
@@ -56,7 +58,7 @@ const AccountComponent = ({ uid, userData, loading }) => {
         <Grid container spacing={3} sx={{ mt: 0, mb: 3 }}>
           <Grid item xs={9}>
             <Typography variant='h6' sx={{ textDecoration: 'underline' }}>
-              Personal Information
+              Business Name
             </Typography>
           </Grid>
           <Grid item xs={3}>
@@ -68,33 +70,18 @@ const AccountComponent = ({ uid, userData, loading }) => {
               Edit
             </Button>
           </Grid>
-          <Grid item xs={6}>
+          <Grid item xs={12}>
             {editMode ? (
               <TextField
-                label='First Name'
-                {...register('fullName.firstName')}
+                label='Business Name'
+                fullWidth
+                defaultValue={data?.businessName || ''}
+                {...register('businessName')}
               />
             ) : (
               <>
-                <Typography variant='subtitle2'>Name</Typography>
-                <Typography variant='p'>
-                  {userData?.fullName?.firstName} {userData?.fullName?.lastName}
-                </Typography>
-              </>
-            )}
-          </Grid>
-          <Grid item xs={6}>
-            {editMode ? (
-              <TextField label='Last Name' {...register('fullName.lastName')} />
-            ) : null}
-          </Grid>
-          <Grid item xs={12}>
-            {editMode ? (
-              <TextField label='Email' fullWidth {...register('email')} />
-            ) : (
-              <>
-                <Typography variant='subtitle2'>Email Address</Typography>
-                <Typography variant='p'>{userData?.email}</Typography>
+                <Typography variant='subtitle2'>Business Name</Typography>
+                <Typography variant='p'>{data?.businessName}</Typography>
               </>
             )}
           </Grid>
@@ -108,7 +95,7 @@ const AccountComponent = ({ uid, userData, loading }) => {
                   disabled={loading}
                   sx={{ textTransform: 'none' }}
                 >
-                  Update Details
+                  Update Business Name
                 </Button>
               </Grid>
               <Grid item xs={12}>
@@ -130,4 +117,4 @@ const AccountComponent = ({ uid, userData, loading }) => {
   );
 };
 
-export default AccountComponent;
+export default BusinessNameComponent;

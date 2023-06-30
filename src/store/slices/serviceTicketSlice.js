@@ -93,6 +93,7 @@ const serviceTicketSlice = createSlice({
   name: 'serviceTicket',
   initialState: {
     data: null,
+    serviceTickets: [],
     loading: false,
     error: null,
   },
@@ -136,7 +137,7 @@ const serviceTicketSlice = createSlice({
       })
       .addCase(fetchServiceTickets.fulfilled, (state, action) => {
         return {
-          data: action.payload,
+          serviceTickets: action.payload,
           loading: false,
           error: null,
         };
@@ -178,6 +179,7 @@ const serviceTicketSlice = createSlice({
         return {
           data: action.payload,
           loading: false,
+          error: null,
         };
       })
       .addCase(updateServiceTicket.rejected, (state, action) => {

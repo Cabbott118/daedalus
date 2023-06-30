@@ -91,7 +91,7 @@ const Notifications = ({ userId }) => {
                     key={notification.uid}
                     disablePadding
                     sx={{
-                      bgcolor: notification.hasBeenRead ? null : '#eee',
+                      bgcolor: notification.hasBeenRead ? null : '#f0fafa',
                       borderRadius: '5px',
                     }}
                   >

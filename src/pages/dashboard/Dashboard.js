@@ -5,31 +5,27 @@ import DeleteDialog from 'pages/dashboard/components/DeleteDialog';
 import UpdateDialog from 'pages/dashboard/components/UpdateDialog';
 import CreateServiceTicketDialog from 'pages/customer/components/CreateServiceTicketDialog';
 import AccountComponent from 'pages/dashboard/components/AccountComponent';
-import AddressComponent from 'pages/dashboard/components/AddressComponent';
+import BusinessInformationComponent from 'pages/dashboard/components/BusinessInformationComponent';
+import PaymentDetailsComponent from 'pages/dashboard/components/PaymentDetailsComponent';
+import SecurityComponent from 'pages/dashboard/components/SecurityComponent';
+import AdminComponent from './components/AdminComponent';
 import Logout from 'components/common/Logout';
 
 // Constants
 import UserType from 'constants/userType';
 
 // MUI
-import {
-  Button,
-  Container,
-  Grid,
-  Paper,
-  Typography,
-  useTheme,
-} from '@mui/material';
-import { Person, LocationOn, CreditCard, Security } from '@mui/icons-material';
+import { Button, Container, Grid, Paper, Typography } from '@mui/material';
+import { Person, Business, CreditCard, Security } from '@mui/icons-material';
 
 // Redux
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchContractor } from 'store/slices/contractorSlice';
-import { fetchCustomer } from 'store/slices/customerSlice';
 
 export default function Dashboard() {
-  const theme = useTheme();
   const dispatch = useDispatch();
+
+  const [menuItems, setMenuItems] = useState([]);
+  const [activeItem, setActiveItem] = useState('Account');
 
   const { data: userData, loading: userLoading } = useSelector(
     (state) => state.user
@@ -47,21 +43,35 @@ export default function Dashboard() {
 
   useEffect(() => {
     if (userData?.userType === UserType.CUSTOMER) {
-      dispatch(fetchCustomer(userData?.uid));
-    } else if (userData?.userType === UserType.CONTRACTOR) {
-      dispatch(fetchContractor(userData?.uid));
+      setMenuItems(customerNavItems);
+    }
+    if (userData?.userType === UserType.CONTRACTOR) {
+      setMenuItems(contractorNavItems);
+    }
+    if (userData?.userType === UserType.ADMIN) {
+      setMenuItems(adminNavItems);
     }
   }, []);
 
-  const [activeItem, setActiveItem] = useState('Account');
-  const dashboardNavList = [
+  const customerNavItems = [
     {
       text: 'Account',
       icon: Person,
     },
     {
-      text: 'Address',
-      icon: LocationOn,
+      text: 'Business Information',
+      icon: Business,
+    },
+  ];
+
+  const contractorNavItems = [
+    {
+      text: 'Account',
+      icon: Person,
+    },
+    {
+      text: 'Business Information',
+      icon: Business,
     },
     {
       text: 'Payment details',
@@ -73,18 +83,25 @@ export default function Dashboard() {
     },
   ];
 
+  const adminNavItems = [
+    {
+      text: 'Admin',
+      icon: Person,
+    },
+  ];
+
   const handleItemClick = (item) => {
     setActiveItem(item);
   };
 
   const renderContent = () => {
     if (activeItem === 'Account')
-      return <AccountComponent uid={userData?.uid} />;
-    if (activeItem === 'Address')
-      return <AddressComponent uid={userData?.uid} />;
-    if (activeItem === 'Payment details')
-      return <div>Placeholder for Payment details</div>;
-    return <div>Security</div>;
+      return <AccountComponent uid={userData?.uid} userData={userData} />;
+    if (activeItem === 'Business Information')
+      return <BusinessInformationComponent userData={userData} />;
+    if (activeItem === 'Payment details') return <PaymentDetailsComponent />;
+    if (activeItem === 'Security') return <SecurityComponent />;
+    if (activeItem === 'Admin') return <AdminComponent />;
   };
 
   return (
@@ -92,18 +109,18 @@ export default function Dashboard() {
       <Grid container spacing={2}>
         <Grid item container direction='column' xs={12} sm={4} spacing={2}>
           <Grid item>
-            <Typography variant='h6'>Settings</Typography>
+            <Typography variant='h6'>Menu</Typography>
           </Grid>
           <Grid item>
             <Grid container>
-              {dashboardNavList.map((navListItem) => (
-                <Grid item xs={12} key={navListItem.text} sx={{ m: 0.5 }}>
+              {menuItems.map((menuItem) => (
+                <Grid item xs={12} key={menuItem.text} sx={{ m: 0.5 }}>
                   <Paper variant='outlined'>
                     <Button
                       startIcon={
-                        <navListItem.icon
+                        <menuItem.icon
                           color={
-                            activeItem === navListItem.text
+                            activeItem === menuItem.text
                               ? 'primary'
                               : 'disabled'
                           }
@@ -111,15 +128,15 @@ export default function Dashboard() {
                       }
                       fullWidth
                       variant={
-                        activeItem === navListItem.text ? 'outlined' : 'text'
+                        activeItem === menuItem.text ? 'outlined' : 'text'
                       }
-                      onClick={() => handleItemClick(navListItem.text)}
+                      onClick={() => handleItemClick(menuItem.text)}
                       sx={{
                         textTransform: 'none',
                         justifyContent: 'flex-start',
                       }}
                     >
-                      {navListItem.text}
+                      {menuItem.text}
                     </Button>
                   </Paper>
                 </Grid>
@@ -138,7 +155,6 @@ export default function Dashboard() {
           </Grid>
         </Grid>
         <Grid item>
-          {' '}
           <Typography>
             Catch-all (not the final place for the below items)
           </Typography>
@@ -153,29 +169,6 @@ export default function Dashboard() {
           <Logout />
         </Grid>
       </Grid>
-
-      <Container>
-        {userData && (
-          <>
-            <Typography>User name:</Typography>
-            <Typography>
-              {userData?.fullName?.firstName} {userData?.fullName?.lastName}
-            </Typography>
-          </>
-        )}
-        {customerData && (
-          <>
-            <Typography>Customer name: </Typography>{' '}
-            <Typography>{customerData?.customerName}</Typography>
-          </>
-        )}
-        {contractorData && (
-          <>
-            <Typography>Contractor name: </Typography>{' '}
-            <Typography>{contractorData?.contractorName}</Typography>
-          </>
-        )}
-      </Container>
     </Container>
   );
 }

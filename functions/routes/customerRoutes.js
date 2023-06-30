@@ -6,10 +6,10 @@ const router = express.Router();
 
 router.post('/create-customer', async (req, res) => {
   try {
-    const { ownerId, customerName } = req.body;
+    const { ownerId, businessName } = req.body;
     const newCustomer = {
       ownerId,
-      customerName,
+      businessName,
       uid: '',
     };
 
@@ -56,6 +56,27 @@ router.get('/get-customer-details', async (req, res) => {
     return res.status(200).json(customerData);
   } catch (error) {
     console.error('Error retrieving customer details:', error);
+    return res.status(500).json({ message: 'Internal Server Error' });
+  }
+});
+
+router.patch('/update-customer', async (req, res) => {
+  try {
+    const { uid, updateData } = req.body;
+    await admin.firestore().collection('customers').doc(uid).update(updateData);
+    // Retrieve the updated customer data from Firestore
+    const updatedCustomerDoc = await admin
+      .firestore()
+      .collection('customers')
+      .doc(uid)
+      .get();
+    const updatedCustomer = updatedCustomerDoc.data();
+    return res.status(200).json({
+      message: 'Customer document updated successfully',
+      customer: updatedCustomer,
+    });
+  } catch (error) {
+    console.error('Error updating customer document', error);
     return res.status(500).json({ message: 'Internal Server Error' });
   }
 });

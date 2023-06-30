@@ -11,11 +11,11 @@ import { createSlice, createAction, createAsyncThunk } from '@reduxjs/toolkit';
 // dispatch(createContractor({ testTitle}));
 const createContractor = createAsyncThunk(
   'contractor/createContractor',
-  async ({ contractorName, ownerId }) => {
+  async ({ businessName, ownerId }) => {
     try {
       const response = await post('/contractors/create-contractor', {
         ownerId,
-        contractorName,
+        businessName,
       });
       return response.contractor;
     } catch (error) {
@@ -51,6 +51,28 @@ const fetchContractor = createAsyncThunk(
       return response;
     } catch {
       throw new Error('Failed to fetch contractor data.');
+    }
+  }
+);
+
+// Async thunk to update customer data
+// const uid = '123'
+// const updateData = {
+//   something: 'some value'
+// };
+
+// dispatch(updateContractor({ uid, updateData }));
+const updateContractor = createAsyncThunk(
+  'contractor/updateContractor',
+  async ({ uid, updateData }) => {
+    try {
+      const response = await patch('/contractors/update-contractor', {
+        uid,
+        updateData,
+      });
+      return response.contractor;
+    } catch (error) {
+      throw new Error('Failed to update contractor data.');
     }
   }
 );
@@ -135,6 +157,26 @@ const contractorSlice = createSlice({
           loading: false,
           error: action.error.message,
         };
+      })
+      // Update contractor record details
+      .addCase(updateContractor.pending, (state) => {
+        return {
+          loading: true,
+          error: null,
+        };
+      })
+      .addCase(updateContractor.fulfilled, (state, action) => {
+        return {
+          data: action.payload,
+          loading: false,
+          error: null,
+        };
+      })
+      .addCase(updateContractor.rejected, (state, action) => {
+        return {
+          loading: false,
+          error: action.error.message,
+        };
       });
   },
 });
@@ -145,5 +187,6 @@ export {
   createContractor,
   fetchContractors,
   fetchContractor,
+  updateContractor,
   clearContractorData,
 };

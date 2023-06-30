@@ -9,6 +9,7 @@ import {
   login,
   signup,
   logout,
+  changeEmail,
   deleteCredentials,
 } from 'services/firebaseServices';
 
@@ -114,6 +115,7 @@ const updateUser = createAsyncThunk(
   'user/updateUser',
   async ({ uid, updateData }) => {
     try {
+      changeEmail(updateData.email);
       const response = await patch('/users/update-user', { uid, updateData });
       return response.user;
     } catch (error) {

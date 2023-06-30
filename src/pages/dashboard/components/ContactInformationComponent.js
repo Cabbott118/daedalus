@@ -2,7 +2,6 @@ import { useState } from 'react';
 
 // Constants
 import UserType from 'constants/userType';
-import states from 'constants/states.json';
 
 // MUI
 import {
@@ -10,7 +9,6 @@ import {
   Button,
   Container,
   Grid,
-  MenuItem,
   TextField,
   Typography,
 } from '@mui/material';
@@ -23,7 +21,7 @@ import { useDispatch } from 'react-redux';
 import { updateCustomer } from 'store/slices/customerSlice';
 import { updateContractor } from 'store/slices/contractorSlice';
 
-const AddressComponent = ({ uid, data, userType, loading }) => {
+const ContactInformationComponent = ({ uid, data, userType, loading }) => {
   const dispatch = useDispatch();
 
   const [editMode, setEditMode] = useState(false);
@@ -34,22 +32,20 @@ const AddressComponent = ({ uid, data, userType, loading }) => {
 
   const { register, handleSubmit } = useForm({
     defaultValues: {
-      address: {
-        addressLineOne: data?.address?.addressLineOne,
-        city: data?.address?.city,
-        state: data?.address?.state,
-        zipCode: data?.address?.zipCode,
+      primaryContact: {
+        firstName: data?.primaryContact?.firstName,
+        lastName: data?.primaryContact?.lastName,
+        email: data?.email,
       },
     },
   });
 
   const onSubmit = (data) => {
     const updateData = {
-      address: {
-        addressLineOne: data.address.addressLineOne,
-        city: data.address.city,
-        state: data.address.state,
-        zipCode: data.address.zipCode,
+      primaryContact: {
+        firstName: data.primaryContact.firstName,
+        lastName: data.primaryContact.lastName,
+        email: data.primaryContact.email,
       },
     };
 
@@ -70,7 +66,7 @@ const AddressComponent = ({ uid, data, userType, loading }) => {
         <Grid container spacing={3} sx={{ mt: 0, mb: 3 }}>
           <Grid item xs={9}>
             <Typography variant='h6' sx={{ textDecoration: 'underline' }}>
-              Address Information
+              Contact Information
             </Typography>
           </Grid>
           <Grid item xs={3}>
@@ -82,72 +78,47 @@ const AddressComponent = ({ uid, data, userType, loading }) => {
               Edit
             </Button>
           </Grid>
-          <Grid item xs={12}>
+          <Grid item xs={6}>
             {editMode ? (
               <TextField
-                label='Address'
-                fullWidth
-                defaultValue={data?.address?.addressLineOne || ''}
-                {...register('address.addressLineOne')}
+                label='First Name'
+                {...register('primaryContact.firstName')}
               />
             ) : (
               <>
-                <Typography variant='subtitle2'>Address</Typography>
+                <Typography variant='subtitle2'>
+                  Primary Contact Name
+                </Typography>
                 <Typography variant='p'>
-                  {data?.address?.addressLineOne}
+                  {data?.primaryContact?.firstName}{' '}
+                  {data?.primaryContact?.lastName}
                 </Typography>
               </>
             )}
           </Grid>
-          <Grid item xs={12}>
+          <Grid item xs={6}>
             {editMode ? (
               <TextField
-                label='City'
-                fullWidth
-                defaultValue={data?.address?.city || ''}
-                {...register('address.city')}
+                label='Last Name'
+                {...register('primaryContact.lastName')}
               />
-            ) : (
-              <>
-                <Typography variant='subtitle2'>City</Typography>
-                <Typography variant='p'>{data?.address?.city}</Typography>
-              </>
-            )}
+            ) : null}
           </Grid>
           <Grid item xs={12}>
             {editMode ? (
               <TextField
-                label='State'
-                select
+                label='Email'
                 fullWidth
-                defaultValue={data?.address?.state || ''}
-                {...register('address.state')}
-              >
-                {states.map((state) => (
-                  <MenuItem key={state.abbreviation} value={state.abbreviation}>
-                    {state.name}
-                  </MenuItem>
-                ))}
-              </TextField>
-            ) : (
-              <>
-                <Typography variant='subtitle2'>State</Typography>
-                <Typography variant='p'>{data?.address?.state}</Typography>
-              </>
-            )}
-          </Grid>
-          <Grid item xs={12}>
-            {editMode ? (
-              <TextField
-                label='Zip Code'
-                fullWidth
-                defaultValue={data?.address?.zipCode || ''}
-                {...register('address.zipCode')}
+                {...register('primaryContact.email')}
               />
             ) : (
               <>
-                <Typography variant='subtitle2'>Zip Code</Typography>
-                <Typography variant='p'>{data?.address?.zipCode}</Typography>
+                <Typography variant='subtitle2'>
+                  Primary Contact Email
+                </Typography>
+                <Typography variant='p'>
+                  {data?.primaryContact?.email}
+                </Typography>
               </>
             )}
           </Grid>
@@ -161,7 +132,7 @@ const AddressComponent = ({ uid, data, userType, loading }) => {
                   disabled={loading}
                   sx={{ textTransform: 'none' }}
                 >
-                  Update Address
+                  Update Contact Information
                 </Button>
               </Grid>
               <Grid item xs={12}>
@@ -183,4 +154,4 @@ const AddressComponent = ({ uid, data, userType, loading }) => {
   );
 };
 
-export default AddressComponent;
+export default ContactInformationComponent;

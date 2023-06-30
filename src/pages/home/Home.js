@@ -55,8 +55,11 @@ export default function Home() {
     (state) => state.contractor
   );
 
-  const { data: serviceTicketData, loading: serviceTicketLoading } =
-    useSelector((state) => state.serviceTicket);
+  const {
+    data: serviceTicketData,
+    serviceTickets,
+    loading: serviceTicketLoading,
+  } = useSelector((state) => state.serviceTicket);
 
   const handleContractorsClick = () => {
     dispatch(fetchContractors());
@@ -121,7 +124,7 @@ export default function Home() {
             )}
           </Grid>
 
-          {serviceTicketData && (
+          {serviceTickets && userData?.userType === UserType.ADMIN && (
             <>
               <Typography variant='h6'>Service Tickets:</Typography>
               <TableContainer component={Paper}>
@@ -136,15 +139,13 @@ export default function Home() {
                     </TableRow>
                   </TableHead>
                   <TableBody>
-                    {serviceTicketData.map((data, index) => (
+                    {serviceTickets?.map((data, index) => (
                       <TableRow key={index}>
                         <TableCell>{data.createdBy}</TableCell>
                         <TableCell>{data.companyReceivingServices}</TableCell>
                         <TableCell>{data.reasonForServices}</TableCell>
                         <TableCell>{data.status}</TableCell>
-                        <TableCell>
-                          {formatCreatedAt(data?.createdAt)}
-                        </TableCell>
+                        <TableCell>{formatCreatedAt(data.createdAt)}</TableCell>
                       </TableRow>
                     ))}
                   </TableBody>
@@ -153,7 +154,7 @@ export default function Home() {
             </>
           )}
 
-          {contractorData && (
+          {contractorData && userData?.userType === UserType.ADMIN && (
             <>
               <Typography variant='h6'>Contractors:</Typography>
               <TableContainer component={Paper}>
@@ -166,7 +167,7 @@ export default function Home() {
                     </TableRow>
                   </TableHead>
                   <TableBody>
-                    {contractorData.map((data, index) => (
+                    {contractorData?.map((data, index) => (
                       <TableRow key={index}>
                         <TableCell>{data.contractorName}</TableCell>
                         <TableCell>{data.ownerId}</TableCell>
