@@ -121,7 +121,7 @@ export default function Home() {
             )}
           </Grid>
 
-          {contractorData && (
+          {serviceTicketData && (
             <>
               <Typography variant='h6'>Service Tickets:</Typography>
               <TableContainer component={Paper}>
