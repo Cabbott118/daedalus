@@ -58,7 +58,7 @@ const logoutUser = createAsyncThunk(
 const deleteUser = createAsyncThunk('user/deleteUser', async (uid) => {
   try {
     await deleteCredentials();
-    const response = await del('/user/delete-user', { uid });
+    const response = await del('/users/delete-user', { uid });
     return response;
   } catch (error) {
     throw new Error('Failed to delete user data.');
@@ -75,7 +75,7 @@ const createUser = createAsyncThunk(
   'user/createUser',
   async ({ email, uid, fullName, userType }) => {
     try {
-      const response = await post('/user/create-user', {
+      const response = await post('/users/create-user', {
         email,
         uid,
         fullName,
@@ -93,7 +93,7 @@ const createUser = createAsyncThunk(
 // dispatch(fetchUser(uid));
 const fetchUser = createAsyncThunk('user/fetchUser', async (uid) => {
   try {
-    const response = await get('/user/get-user-details', { uid });
+    const response = await get('/users/get-user-details', { uid });
     return response;
   } catch (error) {
     throw new Error('Failed to fetch user data.');
@@ -114,7 +114,7 @@ const updateUser = createAsyncThunk(
   'user/updateUser',
   async ({ uid, updateData }) => {
     try {
-      const response = await patch('/user/update-user', { uid, updateData });
+      const response = await patch('/users/update-user', { uid, updateData });
       return response.user;
     } catch (error) {
       throw new Error('Failed to update user data.');

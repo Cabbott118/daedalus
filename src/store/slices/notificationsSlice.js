@@ -13,7 +13,7 @@ const fetchNotifications = createAsyncThunk(
   'notifications/fetchNotifications',
   async (createdBy) => {
     try {
-      const response = await get('/notification/get-notifications', {
+      const response = await get('/notifications/get-notifications', {
         createdBy,
       });
       return response;
@@ -34,7 +34,7 @@ const updateNotification = createAsyncThunk(
   'notifications/updateNotification',
   async ({ uid, updateData }) => {
     try {
-      const response = await patch('/notification/update-notification', {
+      const response = await patch('/notifications/update-notification', {
         uid,
         updateData,
       });

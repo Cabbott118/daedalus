@@ -13,13 +13,27 @@ const createContractor = createAsyncThunk(
   'contractor/createContractor',
   async ({ contractorName, ownerId }) => {
     try {
-      const response = await post('/contractor/create-contractor', {
+      const response = await post('/contractors/create-contractor', {
         ownerId,
         contractorName,
       });
       return response.contractor;
     } catch (error) {
       throw new Error('Failed to create contractor data.');
+    }
+  }
+);
+
+// Async thunk to fetch contractors data
+// dispatch(fetchContractors());
+const fetchContractors = createAsyncThunk(
+  'contractor/fetchContractors',
+  async () => {
+    try {
+      const response = await get('contractors/get-all-contractors', {});
+      return response;
+    } catch {
+      throw new Error('Failed to fetch contractor data.');
     }
   }
 );
@@ -31,7 +45,7 @@ const fetchContractor = createAsyncThunk(
   'contractor/fetchContractor',
   async (ownerId) => {
     try {
-      const response = await get('/contractor/get-contractor-details', {
+      const response = await get('/contractors/get-contractor-details', {
         ownerId,
       });
       return response;
@@ -82,6 +96,26 @@ const contractorSlice = createSlice({
           error: action.error.message,
         };
       })
+      // Get all contractor record details
+      .addCase(fetchContractors.pending, (state) => {
+        return {
+          loading: true,
+          error: null,
+        };
+      })
+      .addCase(fetchContractors.fulfilled, (state, action) => {
+        return {
+          data: action.payload,
+          loading: false,
+          error: null,
+        };
+      })
+      .addCase(fetchContractors.rejected, (state, action) => {
+        return {
+          loading: false,
+          error: action.error.message,
+        };
+      })
       // Get contractor record details
       .addCase(fetchContractor.pending, (state) => {
         return {
@@ -107,4 +141,9 @@ const contractorSlice = createSlice({
 
 // Export the async thunk and reducer
 export const { reducer: contractorReducer } = contractorSlice;
-export { createContractor, fetchContractor, clearContractorData };
+export {
+  createContractor,
+  fetchContractors,
+  fetchContractor,
+  clearContractorData,
+};

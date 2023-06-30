@@ -15,11 +15,11 @@ const contractorRoutes = require('./routes/contractorRoutes');
 const serviceTicketRoutes = require('./routes/serviceTicketRoutes');
 const notificationRoutes = require('./routes/notificationRoutes');
 
-app.use('/user', userRoutes);
-app.use('/customer', customerRoutes);
-app.use('/contractor', contractorRoutes);
-app.use('/service-ticket', serviceTicketRoutes.router);
-app.use('/notification', notificationRoutes);
+app.use('/users', userRoutes);
+app.use('/customers', customerRoutes);
+app.use('/contractors', contractorRoutes);
+app.use('/service-tickets', serviceTicketRoutes.router);
+app.use('/notifications', notificationRoutes);
 
 // Import the notification functions from serviceTicketRoutes.js
 const {

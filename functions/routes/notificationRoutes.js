@@ -53,13 +53,4 @@ router.patch('/update-notification', async (req, res) => {
   }
 });
 
-exports.notificationListener = functions.firestore
-  .document('notifications/{notificationId}')
-  .onCreate(async (snapshot, context) => {
-    // Get the newly created notification data
-    const newNotification = snapshot.data();
-    // Perform any desired actions with the new notification data
-    console.log('New notification:', newNotification);
-  });
-
 module.exports = router;

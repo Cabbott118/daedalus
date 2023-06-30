@@ -12,7 +12,7 @@ const createServiceTicket = createAsyncThunk(
   'serviceTicket/createServiceTicket',
   async ({ uid, companyReceivingServices, reasonForServices }) => {
     try {
-      const response = await post('/service-ticket/create-service-ticket', {
+      const response = await post('/service-tickets/create-service-ticket', {
         uid,
         companyReceivingServices,
         reasonForServices,
@@ -24,16 +24,37 @@ const createServiceTicket = createAsyncThunk(
   }
 );
 
-// Async thunk to fetch contractor data
+// Async thunk to fetch all service ticket data
 // const uid = '123'
-// dispatch(fetchCustomer(uid));
+// dispatch(fetchServiceTickets(uid));
+// dispatch(fetchServiceTickets());
+const fetchServiceTickets = createAsyncThunk(
+  'serviceTicket/fetchServiceTickets',
+  async (uid) => {
+    try {
+      const response = await get('/service-tickets/get-all-service-tickets', {
+        uid,
+      });
+      return response;
+    } catch {
+      throw new Error('Failed to fetch all service ticket data.');
+    }
+  }
+);
+
+// Async thunk to fetch service ticket data
+// const uid = '123'
+// dispatch(fetchServiceTicket(uid));
 const fetchServiceTicket = createAsyncThunk(
   'serviceTicket/fetchServiceTicket',
   async (uid) => {
     try {
-      const response = await get('/service-ticket/get-service-ticket-details', {
-        uid,
-      });
+      const response = await get(
+        '/service-tickets/get-service-ticket-details',
+        {
+          uid,
+        }
+      );
       return response;
     } catch {
       throw new Error('Failed to fetch service ticket data.');
@@ -47,12 +68,12 @@ const fetchServiceTicket = createAsyncThunk(
 //   something: 'some value'
 // };
 
-// dispatch(updateUser({ uid, updateData }));
+// dispatch(updateServiceTicket({ uid, updateData }));
 const updateServiceTicket = createAsyncThunk(
   'serviceTicket/updateServiceTicket',
   async ({ uid, updateData }) => {
     try {
-      const response = await patch('/service-ticket/update-service-ticket', {
+      const response = await patch('/service-tickets/update-service-ticket', {
         uid,
         updateData,
       });
@@ -86,7 +107,7 @@ const serviceTicketSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      // Create customer record
+      // Create service ticket record
       .addCase(createServiceTicket.pending, (state) => {
         return {
           loading: true,
@@ -106,7 +127,27 @@ const serviceTicketSlice = createSlice({
           error: action.error.message,
         };
       })
-      // Get contractor record details
+      // Get service tickets record details
+      .addCase(fetchServiceTickets.pending, (state) => {
+        return {
+          loading: true,
+          error: null,
+        };
+      })
+      .addCase(fetchServiceTickets.fulfilled, (state, action) => {
+        return {
+          data: action.payload,
+          loading: false,
+          error: null,
+        };
+      })
+      .addCase(fetchServiceTickets.rejected, (state, action) => {
+        return {
+          loading: false,
+          error: action.error.message,
+        };
+      })
+      // Get service ticket record details
       .addCase(fetchServiceTicket.pending, (state) => {
         return {
           loading: true,
@@ -152,6 +193,7 @@ const serviceTicketSlice = createSlice({
 export const { reducer: serviceTicketReducer } = serviceTicketSlice;
 export {
   createServiceTicket,
+  fetchServiceTickets,
   fetchServiceTicket,
   updateServiceTicket,
   clearServiceTicketData,

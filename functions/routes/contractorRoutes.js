@@ -36,6 +36,19 @@ router.post('/create-contractor', async (req, res) => {
   }
 });
 
+router.get('/get-all-contractors', async (req, res) => {
+  try {
+    const contractorsRef = admin.firestore().collection('contractors');
+    const querySnapshot = await contractorsRef.get();
+    const contractorsData = querySnapshot.docs.map((doc) => doc.data());
+
+    return res.status(200).json(contractorsData);
+  } catch (error) {
+    console.error('Error retrieving contractors:', error);
+    return res.status(500).json({ message: 'Internal Server Error' });
+  }
+});
+
 router.get('/get-contractor-details', async (req, res) => {
   try {
     const ownerId = req.query.ownerId;
