@@ -82,6 +82,7 @@ const ContactInformationComponent = ({ uid, data, userType, loading }) => {
             {editMode ? (
               <TextField
                 label='First Name'
+                defaultValue={data?.primaryContact.firstName || ''}
                 {...register('primaryContact.firstName')}
               />
             ) : (
@@ -100,6 +101,7 @@ const ContactInformationComponent = ({ uid, data, userType, loading }) => {
             {editMode ? (
               <TextField
                 label='Last Name'
+                defaultValue={data?.primaryContact.lastName || ''}
                 {...register('primaryContact.lastName')}
               />
             ) : null}
@@ -109,6 +111,7 @@ const ContactInformationComponent = ({ uid, data, userType, loading }) => {
               <TextField
                 label='Email'
                 fullWidth
+                defaultValue={data?.primaryContact.email || ''}
                 {...register('primaryContact.email')}
               />
             ) : (
