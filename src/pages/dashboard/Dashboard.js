@@ -162,7 +162,7 @@ export default function Dashboard() {
         <Grid item>
           <CreateServiceTicketDialog
             userId={userData?.uid}
-            companyReceivingServices={customerData?.customerName}
+            companyReceivingServices={customerData?.businessName}
           />
         </Grid>
         <Grid item>

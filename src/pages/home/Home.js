@@ -73,18 +73,21 @@ export default function Home() {
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
       if (user) {
         await dispatch(fetchUser(user.uid));
-        if (userData?.userType === 'customer') {
-          await dispatch(fetchCustomer(user.uid));
-        } else if (userData?.userType === 'contractor') {
-          await dispatch(fetchContractor(user.uid));
-        }
       }
     });
 
     return () => unsubscribe();
   }, [auth, dispatch]);
 
-  if (userLoading)
+  useEffect(() => {
+    if (userData?.userType === UserType.CUSTOMER) {
+      dispatch(fetchCustomer(userData.uid));
+    } else if (userData?.userType === UserType.CONTRACTOR) {
+      dispatch(fetchContractor(userData.uid));
+    }
+  }, [userData, dispatch]);
+
+  if (userLoading || customerLoading || contractorLoading)
     return (
       <Container maxWidth='sm'>
         <Typography>Loading...</Typography>
