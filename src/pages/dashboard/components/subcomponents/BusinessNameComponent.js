@@ -1,9 +1,5 @@
 import { useState } from 'react';
-
-// Constants
 import UserType from 'constants/userType';
-
-// MUI
 import {
   Box,
   Button,
@@ -12,40 +8,39 @@ import {
   TextField,
   Typography,
 } from '@mui/material';
-
-// React Hook Form
 import { useForm } from 'react-hook-form';
-
-// Redux
 import { useDispatch } from 'react-redux';
 import { updateCustomer } from 'store/slices/customerSlice';
 import { updateContractor } from 'store/slices/contractorSlice';
 
-const BusinessNameComponent = ({ uid, data, userType, loading }) => {
+const BusinessNameComponent = ({ uid, data = {}, userType, loading }) => {
   const dispatch = useDispatch();
-
   const [editMode, setEditMode] = useState(false);
-
-  const handleEditSwitch = () => {
-    setEditMode(!editMode);
-  };
-
   const { register, handleSubmit } = useForm({
     defaultValues: {
       businessName: data?.businessName,
     },
   });
 
+  const handleEditSwitch = () => {
+    setEditMode(!editMode);
+  };
+
   const onSubmit = (data) => {
     const updateData = {
       businessName: data.businessName,
     };
 
-    if (userType === UserType.CUSTOMER)
-      dispatch(updateCustomer({ uid, updateData }));
-
-    if (userType === UserType.CONTRACTOR)
-      dispatch(updateContractor({ uid, updateData }));
+    switch (userType) {
+      case UserType.CUSTOMER:
+        dispatch(updateCustomer({ uid, updateData }));
+        break;
+      case UserType.CONTRACTOR:
+        dispatch(updateContractor({ uid, updateData }));
+        break;
+      default:
+        break;
+    }
 
     setEditMode(false);
   };

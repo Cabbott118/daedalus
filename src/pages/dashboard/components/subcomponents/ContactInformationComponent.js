@@ -1,64 +1,95 @@
-import { useEffect, useState } from 'react';
-
-// Constants
+import { useState } from 'react';
 import UserType from 'constants/userType';
-
-// MUI
 import {
   Box,
   Button,
+  Checkbox,
   Container,
+  FormControlLabel,
   Grid,
   TextField,
   Typography,
 } from '@mui/material';
-
-// React Hook Form
 import { useForm } from 'react-hook-form';
-
-// Redux
 import { useDispatch } from 'react-redux';
 import { updateCustomer } from 'store/slices/customerSlice';
 import { updateContractor } from 'store/slices/contractorSlice';
 
-const ContactInformationComponent = ({ uid, data, userType, loading }) => {
+const ContactInformationComponent = ({
+  uid,
+  data = {},
+  userType,
+  userData,
+  loading,
+}) => {
   const dispatch = useDispatch();
-
   const [editMode, setEditMode] = useState(false);
-
-  const handleEditSwitch = () => {
-    setEditMode(!editMode);
-  };
-
+  const [isChecked, setIsChecked] = useState(false);
   const { register, handleSubmit } = useForm({
     defaultValues: {
       primaryContact: {
         firstName: data?.primaryContact?.firstName,
         lastName: data?.primaryContact?.lastName,
-        email: data?.email,
+        email: data?.primaryContact?.email,
       },
     },
   });
 
+  const handleEditSwitch = () => {
+    setEditMode(!editMode);
+  };
+
+  const handleCheckboxChange = (event) => {
+    setIsChecked((prevChecked) => !prevChecked);
+  };
+
   const onSubmit = (data) => {
-    const updateData = {
-      primaryContact: {
-        firstName: data.primaryContact.firstName,
-        lastName: data.primaryContact.lastName,
-        email: data.primaryContact.email,
-      },
-    };
+    let updateData = {};
+    if (isChecked) {
+      updateData = {
+        primaryContact: {
+          firstName: userData?.fullName?.firstName,
+          lastName: userData?.fullName?.lastName,
+          email: userData?.email,
+        },
+      };
+    } else {
+      updateData = {
+        primaryContact: {
+          firstName: data.primaryContact.firstName,
+          lastName: data.primaryContact.lastName,
+          email: data.primaryContact.email,
+        },
+      };
+    }
 
-    if (userType === UserType.CUSTOMER)
-      dispatch(updateCustomer({ uid, updateData }));
-
-    if (userType === UserType.CONTRACTOR)
-      dispatch(updateContractor({ uid, updateData }));
+    switch (userType) {
+      case UserType.CUSTOMER:
+        dispatch(updateCustomer({ uid, updateData }));
+        break;
+      case UserType.CONTRACTOR:
+        dispatch(updateContractor({ uid, updateData }));
+        break;
+      default:
+        break;
+    }
 
     setEditMode(false);
   };
 
-  const missingInformation = <div>Mising information</div>;
+  const renderMissingInformation = () => (
+    <Grid item xs={12} sx={{ mt: -2 }}>
+      <Typography variant='subtitle1'>
+        Add a primary business contact
+      </Typography>
+      <FormControlLabel
+        control={
+          <Checkbox checked={isChecked} onChange={handleCheckboxChange} />
+        }
+        label={`Use ${data?.ownerId} as primary contact`}
+      />
+    </Grid>
+  );
 
   if (loading) return <p>Loading...</p>;
 
@@ -71,27 +102,32 @@ const ContactInformationComponent = ({ uid, data, userType, loading }) => {
               Contact Information
             </Typography>
           </Grid>
-          <Grid item xs={3}>
-            <Button
-              onClick={handleEditSwitch}
-              disabled={editMode}
-              sx={{ textTransform: 'none' }}
-            >
-              Edit
-            </Button>
-          </Grid>
+
+          {data?.primaryContact ? (
+            <Grid item xs={3}>
+              <Button
+                onClick={handleEditSwitch}
+                disabled={editMode}
+                sx={{ textTransform: 'none' }}
+              >
+                Edit
+              </Button>
+            </Grid>
+          ) : (
+            renderMissingInformation()
+          )}
+
           <Grid item xs={6}>
-            {editMode ? (
+            {editMode || !data?.primaryContact ? (
               <TextField
                 label='First Name'
                 defaultValue={data?.primaryContact?.firstName || ''}
                 {...register('primaryContact.firstName')}
+                disabled={isChecked}
               />
             ) : (
               <>
-                <Typography variant='subtitle2'>
-                  Primary Contact Name
-                </Typography>
+                <Typography variant='subtitle2'>Name</Typography>
                 <Typography variant='p'>
                   {data?.primaryContact?.firstName}{' '}
                   {data?.primaryContact?.lastName}
@@ -99,37 +135,40 @@ const ContactInformationComponent = ({ uid, data, userType, loading }) => {
               </>
             )}
           </Grid>
+
           <Grid item xs={6}>
-            {editMode ? (
+            {editMode || !data?.primaryContact ? (
               <TextField
                 label='Last Name'
                 defaultValue={data?.primaryContact?.lastName || ''}
                 {...register('primaryContact.lastName')}
+                disabled={isChecked}
               />
             ) : null}
           </Grid>
+
           <Grid item xs={12}>
-            {editMode ? (
+            {editMode || !data?.primaryContact ? (
               <TextField
                 label='Email'
                 fullWidth
                 defaultValue={data?.primaryContact?.email || ''}
                 {...register('primaryContact.email')}
+                disabled={isChecked}
               />
             ) : (
               <>
-                <Typography variant='subtitle2'>
-                  Primary Contact Email
-                </Typography>
+                <Typography variant='subtitle2'>Email Address</Typography>
                 <Typography variant='p'>
                   {data?.primaryContact?.email}
                 </Typography>
               </>
             )}
           </Grid>
-          {editMode && (
+
+          {editMode || !data?.primaryContact ? (
             <>
-              <Grid item xs={12} sx={{ mb: -2 }}>
+              <Grid item xs={12}>
                 <Button
                   fullWidth
                   variant='contained'
@@ -140,19 +179,21 @@ const ContactInformationComponent = ({ uid, data, userType, loading }) => {
                   Update Contact Information
                 </Button>
               </Grid>
-              <Grid item xs={12}>
-                <Button
-                  fullWidth
-                  variant='text'
-                  onClick={handleEditSwitch}
-                  disabled={loading}
-                  sx={{ textTransform: 'none' }}
-                >
-                  Cancel
-                </Button>
-              </Grid>
+              {data?.primaryContact && (
+                <Grid item xs={12} sx={{ mt: -2 }}>
+                  <Button
+                    fullWidth
+                    variant='text'
+                    onClick={handleEditSwitch}
+                    disabled={loading}
+                    sx={{ textTransform: 'none' }}
+                  >
+                    Cancel
+                  </Button>
+                </Grid>
+              )}
             </>
-          )}
+          ) : null}
         </Grid>
       </Container>
     </Box>

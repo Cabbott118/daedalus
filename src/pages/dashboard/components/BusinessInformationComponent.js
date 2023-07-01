@@ -69,6 +69,7 @@ const BusinessInformationComponent = ({ userData }) => {
         uid={data?.uid}
         data={data}
         userType={userData?.userType}
+        userData={userData}
         loading={loading}
       />
     </>

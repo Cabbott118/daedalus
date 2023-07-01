@@ -1,10 +1,6 @@
 import { useState } from 'react';
-
-// Constants
 import UserType from 'constants/userType';
 import states from 'constants/states.json';
-
-// MUI
 import {
   Box,
   Button,
@@ -14,24 +10,14 @@ import {
   TextField,
   Typography,
 } from '@mui/material';
-
-// React Hook Form
 import { useForm } from 'react-hook-form';
-
-// Redux
 import { useDispatch } from 'react-redux';
 import { updateCustomer } from 'store/slices/customerSlice';
 import { updateContractor } from 'store/slices/contractorSlice';
 
-const AddressComponent = ({ uid, data, userType, loading }) => {
+const AddressComponent = ({ uid, data = {}, userType, loading }) => {
   const dispatch = useDispatch();
-
   const [editMode, setEditMode] = useState(false);
-
-  const handleEditSwitch = () => {
-    setEditMode(!editMode);
-  };
-
   const { register, handleSubmit } = useForm({
     defaultValues: {
       address: {
@@ -43,6 +29,10 @@ const AddressComponent = ({ uid, data, userType, loading }) => {
     },
   });
 
+  const handleEditSwitch = () => {
+    setEditMode(!editMode);
+  };
+
   const onSubmit = (data) => {
     const updateData = {
       address: {
@@ -53,13 +43,28 @@ const AddressComponent = ({ uid, data, userType, loading }) => {
       },
     };
 
-    if (userType === UserType.CUSTOMER)
-      dispatch(updateCustomer({ uid, updateData }));
-
-    if (userType === UserType.CONTRACTOR)
-      dispatch(updateContractor({ uid, updateData }));
+    switch (userType) {
+      case UserType.CUSTOMER:
+        dispatch(updateCustomer({ uid, updateData }));
+        break;
+      case UserType.CONTRACTOR:
+        dispatch(updateContractor({ uid, updateData }));
+        break;
+      default:
+        break;
+    }
 
     setEditMode(false);
+  };
+
+  const renderMissingInformation = () => {
+    return (
+      <Grid item xs={12} sx={{ mt: -2 }}>
+        <Typography variant='subtitle1'>
+          Add a primary business address
+        </Typography>
+      </Grid>
+    );
   };
 
   if (loading) return <p>Loading...</p>;
@@ -73,17 +78,23 @@ const AddressComponent = ({ uid, data, userType, loading }) => {
               Address Information
             </Typography>
           </Grid>
-          <Grid item xs={3}>
-            <Button
-              onClick={handleEditSwitch}
-              disabled={editMode}
-              sx={{ textTransform: 'none' }}
-            >
-              Edit
-            </Button>
-          </Grid>
+
+          {data?.address ? (
+            <Grid item xs={3}>
+              <Button
+                onClick={handleEditSwitch}
+                disabled={editMode}
+                sx={{ textTransform: 'none' }}
+              >
+                Edit
+              </Button>
+            </Grid>
+          ) : (
+            renderMissingInformation()
+          )}
+
           <Grid item xs={12}>
-            {editMode ? (
+            {editMode || !data?.address ? (
               <TextField
                 label='Address'
                 fullWidth
@@ -99,8 +110,9 @@ const AddressComponent = ({ uid, data, userType, loading }) => {
               </>
             )}
           </Grid>
+
           <Grid item xs={12}>
-            {editMode ? (
+            {editMode || !data?.address ? (
               <TextField
                 label='City'
                 fullWidth
@@ -114,8 +126,9 @@ const AddressComponent = ({ uid, data, userType, loading }) => {
               </>
             )}
           </Grid>
+
           <Grid item xs={12}>
-            {editMode ? (
+            {editMode || !data?.address ? (
               <TextField
                 label='State'
                 select
@@ -136,8 +149,9 @@ const AddressComponent = ({ uid, data, userType, loading }) => {
               </>
             )}
           </Grid>
+
           <Grid item xs={12}>
-            {editMode ? (
+            {editMode || !data?.address ? (
               <TextField
                 label='Zip Code'
                 fullWidth
@@ -151,9 +165,10 @@ const AddressComponent = ({ uid, data, userType, loading }) => {
               </>
             )}
           </Grid>
-          {editMode && (
+
+          {editMode || !data?.address ? (
             <>
-              <Grid item xs={12} sx={{ mb: -2 }}>
+              <Grid item xs={12}>
                 <Button
                   fullWidth
                   variant='contained'
@@ -161,22 +176,24 @@ const AddressComponent = ({ uid, data, userType, loading }) => {
                   disabled={loading}
                   sx={{ textTransform: 'none' }}
                 >
-                  Update Address
+                  Update Contact Information
                 </Button>
               </Grid>
-              <Grid item xs={12}>
-                <Button
-                  fullWidth
-                  variant='text'
-                  onClick={handleEditSwitch}
-                  disabled={loading}
-                  sx={{ textTransform: 'none' }}
-                >
-                  Cancel
-                </Button>
-              </Grid>
+              {data?.address && (
+                <Grid item xs={12} sx={{ mt: -2 }}>
+                  <Button
+                    fullWidth
+                    variant='text'
+                    onClick={handleEditSwitch}
+                    disabled={loading}
+                    sx={{ textTransform: 'none' }}
+                  >
+                    Cancel
+                  </Button>
+                </Grid>
+              )}
             </>
-          )}
+          ) : null}
         </Grid>
       </Container>
     </Box>
