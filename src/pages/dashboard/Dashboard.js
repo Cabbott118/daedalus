@@ -8,7 +8,7 @@ import AccountComponent from 'pages/dashboard/components/AccountComponent';
 import BusinessInformationComponent from 'pages/dashboard/components/BusinessInformationComponent';
 import PaymentDetailsComponent from 'pages/dashboard/components/PaymentDetailsComponent';
 import SecurityComponent from 'pages/dashboard/components/SecurityComponent';
-import AdminComponent from './components/AdminComponent';
+import AdminComponent from 'pages/dashboard/components/subcomponents/AdminComponent';
 import Logout from 'components/common/Logout';
 
 // Constants
@@ -19,11 +19,9 @@ import { Button, Container, Grid, Paper, Typography } from '@mui/material';
 import { Person, Business, CreditCard, Security } from '@mui/icons-material';
 
 // Redux
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 
 export default function Dashboard() {
-  const dispatch = useDispatch();
-
   const [menuItems, setMenuItems] = useState([]);
   const [activeItem, setActiveItem] = useState('Account');
 
@@ -72,14 +70,6 @@ export default function Dashboard() {
     {
       text: 'Business Information',
       icon: Business,
-    },
-    {
-      text: 'Payment details',
-      icon: CreditCard,
-    },
-    {
-      text: 'Security',
-      icon: Security,
     },
   ];
 

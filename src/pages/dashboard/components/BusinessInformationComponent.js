@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react';
 
 // Components
-import BusinessNameComponent from 'pages/dashboard/components/BusinessNameComponent';
-import AddressComponent from 'pages/dashboard/components/AddressComponent';
-import ContactInformationComponent from 'pages/dashboard/components/ContactInformationComponent';
+import BusinessNameComponent from 'pages/dashboard/components/subcomponents/BusinessNameComponent';
+import AddressComponent from 'pages/dashboard/components/subcomponents/AddressComponent';
+import ContactInformationComponent from 'pages/dashboard/components/subcomponents/ContactInformationComponent';
 
 // Constants
 import UserType from 'constants/userType';
