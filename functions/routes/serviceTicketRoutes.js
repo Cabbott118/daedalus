@@ -25,21 +25,20 @@ router.get('/get-service-ticket-details', async (req, res) => {
 router.get('/get-all-service-tickets', async (req, res) => {
   try {
     const uid = req.query.uid;
+    const assignedToId = req.query.assignedToId;
     const ticketsRef = admin.firestore().collection('serviceTickets');
+    let query = ticketsRef; // Initialize the query
+
     if (uid) {
-      // TODO: change logic to include reference to customer
-      // and query against customer reference
-      ticketsRef.where('createdBy', '==', uid);
-      const querySnapshot = await ticketsRef.get();
-      const ticketsData = querySnapshot.docs.map((doc) => doc.data());
-
-      return res.status(200).json(ticketsData);
-    } else {
-      const querySnapshot = await ticketsRef.get();
-      const ticketsData = querySnapshot.docs.map((doc) => doc.data());
-
-      return res.status(200).json(ticketsData);
+      query = query.where('createdBy', '==', uid); // Apply the createdBy condition
+    } else if (assignedToId) {
+      query = query.where('assignedToId', '==', assignedToId); // Apply the assignedToId condition
     }
+
+    const querySnapshot = await query.get(); // Execute the query
+    const ticketsData = querySnapshot.docs.map((doc) => doc.data());
+
+    return res.status(200).json(ticketsData);
   } catch (error) {
     console.error('Error retrieving ticket details:', error);
     return res.status(500).json({ message: 'Internal Server Error' });
@@ -48,13 +47,14 @@ router.get('/get-all-service-tickets', async (req, res) => {
 
 router.post('/create-service-ticket', async (req, res) => {
   try {
-    const { uid, companyReceivingServices, reasonForServices } = req.body;
+    const { uid, customerName, customerId, reasonForServices } = req.body;
     const newTicket = {
       createdBy: uid,
       status: 'new',
       assigned: false,
       assignedTo: '',
-      companyReceivingServices,
+      customerName,
+      customerId,
       reasonForServices,
       createdAt: admin.firestore.FieldValue.serverTimestamp(),
     };

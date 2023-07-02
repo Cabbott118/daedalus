@@ -50,7 +50,7 @@ const ServiceTicket = () => {
   return (
     <Container maxWidth='md'>
       <Typography variant='h5' component='h1' align='center'>
-        Service Request for {serviceTicketData?.companyReceivingServices}
+        Service Request for {serviceTicketData?.customerName}
       </Typography>
       <Paper variant='outlined' sx={{ minHeight: '250px' }}>
         <Grid container spacing={2}>

@@ -86,7 +86,7 @@ const ContactInformationComponent = ({
         control={
           <Checkbox checked={isChecked} onChange={handleCheckboxChange} />
         }
-        label={`Use ${data?.ownerId} as primary contact`}
+        label={`Use ${userData?.fullName?.firstName} ${userData?.fullName?.lastName} as primary contact`}
       />
     </Grid>
   );

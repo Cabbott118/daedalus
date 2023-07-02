@@ -3,8 +3,8 @@ import { useEffect, useState } from 'react';
 // Components
 import DeleteDialog from 'pages/dashboard/components/DeleteDialog';
 import UpdateDialog from 'pages/dashboard/components/UpdateDialog';
-import CreateServiceTicketDialog from 'pages/customer/components/CreateServiceTicketDialog';
 import AccountComponent from 'pages/dashboard/components/AccountComponent';
+import ServiceTicketsComponent from 'pages/dashboard/components/ServiceTicketsComponent';
 import BusinessInformationComponent from 'pages/dashboard/components/BusinessInformationComponent';
 import PaymentDetailsComponent from 'pages/dashboard/components/PaymentDetailsComponent';
 import SecurityComponent from 'pages/dashboard/components/SecurityComponent';
@@ -16,7 +16,13 @@ import UserType from 'constants/userType';
 
 // MUI
 import { Button, Container, Grid, Paper, Typography } from '@mui/material';
-import { Person, Business, CreditCard, Security } from '@mui/icons-material';
+import {
+  Person,
+  Business,
+  ListAlt,
+  CreditCard,
+  Security,
+} from '@mui/icons-material';
 
 // Redux
 import { useSelector } from 'react-redux';
@@ -60,6 +66,10 @@ export default function Dashboard() {
       text: 'Business Information',
       icon: Business,
     },
+    {
+      text: 'Service Tickets',
+      icon: ListAlt,
+    },
   ];
 
   const contractorNavItems = [
@@ -70,6 +80,11 @@ export default function Dashboard() {
     {
       text: 'Business Information',
       icon: Business,
+    },
+
+    {
+      text: 'Service Tickets',
+      icon: ListAlt,
     },
   ];
 
@@ -89,6 +104,15 @@ export default function Dashboard() {
       return <AccountComponent uid={userData?.uid} userData={userData} />;
     if (activeItem === 'Business Information')
       return <BusinessInformationComponent userData={userData} />;
+    if (activeItem === 'Service Tickets')
+      return (
+        <ServiceTicketsComponent
+          uid={userData?.uid}
+          userData={userData}
+          customerData={customerData}
+          contractorData={contractorData}
+        />
+      );
     if (activeItem === 'Payment details') return <PaymentDetailsComponent />;
     if (activeItem === 'Security') return <SecurityComponent />;
     if (activeItem === 'Admin') return <AdminComponent />;
@@ -149,12 +173,7 @@ export default function Dashboard() {
             Catch-all (not the final place for the below items)
           </Typography>
         </Grid>
-        <Grid item>
-          <CreateServiceTicketDialog
-            userId={userData?.uid}
-            companyReceivingServices={customerData?.businessName}
-          />
-        </Grid>
+
         <Grid item>
           <Logout />
         </Grid>

@@ -10,11 +10,12 @@ import { createSlice, createAction, createAsyncThunk } from '@reduxjs/toolkit';
 // dispatch(createServiceTicket({ uid, companyName, reasonForServices }));
 const createServiceTicket = createAsyncThunk(
   'serviceTicket/createServiceTicket',
-  async ({ uid, companyReceivingServices, reasonForServices }) => {
+  async ({ uid, customerName, customerId, reasonForServices }) => {
     try {
       const response = await post('/service-tickets/create-service-ticket', {
         uid,
-        companyReceivingServices,
+        customerName,
+        customerId,
         reasonForServices,
       });
       return response.ticket;
@@ -26,14 +27,16 @@ const createServiceTicket = createAsyncThunk(
 
 // Async thunk to fetch all service ticket data
 // const uid = '123'
-// dispatch(fetchServiceTickets(uid));
+// dispatch(fetchServiceTickets({uid}));
+// dispatch(fetchServiceTickets({assignedTo}));
 // dispatch(fetchServiceTickets());
 const fetchServiceTickets = createAsyncThunk(
   'serviceTicket/fetchServiceTickets',
-  async (uid) => {
+  async ({ uid, assignedToId }) => {
     try {
       const response = await get('/service-tickets/get-all-service-tickets', {
         uid,
+        assignedToId,
       });
       return response;
     } catch {
@@ -116,8 +119,10 @@ const serviceTicketSlice = createSlice({
         };
       })
       .addCase(createServiceTicket.fulfilled, (state, action) => {
+        console.log(action);
         return {
           data: action.payload,
+          // serviceTickets: [...state.serviceTickets, action.payload],
           loading: false,
           error: null,
         };

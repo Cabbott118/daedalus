@@ -30,10 +30,7 @@ import {
   clearServiceTicketData,
 } from 'store/slices/serviceTicketSlice';
 
-const CreateServiceTicketDialog = ({
-  userId: uid,
-  companyReceivingServices,
-}) => {
+const CreateServiceTicketDialog = ({ userId: uid, customerData }) => {
   const [isAlertShowing, setIsAlertShowing] = useState(false);
   const [dialogOpen, setDialogOpen] = useState(false);
 
@@ -55,7 +52,12 @@ const CreateServiceTicketDialog = ({
 
   const onSubmit = ({ reasonForServices }) => {
     dispatch(
-      createServiceTicket({ uid, companyReceivingServices, reasonForServices })
+      createServiceTicket({
+        uid,
+        customerName: customerData?.businessName,
+        customerId: customerData?.uid,
+        reasonForServices,
+      })
     );
     setDialogOpen(false);
   };
@@ -77,7 +79,7 @@ const CreateServiceTicketDialog = ({
           onSubmit={handleSubmit(onSubmit)}
           sx={{ minWidth: '20rem' }}
         >
-          <DialogTitle>{`Service Ticket for ${companyReceivingServices}`}</DialogTitle>
+          <DialogTitle>{`Service Ticket for ${customerData?.businessName}`}</DialogTitle>
           <DialogContent>
             <Grid container spacing={3} sx={{ mt: 0 }}>
               <Grid item xs={12}>
