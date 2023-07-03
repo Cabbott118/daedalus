@@ -104,6 +104,7 @@ const serviceTicketSlice = createSlice({
     clearServiceTicketData: (state) => {
       return {
         data: null,
+        serviceTickets: [],
         loading: false,
         error: null,
       };
@@ -114,6 +115,7 @@ const serviceTicketSlice = createSlice({
       // Create service ticket record
       .addCase(createServiceTicket.pending, (state) => {
         return {
+          ...state,
           loading: true,
           error: null,
         };
@@ -121,14 +123,16 @@ const serviceTicketSlice = createSlice({
       .addCase(createServiceTicket.fulfilled, (state, action) => {
         console.log(action);
         return {
+          ...state,
           data: action.payload,
-          // serviceTickets: [...state.serviceTickets, action.payload],
+          serviceTickets: [...state.serviceTickets, action.payload],
           loading: false,
           error: null,
         };
       })
       .addCase(createServiceTicket.rejected, (state, action) => {
         return {
+          ...state,
           loading: false,
           error: action.error.message,
         };
@@ -136,12 +140,14 @@ const serviceTicketSlice = createSlice({
       // Get service tickets record details
       .addCase(fetchServiceTickets.pending, (state) => {
         return {
+          ...state,
           loading: true,
           error: null,
         };
       })
       .addCase(fetchServiceTickets.fulfilled, (state, action) => {
         return {
+          ...state,
           serviceTickets: action.payload,
           loading: false,
           error: null,
@@ -149,6 +155,7 @@ const serviceTicketSlice = createSlice({
       })
       .addCase(fetchServiceTickets.rejected, (state, action) => {
         return {
+          ...state,
           loading: false,
           error: action.error.message,
         };
@@ -156,12 +163,14 @@ const serviceTicketSlice = createSlice({
       // Get service ticket record details
       .addCase(fetchServiceTicket.pending, (state) => {
         return {
+          ...state,
           loading: true,
           error: null,
         };
       })
       .addCase(fetchServiceTicket.fulfilled, (state, action) => {
         return {
+          ...state,
           data: action.payload,
           loading: false,
           error: null,
@@ -169,6 +178,7 @@ const serviceTicketSlice = createSlice({
       })
       .addCase(fetchServiceTicket.rejected, (state, action) => {
         return {
+          ...state,
           loading: false,
           error: action.error.message,
         };
@@ -176,12 +186,14 @@ const serviceTicketSlice = createSlice({
       // Update service ticket record details
       .addCase(updateServiceTicket.pending, (state) => {
         return {
+          ...state,
           loading: true,
           error: null,
         };
       })
       .addCase(updateServiceTicket.fulfilled, (state, action) => {
         return {
+          ...state,
           data: action.payload,
           loading: false,
           error: null,
@@ -189,6 +201,7 @@ const serviceTicketSlice = createSlice({
       })
       .addCase(updateServiceTicket.rejected, (state, action) => {
         return {
+          ...state,
           loading: false,
           error: action.error.message,
         };
