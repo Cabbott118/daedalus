@@ -33,6 +33,8 @@ router.get('/get-all-service-tickets', async (req, res) => {
       query = query.where('createdBy', '==', uid); // Apply the createdBy condition
     } else if (assignedToId) {
       query = query.where('assignedToId', '==', assignedToId); // Apply the assignedToId condition
+    } else {
+      query;
     }
 
     const querySnapshot = await query.get(); // Execute the query

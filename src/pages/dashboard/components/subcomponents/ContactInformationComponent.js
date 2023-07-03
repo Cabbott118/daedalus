@@ -88,6 +88,7 @@ const ContactInformationComponent = ({
         }
         label={`Use ${userData?.fullName?.firstName} ${userData?.fullName?.lastName} as primary contact`}
       />
+      <Typography variant='body2'>or</Typography>
     </Grid>
   );
 

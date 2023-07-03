@@ -8,7 +8,7 @@ import ServiceTicketsComponent from 'pages/dashboard/components/ServiceTicketsCo
 import BusinessInformationComponent from 'pages/dashboard/components/BusinessInformationComponent';
 import PaymentDetailsComponent from 'pages/dashboard/components/PaymentDetailsComponent';
 import SecurityComponent from 'pages/dashboard/components/SecurityComponent';
-import AdminComponent from 'pages/dashboard/components/subcomponents/AdminComponent';
+import AdminComponent from 'pages/dashboard/components/AdminComponent';
 import Logout from 'components/common/Logout';
 
 // Constants
@@ -17,6 +17,7 @@ import UserType from 'constants/userType';
 // MUI
 import { Button, Container, Grid, Paper, Typography } from '@mui/material';
 import {
+  AdminPanelSettings,
   Person,
   Business,
   ListAlt,
@@ -90,8 +91,12 @@ export default function Dashboard() {
 
   const adminNavItems = [
     {
-      text: 'Admin',
+      text: 'Account',
       icon: Person,
+    },
+    {
+      text: 'Admin',
+      icon: AdminPanelSettings,
     },
   ];
 
@@ -167,15 +172,6 @@ export default function Dashboard() {
           <Grid item sx={{ m: 0.5 }}>
             <Paper variant='outlined'>{renderContent()}</Paper>
           </Grid>
-        </Grid>
-        <Grid item>
-          <Typography>
-            Catch-all (not the final place for the below items)
-          </Typography>
-        </Grid>
-
-        <Grid item>
-          <Logout />
         </Grid>
       </Grid>
     </Container>

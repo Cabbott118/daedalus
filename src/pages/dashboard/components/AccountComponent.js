@@ -1,5 +1,8 @@
 import { useState } from 'react';
 
+// Components
+import Logout from 'components/common/Logout';
+
 // MUI
 import {
   Box,
@@ -14,7 +17,7 @@ import {
 import { useForm } from 'react-hook-form';
 
 // Redux
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { updateUser } from 'store/slices/userSlice';
 
 const AccountComponent = ({ uid, userData, loading }) => {
@@ -124,6 +127,9 @@ const AccountComponent = ({ uid, userData, loading }) => {
               </Grid>
             </>
           )}
+          <Grid item>
+            <Logout />
+          </Grid>
         </Grid>
       </Container>
     </Box>
