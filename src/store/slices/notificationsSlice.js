@@ -100,17 +100,9 @@ const notificationsSlice = createSlice({
         };
       })
       .addCase(updateNotification.fulfilled, (state, action) => {
-        const updatedNotification = action.payload;
-        const updatedData = state.data.map((notification) => {
-          if (notification.uid === updatedNotification.uid) {
-            return updatedNotification;
-          }
-          return notification;
-        });
-
         return {
           ...state,
-          data: updatedData,
+          data: [...state.data, action.payload],
           loading: false,
         };
       })

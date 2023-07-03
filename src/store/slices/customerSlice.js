@@ -87,12 +87,14 @@ const customerSlice = createSlice({
       // Create customer record
       .addCase(createCustomer.pending, (state) => {
         return {
+          ...state,
           loading: true,
           error: null,
         };
       })
       .addCase(createCustomer.fulfilled, (state, action) => {
         return {
+          ...state,
           data: action.payload,
           loading: false,
           error: null,
@@ -100,6 +102,7 @@ const customerSlice = createSlice({
       })
       .addCase(createCustomer.rejected, (state, action) => {
         return {
+          ...state,
           loading: false,
           error: action.error.message,
         };
@@ -107,12 +110,14 @@ const customerSlice = createSlice({
       // Get customer record details
       .addCase(fetchCustomer.pending, (state) => {
         return {
+          ...state,
           loading: true,
           error: null,
         };
       })
       .addCase(fetchCustomer.fulfilled, (state, action) => {
         return {
+          ...state,
           data: action.payload,
           loading: false,
           error: null,
@@ -120,6 +125,7 @@ const customerSlice = createSlice({
       })
       .addCase(fetchCustomer.rejected, (state, action) => {
         return {
+          ...state,
           loading: false,
           error: action.error.message,
         };
@@ -127,12 +133,14 @@ const customerSlice = createSlice({
       // Update customer record details
       .addCase(updateCustomer.pending, (state) => {
         return {
+          ...state,
           loading: true,
           error: null,
         };
       })
       .addCase(updateCustomer.fulfilled, (state, action) => {
         return {
+          ...state,
           data: action.payload,
           loading: false,
           error: null,
@@ -140,6 +148,7 @@ const customerSlice = createSlice({
       })
       .addCase(updateCustomer.rejected, (state, action) => {
         return {
+          ...state,
           loading: false,
           error: action.error.message,
         };

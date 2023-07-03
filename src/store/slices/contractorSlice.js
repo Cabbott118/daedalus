@@ -101,12 +101,14 @@ const contractorSlice = createSlice({
       // Create customer record
       .addCase(createContractor.pending, (state) => {
         return {
+          ...state,
           loading: true,
           error: null,
         };
       })
       .addCase(createContractor.fulfilled, (state, action) => {
         return {
+          ...state,
           data: action.payload,
           loading: false,
           error: null,
@@ -114,6 +116,7 @@ const contractorSlice = createSlice({
       })
       .addCase(createContractor.rejected, (state, action) => {
         return {
+          ...state,
           loading: false,
           error: action.error.message,
         };
@@ -121,12 +124,14 @@ const contractorSlice = createSlice({
       // Get all contractor record details
       .addCase(fetchContractors.pending, (state) => {
         return {
+          ...state,
           loading: true,
           error: null,
         };
       })
       .addCase(fetchContractors.fulfilled, (state, action) => {
         return {
+          ...state,
           data: action.payload,
           loading: false,
           error: null,
@@ -134,6 +139,7 @@ const contractorSlice = createSlice({
       })
       .addCase(fetchContractors.rejected, (state, action) => {
         return {
+          ...state,
           loading: false,
           error: action.error.message,
         };
@@ -141,12 +147,14 @@ const contractorSlice = createSlice({
       // Get contractor record details
       .addCase(fetchContractor.pending, (state) => {
         return {
+          ...state,
           loading: true,
           error: null,
         };
       })
       .addCase(fetchContractor.fulfilled, (state, action) => {
         return {
+          ...state,
           data: action.payload,
           loading: false,
           error: null,
@@ -154,6 +162,7 @@ const contractorSlice = createSlice({
       })
       .addCase(fetchContractor.rejected, (state, action) => {
         return {
+          ...state,
           loading: false,
           error: action.error.message,
         };
@@ -161,12 +170,14 @@ const contractorSlice = createSlice({
       // Update contractor record details
       .addCase(updateContractor.pending, (state) => {
         return {
+          ...state,
           loading: true,
           error: null,
         };
       })
       .addCase(updateContractor.fulfilled, (state, action) => {
         return {
+          ...state,
           data: action.payload,
           loading: false,
           error: null,
@@ -174,6 +185,7 @@ const contractorSlice = createSlice({
       })
       .addCase(updateContractor.rejected, (state, action) => {
         return {
+          ...state,
           loading: false,
           error: action.error.message,
         };
