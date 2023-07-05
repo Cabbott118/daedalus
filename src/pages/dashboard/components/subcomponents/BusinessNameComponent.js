@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import UserType from 'constants/userType';
 import {
   Box,
@@ -16,11 +16,11 @@ import { updateContractor } from 'store/slices/contractorSlice';
 const BusinessNameComponent = ({ uid, data = {}, userType, loading }) => {
   const dispatch = useDispatch();
   const [editMode, setEditMode] = useState(false);
-  const { register, handleSubmit } = useForm({
-    defaultValues: {
-      businessName: data?.businessName,
-    },
-  });
+  const { register, handleSubmit, setValue } = useForm({});
+
+  useEffect(() => {
+    setValue('businessName', data?.businessName);
+  }, [data?.businessName, setValue]);
 
   const handleEditSwitch = () => {
     setEditMode(!editMode);
@@ -70,7 +70,6 @@ const BusinessNameComponent = ({ uid, data = {}, userType, loading }) => {
               <TextField
                 label='Business Name'
                 fullWidth
-                defaultValue={data?.businessName || ''}
                 {...register('businessName')}
               />
             ) : (

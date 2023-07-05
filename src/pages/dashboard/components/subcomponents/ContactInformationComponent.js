@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import UserType from 'constants/userType';
 import {
   Box,
@@ -25,15 +25,18 @@ const ContactInformationComponent = ({
   const dispatch = useDispatch();
   const [editMode, setEditMode] = useState(false);
   const [isChecked, setIsChecked] = useState(false);
-  const { register, handleSubmit } = useForm({
-    defaultValues: {
-      primaryContact: {
-        firstName: data?.primaryContact?.firstName,
-        lastName: data?.primaryContact?.lastName,
-        email: data?.primaryContact?.email,
-      },
-    },
-  });
+  const { register, handleSubmit, setValue } = useForm({});
+
+  useEffect(() => {
+    setValue('primaryContact.firstName', data?.primaryContact?.firstName);
+    setValue('primaryContact.lastName', data?.primaryContact?.lastName);
+    setValue('primaryContact.email', data?.primaryContact?.email);
+  }, [
+    data?.primaryContact?.firstName,
+    data?.primaryContact?.lastName,
+    data?.primaryContact?.email,
+    setValue,
+  ]);
 
   const handleEditSwitch = () => {
     setEditMode(!editMode);
@@ -122,7 +125,6 @@ const ContactInformationComponent = ({
             {editMode || !data?.primaryContact ? (
               <TextField
                 label='First Name'
-                defaultValue={data?.primaryContact?.firstName || ''}
                 {...register('primaryContact.firstName')}
                 disabled={isChecked}
               />
@@ -141,7 +143,6 @@ const ContactInformationComponent = ({
             {editMode || !data?.primaryContact ? (
               <TextField
                 label='Last Name'
-                defaultValue={data?.primaryContact?.lastName || ''}
                 {...register('primaryContact.lastName')}
                 disabled={isChecked}
               />
@@ -153,7 +154,6 @@ const ContactInformationComponent = ({
               <TextField
                 label='Email'
                 fullWidth
-                defaultValue={data?.primaryContact?.email || ''}
                 {...register('primaryContact.email')}
                 disabled={isChecked}
               />

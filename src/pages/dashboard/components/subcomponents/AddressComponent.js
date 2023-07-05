@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import UserType from 'constants/userType';
 import states from 'constants/states.json';
 import {
@@ -18,16 +18,24 @@ import { updateContractor } from 'store/slices/contractorSlice';
 const AddressComponent = ({ uid, data = {}, userType, loading }) => {
   const dispatch = useDispatch();
   const [editMode, setEditMode] = useState(false);
-  const { register, handleSubmit } = useForm({
+  const { register, handleSubmit, setValue } = useForm({
     defaultValues: {
       address: {
-        addressLineOne: data?.address?.addressLineOne,
-        city: data?.address?.city,
         state: data?.address?.state,
-        zipCode: data?.address?.zipCode,
       },
     },
   });
+
+  useEffect(() => {
+    setValue('address.addressLineOne', data?.address?.addressLineOne);
+    setValue('address.city', data?.address?.city);
+    setValue('address.zipCode', data?.address?.zipCode);
+  }, [
+    data?.address?.addressLineOne,
+    data?.address?.city,
+    data?.address?.zipCode,
+    setValue,
+  ]);
 
   const handleEditSwitch = () => {
     setEditMode(!editMode);
@@ -98,7 +106,6 @@ const AddressComponent = ({ uid, data = {}, userType, loading }) => {
               <TextField
                 label='Address'
                 fullWidth
-                defaultValue={data?.address?.addressLineOne || ''}
                 {...register('address.addressLineOne')}
               />
             ) : (
@@ -113,12 +120,7 @@ const AddressComponent = ({ uid, data = {}, userType, loading }) => {
 
           <Grid item xs={12}>
             {editMode || !data?.address ? (
-              <TextField
-                label='City'
-                fullWidth
-                defaultValue={data?.address?.city || ''}
-                {...register('address.city')}
-              />
+              <TextField label='City' fullWidth {...register('address.city')} />
             ) : (
               <>
                 <Typography variant='subtitle2'>City</Typography>
@@ -155,7 +157,6 @@ const AddressComponent = ({ uid, data = {}, userType, loading }) => {
               <TextField
                 label='Zip Code'
                 fullWidth
-                defaultValue={data?.address?.zipCode || ''}
                 {...register('address.zipCode')}
               />
             ) : (
