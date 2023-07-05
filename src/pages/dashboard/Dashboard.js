@@ -9,7 +9,6 @@ import BusinessInformationComponent from 'pages/dashboard/components/BusinessInf
 import PaymentDetailsComponent from 'pages/dashboard/components/PaymentDetailsComponent';
 import SecurityComponent from 'pages/dashboard/components/SecurityComponent';
 import AdminComponent from 'pages/dashboard/components/AdminComponent';
-import Logout from 'components/common/Logout';
 
 // Constants
 import UserType from 'constants/userType';

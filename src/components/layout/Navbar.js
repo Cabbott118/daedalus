@@ -31,7 +31,9 @@ export default function Navbar() {
 
   const [navLinks, setNavLinks] = useState([]);
 
-  const { data: userData } = useSelector((state) => state.user);
+  const { data: userData, userProfileLoaded } = useSelector(
+    (state) => state.user
+  );
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {

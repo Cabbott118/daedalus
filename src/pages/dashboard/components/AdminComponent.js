@@ -50,9 +50,14 @@ const AdminComponent = () => {
   };
 
   useEffect(() => {
-    dispatch(fetchContractors());
-    dispatch(fetchServiceTickets({ uid: '' }));
-  }, []);
+    if (!contractorData) {
+      dispatch(fetchContractors());
+    }
+
+    if (!serviceTickets) {
+      dispatch(fetchServiceTickets({ uid: '' }));
+    }
+  }, [contractorData, serviceTickets, dispatch]);
 
   const columns = [
     {

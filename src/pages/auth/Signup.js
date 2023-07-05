@@ -35,9 +35,7 @@ export default function Signup() {
   const [isAlertShowing, setIsAlertShowing] = useState(false);
 
   const dispatch = useDispatch();
-  const { data, loading, isAuthenticated, error } = useSelector(
-    (state) => state.user
-  );
+  const { data, loading, error } = useSelector((state) => state.user);
 
   const handleClickShowPassword = () => setShowPassword((show) => !show);
 
@@ -76,7 +74,7 @@ export default function Signup() {
     }
   }, [data]);
 
-  if (isAuthenticated) {
+  if (data) {
     return <Navigate to={routes.HOME} replace />;
   }
 

@@ -90,6 +90,9 @@ const ServiceTicketsComponent = ({
   }
 
   if (userData?.userType === UserType.CONTRACTOR) {
+    if (!contractorData?.address || !contractorData?.primaryContact) {
+      return <p>Complete Business Information</p>;
+    }
     return (
       <TableContainer component={Paper}>
         <Table>

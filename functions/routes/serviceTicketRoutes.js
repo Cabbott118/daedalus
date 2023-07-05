@@ -24,20 +24,17 @@ router.get('/get-service-ticket-details', async (req, res) => {
 
 router.get('/get-all-service-tickets', async (req, res) => {
   try {
-    const uid = req.query.uid;
-    const assignedToId = req.query.assignedToId;
+    const { uid, assignedToId } = req.query;
     const ticketsRef = admin.firestore().collection('serviceTickets');
     let query = ticketsRef; // Initialize the query
 
     if (uid) {
-      query = query.where('createdBy', '==', uid); // Apply the createdBy condition
+      query = query.where('createdBy', '==', uid);
     } else if (assignedToId) {
-      query = query.where('assignedToId', '==', assignedToId); // Apply the assignedToId condition
-    } else {
-      query;
+      query = query.where('assignedToId', '==', assignedToId);
     }
 
-    const querySnapshot = await query.get(); // Execute the query
+    const querySnapshot = await query.orderBy('createdAt', 'desc').get(); // Execute the query
     const ticketsData = querySnapshot.docs.map((doc) => doc.data());
 
     return res.status(200).json(ticketsData);

@@ -29,14 +29,24 @@ const BusinessInformationComponent = ({ userData }) => {
     (state) => state.contractor
   );
 
+  // useEffect(() => {
+  //   if (userData?.userType === UserType.CUSTOMER) {
+  //     dispatch(fetchCustomer(userData?.uid));
+  //   }
+  //   if (userData?.userType === UserType.CONTRACTOR) {
+  //     dispatch(fetchContractor(userData?.uid));
+  //   }
+  // }, [userData]);
+
   useEffect(() => {
-    if (userData?.userType === UserType.CUSTOMER) {
-      dispatch(fetchCustomer(userData?.uid));
+    if (!customerData && !contractorData && userData) {
+      if (userData.userType === UserType.CUSTOMER) {
+        dispatch(fetchCustomer(userData.uid));
+      } else if (userData.userType === UserType.CONTRACTOR) {
+        dispatch(fetchContractor(userData.uid));
+      }
     }
-    if (userData?.userType === UserType.CONTRACTOR) {
-      dispatch(fetchContractor(userData?.uid));
-    }
-  }, [userData]);
+  }, [userData, customerData, contractorData, dispatch]);
 
   useEffect(() => {
     if (userData?.userType === UserType.CUSTOMER) {

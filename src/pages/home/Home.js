@@ -25,9 +25,11 @@ export default function Home() {
   const theme = useTheme();
   const dispatch = useDispatch();
 
-  const { data: userData, loading: userLoading } = useSelector(
-    (state) => state.user
-  );
+  const {
+    data: userData,
+    userProfileLoaded,
+    loading: userLoading,
+  } = useSelector((state) => state.user);
   const { data: customerData, loading: customerLoading } = useSelector(
     (state) => state.customer
   );
@@ -37,21 +39,22 @@ export default function Home() {
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
-      if (user) {
+      if (user && !userProfileLoaded) {
         await dispatch(fetchUser(user.uid));
       }
     });
-
     return () => unsubscribe();
-  }, [auth, dispatch]);
+  }, [auth, dispatch, userProfileLoaded]);
 
   useEffect(() => {
-    if (userData?.userType === UserType.CUSTOMER) {
-      dispatch(fetchCustomer(userData.uid));
-    } else if (userData?.userType === UserType.CONTRACTOR) {
-      dispatch(fetchContractor(userData.uid));
+    if (!customerData && !contractorData && userData) {
+      if (userData.userType === UserType.CUSTOMER) {
+        dispatch(fetchCustomer(userData.uid));
+      } else if (userData.userType === UserType.CONTRACTOR) {
+        dispatch(fetchContractor(userData.uid));
+      }
     }
-  }, [userData, dispatch]);
+  }, [userData, customerData, contractorData, dispatch]);
 
   if (userLoading || customerLoading || contractorLoading)
     return (
