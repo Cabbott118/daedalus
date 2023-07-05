@@ -23,7 +23,10 @@ import {
 
 // Redux
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchServiceTickets } from 'store/slices/serviceTicketSlice';
+import {
+  fetchServiceTicketsAssignedTo,
+  fetchServiceTicketsCreatedBy,
+} from 'store/slices/serviceTicketSlice';
 
 const ServiceTicketsComponent = ({
   uid,
@@ -41,12 +44,12 @@ const ServiceTicketsComponent = ({
       customerData?.primaryContact &&
       uid
     ) {
-      dispatch(fetchServiceTickets({ uid }));
+      dispatch(fetchServiceTicketsCreatedBy(uid));
     }
 
     if (userData?.userType === UserType.CONTRACTOR && contractorData?.uid) {
       const assignedToId = contractorData?.uid;
-      dispatch(fetchServiceTickets({ assignedToId }));
+      dispatch(fetchServiceTicketsAssignedTo(assignedToId));
     }
   }, [dispatch, uid, userData, customerData, contractorData]);
 

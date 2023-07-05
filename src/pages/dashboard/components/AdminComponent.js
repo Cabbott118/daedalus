@@ -54,8 +54,8 @@ const AdminComponent = () => {
       dispatch(fetchContractors());
     }
 
-    if (!serviceTickets) {
-      dispatch(fetchServiceTickets({ uid: '' }));
+    if (serviceTickets.length === 0) {
+      dispatch(fetchServiceTickets());
     }
   }, [contractorData, serviceTickets, dispatch]);
 

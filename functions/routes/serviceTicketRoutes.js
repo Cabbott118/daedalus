@@ -24,17 +24,58 @@ router.get('/get-service-ticket-details', async (req, res) => {
 
 router.get('/get-all-service-tickets', async (req, res) => {
   try {
-    const { uid, assignedToId } = req.query;
     const ticketsRef = admin.firestore().collection('serviceTickets');
     let query = ticketsRef; // Initialize the query
 
-    if (uid) {
-      query = query.where('createdBy', '==', uid);
-    } else if (assignedToId) {
-      query = query.where('assignedToId', '==', assignedToId);
+    const querySnapshot = await query.orderBy('createdAt', 'desc').get(); // Execute the query
+    const ticketsData = querySnapshot.docs.map((doc) => doc.data());
+
+    return res.status(200).json(ticketsData);
+  } catch (error) {
+    console.error('Error retrieving ticket details:', error);
+    return res.status(500).json({ message: 'Internal Server Error' });
+  }
+});
+
+router.get('/get-service-tickets-assigned-to', async (req, res) => {
+  try {
+    const uid = req.query.uid;
+    const ticketsRef = admin.firestore().collection('serviceTickets');
+    const querySnapshot = await ticketsRef
+      .where('assignedTo', '==', uid)
+      .orderBy('assignedTo', 'desc')
+      .get(); // Initialize the query
+
+    if (querySnapshot.empty) {
+      return res.status(404).json({
+        message: 'No service tickets found for the specified contractor',
+      });
     }
 
-    const querySnapshot = await query.orderBy('createdAt', 'desc').get(); // Execute the query
+    const ticketsData = querySnapshot.docs.map((doc) => doc.data());
+
+    return res.status(200).json(ticketsData);
+  } catch (error) {
+    console.error('Error retrieving ticket details:', error);
+    return res.status(500).json({ message: 'Internal Server Error' });
+  }
+});
+
+router.get('/get-service-tickets-created-by', async (req, res) => {
+  try {
+    const uid = req.query.uid;
+    const ticketsRef = admin.firestore().collection('serviceTickets');
+    const querySnapshot = await ticketsRef
+      .where('createdBy', '==', uid)
+      .orderBy('createdAt', 'desc')
+      .get(); // Initialize the query
+
+    if (querySnapshot.empty) {
+      return res
+        .status(404)
+        .json({ message: 'No service tickets found for the specified owner' });
+    }
+
     const ticketsData = querySnapshot.docs.map((doc) => doc.data());
 
     return res.status(200).json(ticketsData);

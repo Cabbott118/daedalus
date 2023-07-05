@@ -32,12 +32,49 @@ const createServiceTicket = createAsyncThunk(
 // dispatch(fetchServiceTickets());
 const fetchServiceTickets = createAsyncThunk(
   'serviceTicket/fetchServiceTickets',
-  async ({ uid, assignedToId }) => {
+  async () => {
     try {
-      const response = await get('/service-tickets/get-all-service-tickets', {
-        uid,
-        assignedToId,
-      });
+      const response = await get('/service-tickets/get-all-service-tickets');
+      return response;
+    } catch {
+      throw new Error('Failed to fetch all service ticket data.');
+    }
+  }
+);
+
+// Async thunk to fetch all service ticket data
+// const uid = '123'
+// dispatch(fetchServiceTickets({uid}));
+// dispatch(fetchServiceTickets({assignedTo}));
+// dispatch(fetchServiceTickets());
+const fetchServiceTicketsAssignedTo = createAsyncThunk(
+  'serviceTicket/fetchServiceTicketsAssignedTo',
+  async (uid) => {
+    try {
+      const response = await get(
+        '/service-tickets/get-service-tickets-assigned-to',
+        { uid }
+      );
+      return response;
+    } catch {
+      throw new Error('Failed to fetch all service ticket data.');
+    }
+  }
+);
+
+// Async thunk to fetch all service ticket data
+// const uid = '123'
+// dispatch(fetchServiceTickets({uid}));
+// dispatch(fetchServiceTickets({assignedTo}));
+// dispatch(fetchServiceTickets());
+const fetchServiceTicketsCreatedBy = createAsyncThunk(
+  'serviceTicket/fetchServiceTicketsCreatedBy',
+  async (uid) => {
+    try {
+      const response = await get(
+        '/service-tickets/get-service-tickets-created-by',
+        { uid }
+      );
       return response;
     } catch {
       throw new Error('Failed to fetch all service ticket data.');
@@ -160,6 +197,52 @@ const serviceTicketSlice = createSlice({
           error: action.error.message,
         };
       })
+      // Get service tickets record details for assigned to
+      .addCase(fetchServiceTicketsAssignedTo.pending, (state) => {
+        return {
+          ...state,
+          loading: true,
+          error: null,
+        };
+      })
+      .addCase(fetchServiceTicketsAssignedTo.fulfilled, (state, action) => {
+        return {
+          ...state,
+          serviceTickets: action.payload,
+          loading: false,
+          error: null,
+        };
+      })
+      .addCase(fetchServiceTicketsAssignedTo.rejected, (state, action) => {
+        return {
+          ...state,
+          loading: false,
+          error: action.error.message,
+        };
+      })
+      // Get service tickets record details for created by
+      .addCase(fetchServiceTicketsCreatedBy.pending, (state) => {
+        return {
+          ...state,
+          loading: true,
+          error: null,
+        };
+      })
+      .addCase(fetchServiceTicketsCreatedBy.fulfilled, (state, action) => {
+        return {
+          ...state,
+          serviceTickets: action.payload,
+          loading: false,
+          error: null,
+        };
+      })
+      .addCase(fetchServiceTicketsCreatedBy.rejected, (state, action) => {
+        return {
+          ...state,
+          loading: false,
+          error: action.error.message,
+        };
+      })
       // Get service ticket record details
       .addCase(fetchServiceTicket.pending, (state) => {
         return {
@@ -214,6 +297,8 @@ export const { reducer: serviceTicketReducer } = serviceTicketSlice;
 export {
   createServiceTicket,
   fetchServiceTickets,
+  fetchServiceTicketsAssignedTo,
+  fetchServiceTicketsCreatedBy,
   fetchServiceTicket,
   updateServiceTicket,
   clearServiceTicketData,
