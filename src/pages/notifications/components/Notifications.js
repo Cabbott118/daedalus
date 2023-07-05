@@ -79,11 +79,15 @@ const Notifications = ({ userId }) => {
     return () => unsubscribe();
   }, [userId, db]);
 
-  const handleMarkAsRead = (uid) => {
-    const updateData = {
-      hasBeenRead: true,
-    };
-    dispatch(updateNotification({ uid, updateData }));
+  const handleMarkAsRead = (notification) => {
+    if (!notification.hasBeenRead) {
+      const uid = notification.uid;
+      const updateData = {
+        hasBeenRead: true,
+      };
+      dispatch(updateNotification({ uid, updateData }));
+    }
+
     setAnchorEl(null);
   };
 
@@ -153,9 +157,9 @@ const Notifications = ({ userId }) => {
             <>
               {notificationsData?.length !== 0 ? (
                 <List dense={true}>
-                  {notificationsData?.map((notification) => (
+                  {notificationsData?.map((notification, index) => (
                     <ListItem
-                      key={notification.uid}
+                      key={index}
                       disablePadding
                       sx={{
                         bgcolor: notification.hasBeenRead ? null : '#f0fafa',
@@ -165,7 +169,9 @@ const Notifications = ({ userId }) => {
                       <ListItemButton
                         component={Link}
                         to={`${routes.SERVICE_TICKET}/${notification.ticketId}`}
-                        onClick={() => handleMarkAsRead(notification.uid)}
+                        onClick={() => {
+                          handleMarkAsRead(notification);
+                        }}
                       >
                         {!notification.hasBeenRead && (
                           <ListItemIcon>

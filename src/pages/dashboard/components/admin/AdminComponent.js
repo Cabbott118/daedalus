@@ -1,27 +1,20 @@
 import { useState, useEffect } from 'react';
 
+// Components
+import ServiceTicketDialog from 'pages/dashboard/components/admin/subcomponents/serviceTicketDialog';
+
 // Helpers
 import formatCreatedAt from 'services/helpers/dateFormatter';
 
 // MUI
-import {
-  Box,
-  Button,
-  Container,
-  Grid,
-  TextField,
-  Typography,
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  DialogActions,
-} from '@mui/material';
 import { DataGrid } from '@mui/x-data-grid';
 
 // Redux
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchContractors } from 'store/slices/contractorSlice';
-import { fetchServiceTickets } from 'store/slices/serviceTicketSlice';
+import {
+  fetchServiceTicket,
+  fetchServiceTickets,
+} from 'store/slices/serviceTicketSlice';
 
 const AdminComponent = () => {
   const dispatch = useDispatch();
@@ -31,33 +24,27 @@ const AdminComponent = () => {
   //   const { data: customerData, loading: customerLoading } = useSelector(
   //     (state) => state.customer
   //   );
-  const { data: contractorData, loading: contractorLoading } = useSelector(
-    (state) => state.contractor
+
+  const { serviceTickets, loading: serviceTicketLoading } = useSelector(
+    (state) => state.serviceTicket
   );
-  const {
-    data: serviceTicketData,
-    serviceTickets,
-    loading: serviceTicketLoading,
-  } = useSelector((state) => state.serviceTicket);
 
   const handleRowClick = (params) => {
     setSelectedRow(params.row);
+    dispatch(fetchServiceTicket(params.row.uid));
     setOpen(true);
   };
 
   const handleDialogClose = () => {
     setOpen(false);
+    dispatch(fetchServiceTickets());
   };
 
   useEffect(() => {
-    if (!contractorData) {
-      dispatch(fetchContractors());
-    }
-
     if (serviceTickets.length === 0) {
       dispatch(fetchServiceTickets());
     }
-  }, [contractorData, serviceTickets, dispatch]);
+  }, [serviceTickets, dispatch]);
 
   const columns = [
     {
@@ -94,10 +81,11 @@ const AdminComponent = () => {
       assigned: ticket.assigned,
       reasonForServices: ticket.reasonForServices,
       createdAt: formatCreatedAt(ticket.createdAt),
+      uid: ticket.uid,
     }));
   }
 
-  if (contractorLoading || serviceTicketLoading) return <p>Loading...</p>;
+  if (serviceTicketLoading) return <p>Loading...</p>;
 
   return (
     <div style={{ height: 400, width: '100%' }}>
@@ -119,31 +107,7 @@ const AdminComponent = () => {
         // checkboxSelection
         onRowClick={handleRowClick}
       />
-      <Dialog open={open} onClose={handleDialogClose}>
-        <DialogTitle>Service Ticket Details</DialogTitle>
-        <DialogContent>
-          {selectedRow && (
-            <div>
-              <Typography variant='body1'>ID: {selectedRow.id}</Typography>
-              <Typography variant='body1'>
-                Customer: {selectedRow.customerName}
-              </Typography>
-              <Typography variant='body1'>
-                Assigned: {selectedRow.assigned ? 'Yes' : 'No'}
-              </Typography>
-              <Typography variant='body1'>
-                Reason: {selectedRow.reasonForServices}
-              </Typography>
-              <Typography variant='body1'>
-                Created On: {selectedRow.createdAt}
-              </Typography>
-            </div>
-          )}
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleDialogClose}>Close</Button>
-        </DialogActions>
-      </Dialog>
+      <ServiceTicketDialog open={open} onClose={handleDialogClose} />
     </div>
   );
 };

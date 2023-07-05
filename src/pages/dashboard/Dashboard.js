@@ -3,12 +3,12 @@ import { useEffect, useState } from 'react';
 // Components
 import DeleteDialog from 'pages/dashboard/components/DeleteDialog';
 import UpdateDialog from 'pages/dashboard/components/UpdateDialog';
-import AccountComponent from 'pages/dashboard/components/AccountComponent';
-import ServiceTicketsComponent from 'pages/dashboard/components/ServiceTicketsComponent';
-import BusinessInformationComponent from 'pages/dashboard/components/BusinessInformationComponent';
-import PaymentDetailsComponent from 'pages/dashboard/components/PaymentDetailsComponent';
-import SecurityComponent from 'pages/dashboard/components/SecurityComponent';
-import AdminComponent from 'pages/dashboard/components/AdminComponent';
+import AccountComponent from 'pages/dashboard/components/account/AccountComponent';
+import ServiceTicketsComponent from 'pages/dashboard/components/serviceTickets/ServiceTicketsComponent';
+import BusinessInformationComponent from 'pages/dashboard/components/businessInformation/BusinessInformationComponent';
+import PaymentDetailsComponent from 'pages/dashboard/components/paymentDetails/PaymentDetailsComponent';
+import SecurityComponent from 'pages/dashboard/components/security/SecurityComponent';
+import AdminComponent from 'pages/dashboard/components/admin/AdminComponent';
 
 // Constants
 import UserType from 'constants/userType';

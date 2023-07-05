@@ -96,20 +96,19 @@ router.post('/create-service-ticket', async (req, res) => {
       customerName,
       customerId,
       reasonForServices,
+      uid: '',
       createdAt: admin.firestore.FieldValue.serverTimestamp(),
     };
 
-    const ticketRef = admin.firestore().collection('serviceTickets').doc();
-    await ticketRef.set(newTicket);
-    const ticketId = ticketRef.id;
-
-    // Retrieve the created user data from Firestore
-    const createdTicketDoc = await admin
+    const ticketRef = await admin
       .firestore()
       .collection('serviceTickets')
-      .doc(ticketId)
-      .get();
+      .add(newTicket);
 
+    const ticketId = ticketRef.id;
+    await ticketRef.update({ uid: ticketId });
+
+    const createdTicketDoc = await ticketRef.get();
     const createdTicket = createdTicketDoc.data();
 
     return res.status(201).json({

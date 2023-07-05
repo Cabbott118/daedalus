@@ -33,7 +33,7 @@ const ServiceTicket = () => {
 
   useEffect(() => {
     dispatch(fetchServiceTicket(uid));
-  }, []);
+  }, [uid]);
 
   const formatCreatedAt = (createdAt) => {
     const date = new Date(createdAt._seconds * 1000);

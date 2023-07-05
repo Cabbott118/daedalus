@@ -158,11 +158,10 @@ const serviceTicketSlice = createSlice({
         };
       })
       .addCase(createServiceTicket.fulfilled, (state, action) => {
-        console.log(action);
         return {
           ...state,
           data: action.payload,
-          serviceTickets: [...state.serviceTickets, action.payload],
+          serviceTickets: [action.payload, ...state.serviceTickets],
           loading: false,
           error: null,
         };
