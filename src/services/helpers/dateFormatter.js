@@ -1,4 +1,8 @@
 export default function formatCreatedAt(createdAt) {
+  if (!createdAt || !createdAt._seconds) {
+    return '';
+  }
+
   const date = new Date(createdAt._seconds * 1000);
 
   const options = {

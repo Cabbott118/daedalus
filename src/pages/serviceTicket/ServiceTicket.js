@@ -3,6 +3,9 @@ import { useEffect } from 'react';
 // Constants
 import StatusType from 'constants/statusType';
 
+// Helpers
+import formatCreatedAt from 'services/helpers/dateFormatter';
+
 // user type will eventually be used to conditionally render action items on service tickets
 import UserType from 'constants/userType';
 
@@ -34,11 +37,6 @@ const ServiceTicket = () => {
   useEffect(() => {
     dispatch(fetchServiceTicket(uid));
   }, [uid]);
-
-  const formatCreatedAt = (createdAt) => {
-    const date = new Date(createdAt._seconds * 1000);
-    return date.toLocaleString();
-  };
 
   const renderAssignmentStatus = () => {
     if (serviceTicketData?.status === StatusType.NEW) {
