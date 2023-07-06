@@ -61,18 +61,13 @@ const ServiceTicketDialog = ({ open, onClose }) => {
       status: StatusType.ASSIGNED,
     };
 
-    console.log(data);
     console.log(selectedContractor);
     dispatch(updateServiceTicket({ uid, updateData }));
   };
 
   return (
     <Dialog open={open} onClose={onClose}>
-      <Box
-        component='form'
-        onSubmit={handleSubmit(onSubmit)}
-        // sx={{ minWidth: '20rem' }}
-      >
+      <Box component='form' onSubmit={handleSubmit(onSubmit)}>
         <DialogTitle sx={{ textDecoration: 'underline' }}>
           Service Ticket Details
         </DialogTitle>
@@ -99,37 +94,66 @@ const ServiceTicketDialog = ({ open, onClose }) => {
                 xs={12}
                 sx={{ bgcolor: '#eee', p: 3, borderRadius: 2, mt: 2 }}
               >
-                <Typography variant='body1' sx={{ mb: 2 }}>
-                  Reason for Services: {serviceTicketData?.reasonForServices}
+                <Typography variant='body1' sx={{}}>
+                  Reason for services:
                 </Typography>
-                <Typography variant='body1' sx={{ mb: 2 }}>
-                  Site Location: 1234 Tester's Lane, Polk City, FL 33868
+                <Typography variant='body2' sx={{ mb: 2 }}>
+                  {serviceTicketData?.reasonForServices}
                 </Typography>
-                <Typography variant='body1'>
-                  Not To Exceed (NTE): $5,000
+                <Typography variant='body1' sx={{}}>
+                  Site location:
+                </Typography>
+                <Typography variant='body2' sx={{ mb: 2, color: 'green' }}>
+                  1234 Tester's Lane, Polk City, FL 33868
+                </Typography>
+                <Typography variant='body1'>Not to exceed (NTE):</Typography>
+                <Typography variant='body2' sx={{ color: 'green' }}>
+                  $5,000
                 </Typography>
               </Grid>
-
-              {!serviceTicketData?.assigned && (
-                <Grid item xs={12} sx={{ mt: 2 }}>
-                  <Typography variant='subtitle2' sx={{ color: 'red', mb: 1 }}>
-                    This ticket requires action
-                  </Typography>
-                  <TextField
-                    label='Assign to Contractor'
-                    select
-                    fullWidth
-                    defaultValue={contractorData?.contractorName || ''}
-                    {...register('assignedTo')}
-                  >
-                    {contractorData?.map((contractor, index) => (
-                      <MenuItem key={index} value={contractor.uid}>
-                        {contractor.businessName}
-                      </MenuItem>
-                    ))}
-                  </TextField>
-                </Grid>
-              )}
+              <Grid item xs={12} sx={{ mt: 2 }}>
+                {!serviceTicketData?.assigned ? (
+                  <>
+                    <Typography
+                      variant='subtitle2'
+                      sx={{ color: 'red', mb: 1 }}
+                    >
+                      This ticket requires action
+                    </Typography>
+                    <TextField
+                      label='Assign to Contractor'
+                      select
+                      fullWidth
+                      defaultValue={contractorData?.contractorName || ''}
+                      {...register('assignedTo')}
+                    >
+                      {contractorData?.map((contractor, index) => (
+                        <MenuItem key={index} value={contractor.uid}>
+                          {contractor.businessName}
+                        </MenuItem>
+                      ))}
+                    </TextField>
+                  </>
+                ) : (
+                  <>
+                    <Typography variant='body1'>
+                      Service ticket assigned to:
+                    </Typography>
+                    <Typography variant='body2'>
+                      {serviceTicketData?.contractorName}
+                    </Typography>
+                    <Typography variant='body1' sx={{ mt: 2 }}>
+                      Service ticket status:
+                    </Typography>
+                    <Typography
+                      variant='body2'
+                      sx={{ textTransform: 'uppercase' }}
+                    >
+                      {serviceTicketData?.status}
+                    </Typography>
+                  </>
+                )}
+              </Grid>
             </Grid>
           )}
         </DialogContent>

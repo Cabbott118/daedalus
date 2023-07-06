@@ -79,7 +79,19 @@ const ServiceTicketsComponent = ({
                 {serviceTickets?.map((data, index) => (
                   <TableRow key={index}>
                     <TableCell>{data.customerName}</TableCell>
-                    <TableCell>{data.reasonForServices}</TableCell>
+                    <TableCell>
+                      <Typography
+                        variant='body2'
+                        sx={{
+                          overflow: 'hidden',
+                          textOverflow: 'ellipsis',
+                          whiteSpace: 'nowrap',
+                          maxWidth: 200, // Adjust the value as needed
+                        }}
+                      >
+                        {data.reasonForServices}
+                      </Typography>
+                    </TableCell>
                     <TableCell>{data.status}</TableCell>
                     <TableCell>{formatCreatedAt(data.createdAt)}</TableCell>
                   </TableRow>

@@ -92,7 +92,6 @@ router.post('/create-service-ticket', async (req, res) => {
       createdBy: uid,
       status: 'new',
       assigned: false,
-      assignedTo: '',
       customerName,
       customerId,
       reasonForServices,

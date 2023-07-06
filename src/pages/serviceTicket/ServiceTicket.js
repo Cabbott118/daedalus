@@ -1,7 +1,8 @@
 import { useEffect } from 'react';
 
 // Constants
-import ServiceTicketStatusType from 'constants/serviceTicketStatusType';
+import StatusType from 'constants/statusType';
+
 // user type will eventually be used to conditionally render action items on service tickets
 import UserType from 'constants/userType';
 
@@ -12,9 +13,8 @@ import {
   Chip,
   Container,
   Grid,
-  Paper,
+  TextField,
   Typography,
-  useTheme,
 } from '@mui/material';
 
 // React Router
@@ -40,6 +40,63 @@ const ServiceTicket = () => {
     return date.toLocaleString();
   };
 
+  const renderAssignmentStatus = () => {
+    if (serviceTicketData?.status === StatusType.NEW) {
+      return (
+        <Typography variant='body1'>
+          This ticket will be assigned shortly
+        </Typography>
+      );
+    }
+    if (serviceTicketData?.status === StatusType.ASSIGNED) {
+      return (
+        <>
+          <Typography variant='body1'>
+            This ticket has been assigned to:
+          </Typography>
+          <Typography variant='body2'>
+            {serviceTicketData?.contractorName}
+          </Typography>
+        </>
+      );
+    }
+    if (serviceTicketData?.status === StatusType.ACCEPTED) {
+      return (
+        <>
+          <Typography variant='body1'>This ticket has been accepted</Typography>
+          <Typography variant='body1'>Services to be rendered by:</Typography>
+          <Typography variant='body2'>
+            {serviceTicketData?.contractorName}
+          </Typography>
+        </>
+      );
+    }
+    if (serviceTicketData?.status === StatusType.IN_PROGRESS) {
+      return (
+        <>
+          <Typography variant='body1'>This ticket is in progress</Typography>
+          <Typography variant='body1'>Services being rendered by:</Typography>
+          <Typography variant='body2'>
+            {serviceTicketData?.contractorName}
+          </Typography>
+        </>
+      );
+    }
+    if (serviceTicketData?.status === StatusType.COMPETE) {
+      return (
+        <>
+          <Typography variant='body1'>
+            This ticket has been completed
+          </Typography>
+          <Typography variant='body1'>Services rendered by:</Typography>
+          <Typography variant='body2'>
+            {serviceTicketData?.contractorName}
+          </Typography>
+        </>
+      );
+    }
+  };
+
   if (serviceTicketLoading)
     return (
       <Container>
@@ -48,32 +105,60 @@ const ServiceTicket = () => {
     );
 
   return (
-    <Container maxWidth='md'>
-      <Typography variant='h5' component='h1' align='center'>
-        Service Request for {serviceTicketData?.customerName}
+    <Container maxWidth='sm'>
+      <Typography variant='h2' align='center' sx={{ fontSize: '1.5rem' }}>
+        Service Request
       </Typography>
-      <Paper variant='outlined' sx={{ minHeight: '250px' }}>
-        <Grid container spacing={2}>
-          <Grid item xs={8} sx={{ my: '.5rem' }}></Grid>
-          <Grid item xs={4} sx={{ my: '.5rem' }}>
-            <Chip
-              label={serviceTicketData?.status}
-              color='info'
-              sx={{ width: '6rem' }}
-            />
-          </Grid>
-          <Grid item xs={12}>
-            <Grid container spacing={0}>
-              <Grid item xs={12}>
-                <Typography>Reason for request:</Typography>
-              </Grid>
-              <Grid item xs={12}>
-                <Typography>{serviceTicketData?.reasonForServices}</Typography>
-              </Grid>
-            </Grid>
-          </Grid>
+      <Grid container>
+        <Grid item xs={8}>
+          <Typography
+            variant='h6'
+            sx={{ fontWeight: 400, letterSpacing: '0.05rem', mb: -1 }}
+          >
+            {serviceTicketData?.customerName}
+          </Typography>
+          <Typography variant='caption'>
+            {formatCreatedAt(serviceTicketData?.createdAt)}
+          </Typography>
         </Grid>
-      </Paper>
+        <Grid item xs={2} sx={{ my: 1 }}>
+          <Chip label='HVAC' variant='filled' color='primary' />
+        </Grid>
+        <Grid item xs={2} sx={{ my: 1 }}>
+          <Chip
+            label={serviceTicketData?.status}
+            variant='filled'
+            color='primary'
+            sx={{ textTransform: 'uppercase' }}
+          />
+        </Grid>
+
+        <Grid
+          item
+          xs={12}
+          sx={{ bgcolor: '#eee', p: 3, borderRadius: 2, mt: 2 }}
+        >
+          <Typography variant='body1' sx={{}}>
+            Reason for services:
+          </Typography>
+          <Typography variant='body2' sx={{ mb: 2 }}>
+            {serviceTicketData?.reasonForServices}
+          </Typography>
+          <Typography variant='body1' sx={{}}>
+            Site location:
+          </Typography>
+          <Typography variant='body2' sx={{ mb: 2, color: 'green' }}>
+            1234 Tester's Lane, Polk City, FL 33868
+          </Typography>
+          <Typography variant='body1'>Not to exceed (NTE):</Typography>
+          <Typography variant='body2' sx={{ color: 'green' }}>
+            $5,000
+          </Typography>
+        </Grid>
+        <Grid item xs={12} sx={{ mt: 2 }}>
+          {renderAssignmentStatus()}
+        </Grid>
+      </Grid>
     </Container>
   );
 };
