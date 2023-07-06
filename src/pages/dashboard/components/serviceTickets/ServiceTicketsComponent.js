@@ -64,7 +64,7 @@ const ServiceTicketsComponent = ({
           userId={userData?.uid}
           customerData={customerData}
         />
-        {serviceTickets && (
+        {serviceTickets.length > 0 && (
           <TableContainer component={Paper}>
             <Table>
               <TableHead>
@@ -86,7 +86,7 @@ const ServiceTicketsComponent = ({
                           overflow: 'hidden',
                           textOverflow: 'ellipsis',
                           whiteSpace: 'nowrap',
-                          maxWidth: 200, // Adjust the value as needed
+                          maxWidth: 80,
                         }}
                       >
                         {data.reasonForServices}
@@ -109,28 +109,44 @@ const ServiceTicketsComponent = ({
       return <p>Complete Business Information</p>;
     }
     return (
-      <TableContainer component={Paper}>
-        <Table>
-          <TableHead>
-            <TableRow>
-              <TableCell>Company Receiving Services</TableCell>
-              <TableCell>Reason for Services</TableCell>
-              <TableCell>Status</TableCell>
-              <TableCell>Created At</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {serviceTickets?.map((data, index) => (
-              <TableRow key={index}>
-                <TableCell>{data.customerName}</TableCell>
-                <TableCell>{data.reasonForServices}</TableCell>
-                <TableCell>{data.status}</TableCell>
-                <TableCell>{formatCreatedAt(data.createdAt)}</TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </TableContainer>
+      <>
+        {serviceTickets.length > 0 && (
+          <TableContainer component={Paper}>
+            <Table>
+              <TableHead>
+                <TableRow>
+                  <TableCell>Company Receiving Services</TableCell>
+                  <TableCell>Reason for Services</TableCell>
+                  <TableCell>Status</TableCell>
+                  <TableCell>Created At</TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {serviceTickets?.map((data, index) => (
+                  <TableRow key={index}>
+                    <TableCell>{data.customerName}</TableCell>
+                    <TableCell>
+                      <Typography
+                        variant='body2'
+                        sx={{
+                          overflow: 'hidden',
+                          textOverflow: 'ellipsis',
+                          whiteSpace: 'nowrap',
+                          maxWidth: 80,
+                        }}
+                      >
+                        {data.reasonForServices}
+                      </Typography>
+                    </TableCell>
+                    <TableCell>{data.status}</TableCell>
+                    <TableCell>{formatCreatedAt(data.createdAt)}</TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </TableContainer>
+        )}
+      </>
     );
   }
 

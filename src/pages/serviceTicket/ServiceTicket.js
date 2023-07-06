@@ -104,7 +104,11 @@ const ServiceTicket = () => {
 
   return (
     <Container maxWidth='sm'>
-      <Typography variant='h2' align='center' sx={{ fontSize: '1.5rem' }}>
+      <Typography
+        variant='h2'
+        align='center'
+        sx={{ fontSize: '1.5rem', my: 3 }}
+      >
         Service Request
       </Typography>
       <Grid container>
@@ -130,7 +134,9 @@ const ServiceTicket = () => {
             sx={{ textTransform: 'uppercase' }}
           />
         </Grid>
-
+        <Grid item xs={12} sx={{ mt: 2 }}>
+          {renderAssignmentStatus()}
+        </Grid>
         <Grid
           item
           xs={12}
@@ -152,9 +158,6 @@ const ServiceTicket = () => {
           <Typography variant='body2' sx={{ color: 'green' }}>
             $5,000
           </Typography>
-        </Grid>
-        <Grid item xs={12} sx={{ mt: 2 }}>
-          {renderAssignmentStatus()}
         </Grid>
       </Grid>
     </Container>

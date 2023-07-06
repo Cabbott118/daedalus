@@ -166,7 +166,7 @@ const ServiceTicketDialog = ({ open, onClose }) => {
             <Button
               variant='contained'
               type='submit'
-              onClick={onClose}
+              // onClick={onClose}
               sx={{ textTransform: 'none' }}
             >
               Update

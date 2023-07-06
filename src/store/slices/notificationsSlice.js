@@ -11,10 +11,10 @@ import { createSlice, createAction, createAsyncThunk } from '@reduxjs/toolkit';
 // dispatch(fetchNotifications(createdBy));
 const fetchNotifications = createAsyncThunk(
   'notifications/fetchNotifications',
-  async (createdBy) => {
+  async (userId) => {
     try {
       const response = await get('/notifications/get-notifications', {
-        createdBy,
+        userId,
       });
       return response;
     } catch {

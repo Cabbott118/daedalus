@@ -18,17 +18,20 @@ const notificationRoutes = require('./routes/notificationRoutes');
 app.use('/users', userRoutes);
 app.use('/customers', customerRoutes);
 app.use('/contractors', contractorRoutes);
-app.use('/service-tickets', serviceTicketRoutes.router);
-app.use('/notifications', notificationRoutes);
+app.use('/service-tickets', serviceTicketRoutes);
+app.use('/notifications', notificationRoutes.router);
 
-// Import the notification functions from serviceTicketRoutes.js
+// Import the notification functions from notificationRoutes.js
 const {
   createNotificationOnTicketCreation,
+  createNotificationOnTicketAssignment,
   createNotificationOnStatusChange,
-} = require('./routes/serviceTicketRoutes');
+} = require('./routes/notificationRoutes');
 
 // Assign the notification functions as Firebase Cloud Functions
 exports.createNotificationOnTicketCreation = createNotificationOnTicketCreation;
+exports.createNotificationOnTicketAssignment =
+  createNotificationOnTicketAssignment;
 exports.createNotificationOnStatusChange = createNotificationOnStatusChange;
 
 exports.api = functions.https.onRequest(app);

@@ -55,7 +55,7 @@ const Notifications = ({ userId }) => {
 
     const q = query(
       collection(db, 'notifications'),
-      where('ticketOwner', '==', userId),
+      where('notificationOwner', '==', userId),
       orderBy('createdAt', 'desc')
     );
 
