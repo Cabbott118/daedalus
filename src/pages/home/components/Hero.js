@@ -1,6 +1,9 @@
 // Assets
 import heroImage from 'assets/images/pexels-pixabay-40723.jpg';
 
+// Components
+import HeroContent from 'pages/home/components/HeroContent';
+
 // Constants
 import routes from 'constants/routes';
 
@@ -31,16 +34,17 @@ const Hero = () => {
   };
 
   return (
-    <Box maxWidth='xl' sx={{ height: 'calc(100vh - 64px)' }}>
-      <img
-        src={heroImage}
-        style={{
-          objectFit: 'cover',
-          filter: 'brightness(0.4)',
-          width: '100%',
-          height: '100%',
-        }}
-      />
+    <Box
+      maxWidth='xl'
+      sx={{
+        height: 'calc(100vh - 64px)',
+        width: '100%',
+        backgroundImage: `url(${heroImage})`,
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+      }}
+    >
+      <HeroContent />
     </Box>
   );
 };

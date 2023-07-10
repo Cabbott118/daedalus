@@ -28,7 +28,7 @@ const EnrollmentBanner = () => {
 
   return (
     <Container maxWidth='sm'>
-      <Grid container spacing={2}>
+      <Grid container>
         <Grid item xs={12} sm={6}>
           <Card>
             <CardActionArea onClick={handleCustomerClick}>
