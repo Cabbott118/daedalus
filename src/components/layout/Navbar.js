@@ -26,14 +26,13 @@ import { Link, Outlet } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 
 export default function Navbar() {
+  const theme = useTheme();
   const auth = getAuth();
   const dispatch = useDispatch();
 
   const [navLinks, setNavLinks] = useState([]);
 
-  const { data: userData, userProfileLoaded } = useSelector(
-    (state) => state.user
-  );
+  const { data: userData } = useSelector((state) => state.user);
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
@@ -62,7 +61,12 @@ export default function Navbar() {
 
   return (
     <>
-      <Box sx={{ flexGrow: 1 }}>
+      <Box
+        sx={{
+          flexGrow: 1,
+          // bgcolor: theme.palette.secondary.main,
+        }}
+      >
         <Container maxWidth='md'>
           <AppBar
             position='static'

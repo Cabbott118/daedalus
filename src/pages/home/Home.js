@@ -1,7 +1,8 @@
 import { useEffect } from 'react';
 
 // Components
-import EnrollmentBanner from './components/EnrollmentBanner';
+import Hero from 'pages/home/components/Hero';
+import EnrollmentBanner from 'pages/home/components/EnrollmentBanner';
 
 // Constants
 import UserType from 'constants/userType';
@@ -63,7 +64,13 @@ export default function Home() {
       </Container>
     );
 
-  if (!userData) return <EnrollmentBanner />;
+  if (!userData)
+    return (
+      <>
+        <Hero />
+        <EnrollmentBanner />
+      </>
+    );
 
   return (
     <Container maxWidth='sm'>

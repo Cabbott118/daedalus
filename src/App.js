@@ -6,7 +6,7 @@ import routes from 'constants/routes';
 
 // MUI
 import { Container, Typography, ThemeProvider } from '@mui/material';
-import theme from './styles/theme';
+import theme from 'styles/theme';
 
 // Pages
 // Auth

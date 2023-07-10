@@ -48,7 +48,7 @@ const ServiceTicketDialog = ({ open, onClose }) => {
     dispatch(fetchContractors());
   }, [dispatch]);
 
-  const onSubmit = (data) => {
+  const onSubmit = async (data) => {
     const selectedContractor = contractorData?.find(
       (contractor) => contractor.uid === data.assignedTo
     );
@@ -61,8 +61,8 @@ const ServiceTicketDialog = ({ open, onClose }) => {
       status: StatusType.ASSIGNED,
     };
 
-    console.log(selectedContractor);
-    dispatch(updateServiceTicket({ uid, updateData }));
+    await dispatch(updateServiceTicket({ uid, updateData }));
+    onClose();
   };
 
   return (
@@ -166,7 +166,6 @@ const ServiceTicketDialog = ({ open, onClose }) => {
             <Button
               variant='contained'
               type='submit'
-              // onClick={onClose}
               sx={{ textTransform: 'none' }}
             >
               Update
