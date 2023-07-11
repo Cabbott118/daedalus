@@ -1,6 +1,6 @@
 // Assets
 import 'assets/css/loader.css';
-import { ReactComponent as FiveSvg } from 'assets/images/daedalus-flying.svg';
+import { ReactComponent as Daedalus } from 'assets/images/daedalus.svg';
 
 // MUI
 import { Container, useTheme } from '@mui/material';
@@ -16,7 +16,7 @@ const Loader = ({ color }) => {
         width='200'
         height='200'
       >
-        <FiveSvg
+        <Daedalus
           height='100px'
           width='100px'
           style={{

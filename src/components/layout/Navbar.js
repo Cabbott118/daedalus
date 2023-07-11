@@ -2,7 +2,8 @@ import { useEffect, useState } from 'react';
 
 // Components
 import Notifications from 'pages/notifications/components/Notifications';
-import { ReactComponent as FiveSvg } from 'assets/images/daedalus-flying.svg';
+// import { ReactComponent as DaedalusFlying } from 'assets/images/daedalus-flying.svg';
+import { ReactComponent as DaedalusFlying } from 'assets/images/daedalus.svg';
 
 // Constants
 import routes from 'constants/routes';
@@ -82,7 +83,15 @@ export default function Navbar() {
                     color: theme.palette.text.primary,
                   }}
                 >
-                  <FiveSvg
+                  {/* <DaedalusFlying
+                    height='50px'
+                    width='50px'
+                    style={{
+                      fill: theme.palette.primary.main,
+                      marginBottom: -10,
+                    }}
+                  /> */}
+                  <DaedalusFlying
                     height='50px'
                     width='50px'
                     style={{

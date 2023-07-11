@@ -1,10 +1,10 @@
 .react-spinner-loader-svg-calLoader {
   transform-origin: 200px 100px;
-  animation: 1s linear infinite loader-spin;
+  animation: 1.5s linear infinite loader-spin;
 }
 
 .react-spinner-loader-svg-cal-loader__path {
-  animation: 1.4s ease-in-out infinite loader-path;
+  animation: 1.5s ease-in-out infinite loader-path;
 }
 
 @keyframes loader-spin {

@@ -2,7 +2,6 @@ import { useEffect } from 'react';
 
 // Components
 import Loader from 'components/common/Loader';
-import AirplaneLoader from 'components/common/AirplaneLoader';
 import Hero from 'pages/home/components/Hero';
 import EnrollmentBanner from 'pages/home/components/EnrollmentBanner';
 
@@ -59,7 +58,7 @@ export default function Home() {
     }
   }, [userData, customerData, contractorData, dispatch]);
 
-  if (userLoading || customerLoading || contractorLoading)
+  if (!userLoading || customerLoading || contractorLoading)
     return <Loader style={{ fill: theme.palette.primary.main }} />;
 
   if (!userData)
