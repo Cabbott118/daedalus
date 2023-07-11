@@ -1,6 +1,7 @@
 import { useEffect } from 'react';
 
 // Components
+import Plane from 'components/common/Plane';
 import AirplaneLoader from 'components/common/AirplaneLoader';
 import Hero from 'pages/home/components/Hero';
 import EnrollmentBanner from 'pages/home/components/EnrollmentBanner';
@@ -59,12 +60,7 @@ export default function Home() {
   }, [userData, customerData, contractorData, dispatch]);
 
   if (userLoading || customerLoading || contractorLoading)
-    return (
-      <AirplaneLoader />
-      // <Container maxWidth='sm'>
-      //   <Typography>Loading...</Typography>
-      // </Container>
-    );
+    return <Plane height={150} width={150} />;
 
   if (!userData)
     return (
