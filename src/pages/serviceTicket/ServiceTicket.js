@@ -150,7 +150,7 @@ const ServiceTicket = () => {
   return (
     <Container
       maxWidth='sm'
-      sx={{ bgcolor: '#243B53', py: 2, borderRadius: 2 }}
+      sx={{ bgcolor: theme.additionalPalette.primary, py: 2, borderRadius: 2 }}
     >
       <Typography
         variant='h2'
@@ -200,7 +200,12 @@ const ServiceTicket = () => {
         <Grid
           item
           xs={12}
-          sx={{ bgcolor: '#102A43', p: 3, borderRadius: 2, mt: 2 }}
+          sx={{
+            bgcolor: theme.additionalPalette.secondary,
+            p: 3,
+            borderRadius: 2,
+            mt: 2,
+          }}
         >
           <Typography
             variant='body1'

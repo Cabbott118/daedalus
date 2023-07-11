@@ -51,9 +51,6 @@ const Notifications = ({ userId }) => {
   const dispatch = useDispatch();
   const theme = useTheme();
 
-  const storedTheme = localStorage.getItem('theme');
-  const [isDarkMode, setIsDarkMode] = useState(storedTheme === 'dark');
-
   const [unreadNotifications, setUnreadNotifications] = useState(null);
   const [anchorEl, setAnchorEl] = useState(null);
 
@@ -171,9 +168,7 @@ const Notifications = ({ userId }) => {
                       sx={{
                         bgcolor: notification.hasBeenRead
                           ? null
-                          : isDarkMode
-                          ? '#102A43'
-                          : '#F0F0F0',
+                          : theme.additionalPalette.primary,
                         borderRadius: '5px',
                       }}
                     >

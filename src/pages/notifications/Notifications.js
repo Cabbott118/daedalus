@@ -49,24 +49,6 @@ const Notifications = ({ userId }) => {
   const dispatch = useDispatch();
   const theme = useTheme();
 
-  const [isDarkMode, setIsDarkMode] = useState(false); // Initialize with false
-
-  useEffect(() => {
-    const currentTheme = localStorage.getItem('theme');
-    setIsDarkMode(currentTheme === 'dark'); // Set initial theme value
-
-    const handleThemeChange = () => {
-      const updatedTheme = localStorage.getItem('theme');
-      setIsDarkMode(updatedTheme === 'dark');
-    };
-
-    window.addEventListener('storage', handleThemeChange); // Listen for storage events
-
-    return () => {
-      window.removeEventListener('storage', handleThemeChange); // Clean up the event listener
-    };
-  }, [isDarkMode]);
-
   const { data: notificationsData, loading: notificationsLoading } =
     useSelector((state) => state.notifications);
 
@@ -115,9 +97,7 @@ const Notifications = ({ userId }) => {
                     sx={{
                       bgcolor: notification.hasBeenRead
                         ? null
-                        : isDarkMode
-                        ? '#102A43'
-                        : '#F0F0F0',
+                        : theme.additionalPalette.primary,
                       borderRadius: '5px',
                     }}
                   >

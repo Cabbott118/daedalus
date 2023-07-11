@@ -15,6 +15,10 @@ const lightTheme = createTheme({
       default: '#ffffff', // Light background color
     },
   },
+  additionalPalette: {
+    primary: '#F0F0F0',
+    secondary: '#CCCCCC',
+  },
   breakpoints: {
     values: {
       xs: 0,
@@ -55,6 +59,10 @@ const darkTheme = createTheme({
     background: {
       default: '#212121', // Override the default background color
     },
+  },
+  additionalPalette: {
+    primary: '#102A43',
+    secondary: '#0D1C2B',
   },
   breakpoints: {
     values: {
