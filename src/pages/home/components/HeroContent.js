@@ -53,7 +53,7 @@ const HeroContent = () => {
             variant='h4'
             component='h1'
             align='center'
-            sx={{ color: 'white', fontWeight: '700' }}
+            sx={{ color: 'white', fontWeight: '700', pb: 1 }}
           >
             Service Requests, Made Simple
           </Typography>

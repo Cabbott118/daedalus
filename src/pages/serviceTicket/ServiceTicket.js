@@ -18,6 +18,7 @@ import {
   Grid,
   TextField,
   Typography,
+  useTheme,
 } from '@mui/material';
 
 // React Router
@@ -30,6 +31,7 @@ import { fetchServiceTicket } from 'store/slices/serviceTicketSlice';
 const ServiceTicket = () => {
   const { uid } = useParams();
   const dispatch = useDispatch();
+  const theme = useTheme();
 
   const { data: serviceTicketData, loading: serviceTicketLoading } =
     useSelector((state) => state.serviceTicket);
@@ -41,7 +43,7 @@ const ServiceTicket = () => {
   const renderAssignmentStatus = () => {
     if (serviceTicketData?.status === StatusType.NEW) {
       return (
-        <Typography variant='body1'>
+        <Typography variant='body1' sx={{ color: theme.palette.text.primary }}>
           This ticket will be assigned shortly
         </Typography>
       );
@@ -49,10 +51,16 @@ const ServiceTicket = () => {
     if (serviceTicketData?.status === StatusType.ASSIGNED) {
       return (
         <>
-          <Typography variant='body1'>
+          <Typography
+            variant='body1'
+            sx={{ color: theme.palette.text.primary }}
+          >
             This ticket has been assigned to:
           </Typography>
-          <Typography variant='body2'>
+          <Typography
+            variant='body2'
+            sx={{ color: theme.palette.text.primary }}
+          >
             {serviceTicketData?.contractorName}
           </Typography>
         </>
@@ -61,9 +69,22 @@ const ServiceTicket = () => {
     if (serviceTicketData?.status === StatusType.ACCEPTED) {
       return (
         <>
-          <Typography variant='body1'>This ticket has been accepted</Typography>
-          <Typography variant='body1'>Services to be rendered by:</Typography>
-          <Typography variant='body2'>
+          <Typography
+            variant='body1'
+            sx={{ color: theme.palette.text.primary }}
+          >
+            This ticket has been accepted
+          </Typography>
+          <Typography
+            variant='body1'
+            sx={{ color: theme.palette.text.primary }}
+          >
+            Services to be rendered by:
+          </Typography>
+          <Typography
+            variant='body2'
+            sx={{ color: theme.palette.text.primary }}
+          >
             {serviceTicketData?.contractorName}
           </Typography>
         </>
@@ -72,9 +93,22 @@ const ServiceTicket = () => {
     if (serviceTicketData?.status === StatusType.IN_PROGRESS) {
       return (
         <>
-          <Typography variant='body1'>This ticket is in progress</Typography>
-          <Typography variant='body1'>Services being rendered by:</Typography>
-          <Typography variant='body2'>
+          <Typography
+            variant='body1'
+            sx={{ color: theme.palette.text.primary }}
+          >
+            This ticket is in progress
+          </Typography>
+          <Typography
+            variant='body1'
+            sx={{ color: theme.palette.text.primary }}
+          >
+            Services being rendered by:
+          </Typography>
+          <Typography
+            variant='body2'
+            sx={{ color: theme.palette.text.primary }}
+          >
             {serviceTicketData?.contractorName}
           </Typography>
         </>
@@ -83,11 +117,22 @@ const ServiceTicket = () => {
     if (serviceTicketData?.status === StatusType.COMPETE) {
       return (
         <>
-          <Typography variant='body1'>
+          <Typography
+            variant='body1'
+            sx={{ color: theme.palette.text.primary }}
+          >
             This ticket has been completed
           </Typography>
-          <Typography variant='body1'>Services rendered by:</Typography>
-          <Typography variant='body2'>
+          <Typography
+            variant='body1'
+            sx={{ color: theme.palette.text.primary }}
+          >
+            Services rendered by:
+          </Typography>
+          <Typography
+            variant='body2'
+            sx={{ color: theme.palette.text.primary }}
+          >
             {serviceTicketData?.contractorName}
           </Typography>
         </>
@@ -103,11 +148,18 @@ const ServiceTicket = () => {
     );
 
   return (
-    <Container maxWidth='sm'>
+    <Container
+      maxWidth='sm'
+      sx={{ bgcolor: '#243B53', py: 2, borderRadius: 2 }}
+    >
       <Typography
         variant='h2'
         align='center'
-        sx={{ fontSize: '1.5rem', my: 3 }}
+        sx={{
+          fontSize: '1.5rem',
+          my: 3,
+          color: theme.palette.text.primary,
+        }}
       >
         Service Request
       </Typography>
@@ -115,11 +167,19 @@ const ServiceTicket = () => {
         <Grid item xs={8}>
           <Typography
             variant='h6'
-            sx={{ fontWeight: 400, letterSpacing: '0.05rem', mb: -1 }}
+            sx={{
+              fontWeight: 400,
+              letterSpacing: '0.05rem',
+              mb: -1,
+              color: theme.palette.text.primary,
+            }}
           >
             {serviceTicketData?.customerName}
           </Typography>
-          <Typography variant='caption'>
+          <Typography
+            variant='caption'
+            sx={{ color: theme.palette.text.primary }}
+          >
             {formatCreatedAt(serviceTicketData?.createdAt)}
           </Typography>
         </Grid>
@@ -140,22 +200,42 @@ const ServiceTicket = () => {
         <Grid
           item
           xs={12}
-          sx={{ bgcolor: '#eee', p: 3, borderRadius: 2, mt: 2 }}
+          sx={{ bgcolor: '#102A43', p: 3, borderRadius: 2, mt: 2 }}
         >
-          <Typography variant='body1' sx={{}}>
+          <Typography
+            variant='body1'
+            sx={{ color: theme.palette.text.primary }}
+          >
             Reason for services:
           </Typography>
-          <Typography variant='body2' sx={{ mb: 2 }}>
+          <Typography
+            variant='body2'
+            sx={{ mb: 2, color: theme.palette.text.primary }}
+          >
             {serviceTicketData?.reasonForServices}
           </Typography>
-          <Typography variant='body1' sx={{}}>
+          <Typography
+            variant='body1'
+            sx={{ color: theme.palette.text.primary }}
+          >
             Site location:
           </Typography>
-          <Typography variant='body2' sx={{ mb: 2, color: 'green' }}>
+          <Typography
+            variant='body2'
+            sx={{ mb: 2, color: theme.palette.text.primary }}
+          >
             1234 Tester's Lane, Polk City, FL 33868
           </Typography>
-          <Typography variant='body1'>Not to exceed (NTE):</Typography>
-          <Typography variant='body2' sx={{ color: 'green' }}>
+          <Typography
+            variant='body1'
+            sx={{ color: theme.palette.text.primary }}
+          >
+            Not to exceed (NTE):
+          </Typography>
+          <Typography
+            variant='body2'
+            sx={{ color: theme.palette.text.primary }}
+          >
             $5,000
           </Typography>
         </Grid>

@@ -19,6 +19,7 @@ import {
   MenuItem,
   TextField,
   Typography,
+  useTheme,
 } from '@mui/material';
 
 // React Hook Form
@@ -31,6 +32,7 @@ import { fetchContractors } from 'store/slices/contractorSlice';
 
 const ServiceTicketDialog = ({ open, onClose }) => {
   const dispatch = useDispatch();
+  const theme = useTheme();
 
   const { data: serviceTicketData, loading: serviceTicketLoading } =
     useSelector((state) => state.serviceTicket);
@@ -68,7 +70,12 @@ const ServiceTicketDialog = ({ open, onClose }) => {
   return (
     <Dialog open={open} onClose={onClose}>
       <Box component='form' onSubmit={handleSubmit(onSubmit)}>
-        <DialogTitle sx={{ textDecoration: 'underline' }}>
+        <DialogTitle
+          sx={{
+            textDecoration: 'underline',
+            color: theme.palette.text.primary,
+          }}
+        >
           Service Ticket Details
         </DialogTitle>
 
@@ -78,11 +85,19 @@ const ServiceTicketDialog = ({ open, onClose }) => {
               <Grid item xs={12}>
                 <Typography
                   variant='h6'
-                  sx={{ fontWeight: 400, letterSpacing: '0.05rem', mb: -1 }}
+                  sx={{
+                    fontWeight: 400,
+                    letterSpacing: '0.05rem',
+                    mb: -1,
+                    color: theme.palette.text.primary,
+                  }}
                 >
                   {serviceTicketData?.customerName}
                 </Typography>
-                <Typography variant='caption'>
+                <Typography
+                  variant='caption'
+                  sx={{ color: theme.palette.text.primary }}
+                >
                   {formatCreatedAt(serviceTicketData?.createdAt)}
                 </Typography>
                 <Grid item xs={12} sx={{ my: 2 }}>
@@ -92,22 +107,42 @@ const ServiceTicketDialog = ({ open, onClose }) => {
               <Grid
                 item
                 xs={12}
-                sx={{ bgcolor: '#eee', p: 3, borderRadius: 2, mt: 2 }}
+                sx={{ bgcolor: '#102A43', p: 3, borderRadius: 2, mt: 2 }}
               >
-                <Typography variant='body1' sx={{}}>
+                <Typography
+                  variant='body1'
+                  sx={{ color: theme.palette.text.primary }}
+                >
                   Reason for services:
                 </Typography>
-                <Typography variant='body2' sx={{ mb: 2 }}>
+                <Typography
+                  variant='body2'
+                  sx={{ mb: 2, color: theme.palette.text.primary }}
+                >
                   {serviceTicketData?.reasonForServices}
                 </Typography>
-                <Typography variant='body1' sx={{}}>
+                <Typography
+                  variant='body1'
+                  sx={{ color: theme.palette.text.primary }}
+                >
                   Site location:
                 </Typography>
-                <Typography variant='body2' sx={{ mb: 2, color: 'green' }}>
+                <Typography
+                  variant='body2'
+                  sx={{ mb: 2, color: theme.palette.text.primary }}
+                >
                   1234 Tester's Lane, Polk City, FL 33868
                 </Typography>
-                <Typography variant='body1'>Not to exceed (NTE):</Typography>
-                <Typography variant='body2' sx={{ color: 'green' }}>
+                <Typography
+                  variant='body1'
+                  sx={{ color: theme.palette.text.primary }}
+                >
+                  Not to exceed (NTE):
+                </Typography>
+                <Typography
+                  variant='body2'
+                  sx={{ color: theme.palette.text.primary }}
+                >
                   $5,000
                 </Typography>
               </Grid>
@@ -124,6 +159,7 @@ const ServiceTicketDialog = ({ open, onClose }) => {
                       label='Assign to Contractor'
                       select
                       fullWidth
+                      color='primary'
                       defaultValue={contractorData?.contractorName || ''}
                       {...register('assignedTo')}
                     >
@@ -136,18 +172,30 @@ const ServiceTicketDialog = ({ open, onClose }) => {
                   </>
                 ) : (
                   <>
-                    <Typography variant='body1'>
+                    <Typography
+                      variant='body1'
+                      sx={{ color: theme.palette.text.primary }}
+                    >
                       Service ticket assigned to:
                     </Typography>
-                    <Typography variant='body2'>
+                    <Typography
+                      variant='body2'
+                      sx={{ color: theme.palette.text.primary }}
+                    >
                       {serviceTicketData?.contractorName}
                     </Typography>
-                    <Typography variant='body1' sx={{ mt: 2 }}>
+                    <Typography
+                      variant='body1'
+                      sx={{ mt: 2, color: theme.palette.text.primary }}
+                    >
                       Service ticket status:
                     </Typography>
                     <Typography
                       variant='body2'
-                      sx={{ textTransform: 'uppercase' }}
+                      sx={{
+                        textTransform: 'uppercase',
+                        color: theme.palette.text.primary,
+                      }}
                     >
                       {serviceTicketData?.status}
                     </Typography>
@@ -159,7 +207,10 @@ const ServiceTicketDialog = ({ open, onClose }) => {
         </DialogContent>
 
         <DialogActions>
-          <Button onClick={onClose} sx={{ textTransform: 'none' }}>
+          <Button
+            onClick={onClose}
+            sx={{ textTransform: 'none', color: theme.palette.text.primary }}
+          >
             Close
           </Button>
           {!serviceTicketData?.assigned && (

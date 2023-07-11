@@ -30,6 +30,7 @@ import {
   ListItemIcon,
   Menu,
   Typography,
+  useTheme,
 } from '@mui/material';
 import CircleIcon from '@mui/icons-material/Circle';
 
@@ -46,6 +47,7 @@ import {
 const Notifications = ({ userId }) => {
   const db = getFirestore();
   const dispatch = useDispatch();
+  const theme = useTheme();
 
   const { data: notificationsData, loading: notificationsLoading } =
     useSelector((state) => state.notifications);
@@ -77,7 +79,9 @@ const Notifications = ({ userId }) => {
   return (
     <>
       <Container maxWidth='md'>
-        <Typography variant='h6'>Notifications</Typography>
+        <Typography variant='h6' sx={{ color: theme.palette.text.primary }}>
+          Notifications
+        </Typography>
 
         <Divider />
         {notificationsLoading ? (
@@ -91,7 +95,7 @@ const Notifications = ({ userId }) => {
                     key={index}
                     disablePadding
                     sx={{
-                      bgcolor: notification.hasBeenRead ? null : '#f0fafa',
+                      bgcolor: notification.hasBeenRead ? null : '#102A43',
                       borderRadius: '5px',
                     }}
                   >
@@ -116,6 +120,7 @@ const Notifications = ({ userId }) => {
                         secondary={formatCreatedAt(notification.createdAt)}
                         inset={notification.hasBeenRead ? true : undefined}
                         primaryTypographyProps={{
+                          color: theme.palette.text.primary,
                           fontWeight: notification.hasBeenRead ? '400' : '600',
                         }}
                       />

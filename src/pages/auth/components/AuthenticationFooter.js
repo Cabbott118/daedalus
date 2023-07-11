@@ -8,7 +8,7 @@ import { Grid } from '@mui/material';
 import { Link } from 'react-router-dom';
 
 const linkStyles = {
-  color: '#124559',
+  color: '#fff',
   fontSize: '.9rem',
 };
 

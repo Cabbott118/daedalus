@@ -1,7 +1,8 @@
 .react-spinner-loader-svg-calLoader {
   width: 230px;
   height: 230px;
-  transform-origin: 115px 115px;
+  transform-origin: 200px 75px;
+  /* transform-origin: 100% 50%; */
   animation: 1.4s linear infinite loader-spin;
 }
 

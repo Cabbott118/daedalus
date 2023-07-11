@@ -59,8 +59,7 @@ export default function Home() {
     }
   }, [userData, customerData, contractorData, dispatch]);
 
-  if (userLoading || customerLoading || contractorLoading)
-    return <Plane height={150} width={150} />;
+  if (userLoading || customerLoading || contractorLoading) return <Plane />;
 
   if (!userData)
     return (

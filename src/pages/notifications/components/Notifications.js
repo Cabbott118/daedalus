@@ -31,6 +31,7 @@ import {
   ListItemIcon,
   Menu,
   Typography,
+  useTheme,
 } from '@mui/material';
 import CircleIcon from '@mui/icons-material/Circle';
 
@@ -48,6 +49,7 @@ const Notifications = ({ userId }) => {
   const auth = getAuth();
   const db = getFirestore();
   const dispatch = useDispatch();
+  const theme = useTheme();
 
   const [unreadNotifications, setUnreadNotifications] = useState(null);
   const [anchorEl, setAnchorEl] = useState(null);
@@ -108,6 +110,7 @@ const Notifications = ({ userId }) => {
           onClick={handleNotificationsClick}
           sx={{
             textTransform: 'none',
+            color: theme.palette.text.primary,
           }}
         >
           <Badge badgeContent={unreadNotifications} color='error'>
@@ -142,6 +145,7 @@ const Notifications = ({ userId }) => {
                     onClick={handleNotificationsClose}
                     sx={{
                       textTransform: 'none',
+                      color: theme.palette.text.primary,
                     }}
                   >
                     See All
@@ -162,7 +166,7 @@ const Notifications = ({ userId }) => {
                       key={index}
                       disablePadding
                       sx={{
-                        bgcolor: notification.hasBeenRead ? null : '#f0fafa',
+                        bgcolor: notification.hasBeenRead ? null : '#102A43',
                         borderRadius: '5px',
                       }}
                     >
@@ -189,6 +193,7 @@ const Notifications = ({ userId }) => {
                             fontWeight: notification.hasBeenRead
                               ? '400'
                               : '600',
+                            color: theme.palette.text.primary,
                           }}
                         />
                       </ListItemButton>
@@ -197,7 +202,10 @@ const Notifications = ({ userId }) => {
                 </List>
               ) : (
                 <Container sx={{ p: '1rem' }}>
-                  <Typography variant='body1'>
+                  <Typography
+                    variant='body1'
+                    sx={{ color: theme.palette.text.primary }}
+                  >
                     No notifications to display
                   </Typography>
                 </Container>

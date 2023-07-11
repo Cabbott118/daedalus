@@ -1,7 +1,6 @@
 // MUI
 import { useTheme } from '@mui/material';
-import { Avatar, Box, Typography } from '@mui/material';
-import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
+import { Box, Typography } from '@mui/material';
 
 const AuthenticationHeader = ({ title }) => {
   const theme = useTheme();
@@ -13,13 +12,13 @@ const AuthenticationHeader = ({ title }) => {
         mb: 3,
         display: 'flex',
         flexDirection: 'column',
-        // alignItems: 'center',
       }}
     >
-      {/* <Avatar sx={{ m: 1, bgcolor: theme.palette.secondary.main }}>
-        <LockOutlinedIcon />
-      </Avatar> */}
-      <Typography component='h1' variant='h3'>
+      <Typography
+        component='h1'
+        variant='h3'
+        sx={{ color: theme.palette.text.primary }}
+      >
         {title}
       </Typography>
     </Box>
