@@ -83,14 +83,6 @@ export default function Navbar() {
                     color: theme.palette.text.primary,
                   }}
                 >
-                  {/* <DaedalusFlying
-                    height='50px'
-                    width='50px'
-                    style={{
-                      fill: theme.palette.primary.main,
-                      marginBottom: -10,
-                    }}
-                  /> */}
                   <DaedalusFlying
                     height='50px'
                     width='50px'

@@ -107,7 +107,12 @@ const ServiceTicketDialog = ({ open, onClose }) => {
               <Grid
                 item
                 xs={12}
-                sx={{ bgcolor: '#102A43', p: 3, borderRadius: 2, mt: 2 }}
+                sx={{
+                  bgcolor: theme.palette.background.default,
+                  p: 3,
+                  borderRadius: 2,
+                  mt: 2,
+                }}
               >
                 <Typography
                   variant='body1'

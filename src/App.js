@@ -1,3 +1,5 @@
+import { useEffect, useState } from 'react';
+
 // Components
 import Navbar from 'components/layout/Navbar';
 
@@ -6,7 +8,7 @@ import routes from 'constants/routes';
 
 // MUI
 import { Container, Typography, ThemeProvider } from '@mui/material';
-import theme from 'styles/theme';
+import { lightTheme, darkTheme } from 'styles/theme';
 
 // Pages
 // Auth
@@ -39,8 +41,23 @@ import { Outlet, Route, Routes } from 'react-router-dom';
 import { BrowserRouter } from 'react-router-dom';
 
 function App() {
+  const storedTheme = localStorage.getItem('theme');
+  const [isDarkMode, setIsDarkMode] = useState(storedTheme === 'dark');
+
+  const toggleTheme = () => {
+    const updatedTheme = isDarkMode ? 'light' : 'dark';
+    setIsDarkMode(!isDarkMode);
+    localStorage.setItem('theme', updatedTheme);
+  };
+
+  useEffect(() => {
+    document.body.style.backgroundColor = isDarkMode
+      ? darkTheme.palette.background.default
+      : lightTheme.palette.background.default;
+  }, [isDarkMode]);
+
   return (
-    <ThemeProvider theme={theme}>
+    <ThemeProvider theme={isDarkMode ? darkTheme : lightTheme}>
       <BrowserRouter>
         <Routes>
           <Route path={routes.HOME} element={<Navbar />}>
@@ -125,6 +142,7 @@ function App() {
             element={<ForgotPasswordConfirmation />}
           />
         </Routes>
+        <button onClick={toggleTheme}>Toggle Theme</button>
       </BrowserRouter>
     </ThemeProvider>
   );

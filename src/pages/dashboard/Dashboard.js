@@ -14,7 +14,14 @@ import AdminComponent from 'pages/dashboard/components/admin/AdminComponent';
 import UserType from 'constants/userType';
 
 // MUI
-import { Button, Container, Grid, Paper, Typography } from '@mui/material';
+import {
+  Button,
+  Container,
+  Grid,
+  Paper,
+  Typography,
+  useTheme,
+} from '@mui/material';
 import {
   AdminPanelSettings,
   Person,
@@ -28,6 +35,7 @@ import {
 import { useSelector } from 'react-redux';
 
 export default function Dashboard() {
+  const theme = useTheme();
   const [menuItems, setMenuItems] = useState([]);
   const [activeItem, setActiveItem] = useState('Account');
 
@@ -127,7 +135,9 @@ export default function Dashboard() {
       <Grid container spacing={2}>
         <Grid item container direction='column' xs={12} sm={4} spacing={2}>
           <Grid item>
-            <Typography variant='h6'>Menu</Typography>
+            <Typography variant='h6' sx={{ color: theme.palette.text.primary }}>
+              Menu
+            </Typography>
           </Grid>
           <Grid item>
             <Grid container>
@@ -165,7 +175,9 @@ export default function Dashboard() {
 
         <Grid item container direction='column' xs={12} sm={8} spacing={2}>
           <Grid item>
-            <Typography variant='h6'>{activeItem}</Typography>
+            <Typography variant='h6' sx={{ color: theme.palette.text.primary }}>
+              {activeItem}
+            </Typography>
           </Grid>
 
           <Grid item sx={{ m: 0.5 }}>
