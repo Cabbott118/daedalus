@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 
 // Components
 import Notifications from 'pages/notifications/components/Notifications';
-import { ReactComponent as FiveSvg } from 'assets/images/6.svg';
+import { ReactComponent as FiveSvg } from 'assets/images/daedalus-flying.svg';
 
 // Constants
 import routes from 'constants/routes';
@@ -76,22 +76,21 @@ export default function Navbar() {
           >
             <Toolbar>
               <Link to={routes.HOME} style={{ flexGrow: 1 }}>
-                {/* <Button
+                <Button
                   sx={{
                     textTransform: 'none',
                     color: theme.palette.text.primary,
                   }}
                 >
-                  Home
-                </Button> */}
-                <FiveSvg
-                  height='50px'
-                  width='50px'
-                  style={{
-                    fill: theme.palette.primary.main,
-                    paddingBottom: '-0.5rem',
-                  }}
-                />
+                  <FiveSvg
+                    height='50px'
+                    width='50px'
+                    style={{
+                      fill: theme.palette.primary.main,
+                      marginBottom: -10,
+                    }}
+                  />
+                </Button>
               </Link>
 
               {navLinks.map((navLink) => (

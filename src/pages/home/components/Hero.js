@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 
 // Assets
-import heroImage from 'assets/images/pexels-pixabay-40723.jpg';
+import heroImage from 'assets/images/hero-bg.jpg';
 
 // Components
 import HeroContent from 'pages/home/components/HeroContent';
