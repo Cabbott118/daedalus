@@ -5,7 +5,7 @@
       "queryScope": "COLLECTION",
       "fields": [
         {
-          "fieldPath": "ticketOwner",
+          "fieldPath": "notificationOwner",
           "order": "ASCENDING"
         },
         {
@@ -19,7 +19,7 @@
       "queryScope": "COLLECTION",
       "fields": [
         {
-          "fieldPath": "ticketOwner",
+          "fieldPath": "notificationOwner",
           "order": "ASCENDING"
         },
         {
@@ -34,6 +34,20 @@
       "fields": [
         {
           "fieldPath": "createdBy",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "createdAt",
+          "order": "DESCENDING"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "notifications",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "notificationOwner",
           "order": "ASCENDING"
         },
         {

@@ -1,3 +1,5 @@
+import { useState, useEffect } from 'react';
+
 // Assets
 import heroImage from 'assets/images/pexels-pixabay-40723.jpg';
 
@@ -27,13 +29,26 @@ const Hero = () => {
   const theme = useTheme();
   const navigate = useNavigate();
 
+  const [scrollY, setScrollY] = useState(0);
+
+  const handleScroll = () => {
+    setScrollY(window.scrollY);
+  };
+
+  useEffect(() => {
+    window.addEventListener('scroll', handleScroll);
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+    };
+  }, []);
+
   const boxStyles = {
     mt: '-64px',
     height: 'calc(100vh)',
     width: '100%',
     backgroundImage: `url(${heroImage})`,
     backgroundSize: 'cover',
-    backgroundPosition: 'center',
+    backgroundPosition: `center calc(50% + ${scrollY * 0.5}px)`,
     [theme.breakpoints.down('sm')]: {
       mt: '-56px',
     },
