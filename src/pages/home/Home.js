@@ -58,7 +58,7 @@ export default function Home() {
     }
   }, [userData, customerData, contractorData, dispatch]);
 
-  if (!userLoading || customerLoading || contractorLoading)
+  if (userLoading || customerLoading || contractorLoading)
     return <Loader style={{ fill: theme.palette.primary.main }} />;
 
   if (!userData)
