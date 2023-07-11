@@ -34,67 +34,74 @@ const HeroContent = () => {
     <Grid
       container
       direction='column'
-      justifyContent='center'
+      justifyContent='space-between'
       alignItems='center'
-      sx={{ height: '50%' }}
+      sx={{ height: '70%' }}
     >
-      <Grid item>
-        <Typography
-          variant='h3'
-          component='h1'
-          align='center'
-          // color='primary'
-          sx={{ color: 'white' }}
-        >
-          Welcome to Daedalus
-        </Typography>
+      <Grid item></Grid>
+      <Grid
+        item
+        container
+        direction='column'
+        justifyContent='center'
+        alignItems='center'
+        spacing={3}
+        sx={{ px: 4 }}
+      >
+        <Grid item>
+          <Typography
+            variant='h4'
+            component='h1'
+            align='center'
+            sx={{ color: 'white', fontWeight: '700' }}
+          >
+            Service Requests, Made Simple
+          </Typography>
+          <Typography
+            variant='subtitle'
+            component='h4'
+            align='center'
+            sx={{ color: 'white', fontWeight: '300' }}
+          >
+            Connect with industry leading service providers of all trades.
+          </Typography>
+        </Grid>
+        <Grid item sx={{ mt: 8 }}>
+          <Button
+            variant='contained'
+            fullWidth
+            sx={{
+              width: '300px',
+              color: '#fff',
+              borderColor: '#fff',
+              '&:hover': {
+                color: '#eee',
+                borderColor: '#eee',
+              },
+            }}
+          >
+            Take Flight
+          </Button>
+        </Grid>
+        <Grid item>
+          <Button
+            variant='text'
+            fullWidth
+            sx={{
+              width: '300px',
+              color: '#fff',
+              borderColor: '#fff',
+              '&:hover': {
+                color: '#eee',
+                borderColor: '#eee',
+              },
+            }}
+          >
+            About Daedalus
+          </Button>
+        </Grid>
       </Grid>
-      <Grid item sx={{ pb: 3 }}>
-        <Typography
-          variant='body1'
-          component='h4'
-          align='center'
-          sx={{ color: 'white', px: '1rem' }}
-        >
-          Whether you're looking for a reliable service provider or are a
-          skilled professional hoping to showcase your expertise, Daedalus
-          empowers you to effortlessly connect and collaborate
-        </Typography>
-      </Grid>
-      <Grid item sx={{ minWidth: '250px', mt: '10px' }}>
-        <Button
-          variant='outlined'
-          fullWidth
-          sx={{
-            // textTransform: 'none',
-            color: '#fff',
-            borderColor: '#fff',
-            '&:hover': {
-              color: '#eee',
-              borderColor: '#eee',
-            },
-          }}
-        >
-          Get Started
-        </Button>
-      </Grid>
-      <Grid item sx={{ minWidth: '250px', mt: '10px' }}>
-        <Button
-          variant='outlined'
-          fullWidth
-          sx={{
-            // textTransform: 'none',
-            color: '#fff',
-            borderColor: '#fff',
-            '&:hover': {
-              color: '#eee',
-              borderColor: '#eee',
-            },
-          }}
-        >
-          About Us
-        </Button>
-      </Grid>
+      <Grid item></Grid>
     </Grid>
   );
 };

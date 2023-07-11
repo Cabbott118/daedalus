@@ -75,7 +75,14 @@ export default function Navbar() {
           >
             <Toolbar>
               <Link to={routes.HOME} style={{ flexGrow: 1 }}>
-                <Button sx={{ textTransform: 'none' }}>Home</Button>
+                <Button
+                  sx={{
+                    textTransform: 'none',
+                    color: theme.palette.primary.contrastText,
+                  }}
+                >
+                  Home
+                </Button>
               </Link>
 
               {navLinks.map((navLink) => (
