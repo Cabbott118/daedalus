@@ -7,7 +7,12 @@ import Navbar from 'components/layout/Navbar';
 import routes from 'constants/routes';
 
 // MUI
-import { Container, Typography, ThemeProvider } from '@mui/material';
+import {
+  Container,
+  Typography,
+  ThemeProvider,
+  CssBaseline,
+} from '@mui/material';
 import { lightTheme, darkTheme, sunTheme, earthTheme } from 'styles/theme';
 
 // Pages
@@ -43,9 +48,13 @@ import { BrowserRouter } from 'react-router-dom';
 function App() {
   const [selectedTheme, setSelectedTheme] = useState(lightTheme);
 
+  // useEffect(() => {
+  //   const storedTheme = localStorage.getItem('selectedTheme');
+  //   if (storedTheme) setSelectedTheme(JSON.parse(storedTheme));
+  // }, []);
+
   const toggleTheme = () => {
     setSelectedTheme((prevTheme) => {
-      console.log(prevTheme);
       let updatedTheme;
       if (prevTheme === lightTheme) {
         updatedTheme = darkTheme;
@@ -57,26 +66,15 @@ function App() {
         updatedTheme = lightTheme;
       }
 
+      // localStorage.setItem('selectedTheme', JSON.stringify(updatedTheme));
+      console.log(updatedTheme);
       return updatedTheme;
     });
   };
 
-  useEffect(() => {
-    if (selectedTheme === lightTheme)
-      document.body.style.backgroundColor =
-        lightTheme.palette.background.default;
-    if (selectedTheme === darkTheme)
-      document.body.style.backgroundColor =
-        darkTheme.palette.background.default;
-    if (selectedTheme === sunTheme)
-      document.body.style.backgroundColor = sunTheme.palette.background.default;
-    if (selectedTheme === earthTheme)
-      document.body.style.backgroundColor =
-        earthTheme.palette.background.default;
-  }, [selectedTheme]);
-
   return (
     <ThemeProvider theme={selectedTheme}>
+      <CssBaseline />
       <BrowserRouter>
         <Routes>
           <Route path={routes.HOME} element={<Navbar />}>

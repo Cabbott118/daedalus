@@ -150,7 +150,11 @@ const ServiceTicket = () => {
   return (
     <Container
       maxWidth='sm'
-      sx={{ bgcolor: theme.additionalPalette.primary, py: 2, borderRadius: 2 }}
+      sx={{
+        bgcolor: theme.additionalPalette.primary,
+        py: 2,
+        borderRadius: 2,
+      }}
     >
       <Typography
         variant='h2'

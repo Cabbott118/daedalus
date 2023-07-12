@@ -3,6 +3,7 @@ import { createTheme } from '@mui/material/styles';
 const lightTheme = createTheme({
   palette: {
     mode: 'light',
+    paletteName: 'light',
     primary: {
       main: '#00C7E6',
       contrastText: '#DDE6ED',
@@ -46,6 +47,7 @@ const lightTheme = createTheme({
 const darkTheme = createTheme({
   palette: {
     mode: 'dark',
+    paletteName: 'dark',
     primary: {
       main: '#00C7E6',
     },
@@ -86,8 +88,9 @@ const darkTheme = createTheme({
 });
 
 const earthTheme = createTheme({
-  mode: 'light',
   palette: {
+    // mode: 'earth',
+    paletteName: 'earth',
     primary: {
       main: '#7CBA7A', // Moss green
     },
@@ -128,8 +131,9 @@ const earthTheme = createTheme({
 });
 
 const sunTheme = createTheme({
-  mode: 'light',
   palette: {
+    // mode: 'sun',
+    paletteName: 'sun',
     primary: {
       main: '#FFD700',
     },

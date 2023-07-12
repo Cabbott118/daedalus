@@ -12,7 +12,7 @@ import {
   where,
   orderBy,
   onSnapshot,
-} from 'firebase/firestore'; // Add necessary imports
+} from 'firebase/firestore';
 
 // Helpers
 import formatCreatedAt from 'services/helpers/dateFormatter';
