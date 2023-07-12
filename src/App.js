@@ -8,7 +8,7 @@ import routes from 'constants/routes';
 
 // MUI
 import { Container, Typography, ThemeProvider } from '@mui/material';
-import { lightTheme, darkTheme } from 'styles/theme';
+import { lightTheme, darkTheme, sunTheme, earthTheme } from 'styles/theme';
 
 // Pages
 // Auth
@@ -41,23 +41,42 @@ import { Outlet, Route, Routes } from 'react-router-dom';
 import { BrowserRouter } from 'react-router-dom';
 
 function App() {
-  const storedTheme = localStorage.getItem('theme');
-  const [isDarkMode, setIsDarkMode] = useState(storedTheme === 'dark');
+  const [selectedTheme, setSelectedTheme] = useState(lightTheme);
 
   const toggleTheme = () => {
-    const updatedTheme = isDarkMode ? 'light' : 'dark';
-    setIsDarkMode(!isDarkMode);
-    localStorage.setItem('theme', updatedTheme);
+    setSelectedTheme((prevTheme) => {
+      console.log(prevTheme);
+      let updatedTheme;
+      if (prevTheme === lightTheme) {
+        updatedTheme = darkTheme;
+      } else if (prevTheme === darkTheme) {
+        updatedTheme = sunTheme;
+      } else if (prevTheme === sunTheme) {
+        updatedTheme = earthTheme;
+      } else {
+        updatedTheme = lightTheme;
+      }
+
+      return updatedTheme;
+    });
   };
 
   useEffect(() => {
-    document.body.style.backgroundColor = isDarkMode
-      ? darkTheme.palette.background.default
-      : lightTheme.palette.background.default;
-  }, [isDarkMode]);
+    if (selectedTheme === lightTheme)
+      document.body.style.backgroundColor =
+        lightTheme.palette.background.default;
+    if (selectedTheme === darkTheme)
+      document.body.style.backgroundColor =
+        darkTheme.palette.background.default;
+    if (selectedTheme === sunTheme)
+      document.body.style.backgroundColor = sunTheme.palette.background.default;
+    if (selectedTheme === earthTheme)
+      document.body.style.backgroundColor =
+        earthTheme.palette.background.default;
+  }, [selectedTheme]);
 
   return (
-    <ThemeProvider theme={isDarkMode ? darkTheme : lightTheme}>
+    <ThemeProvider theme={selectedTheme}>
       <BrowserRouter>
         <Routes>
           <Route path={routes.HOME} element={<Navbar />}>

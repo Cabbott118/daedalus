@@ -2,17 +2,16 @@ import { createTheme } from '@mui/material/styles';
 
 const lightTheme = createTheme({
   palette: {
+    mode: 'light',
     primary: {
       main: '#00C7E6',
-      // main: '#0042BF',
       contrastText: '#DDE6ED',
     },
     secondary: {
       main: '#F79B19',
-      // contrastText: '#DDE6ED',
     },
     background: {
-      default: '#ffffff', // Light background color
+      default: '#ffffff',
     },
   },
   additionalPalette: {
@@ -49,15 +48,12 @@ const darkTheme = createTheme({
     mode: 'dark',
     primary: {
       main: '#00C7E6',
-      // main: '#0042BF',
-      // contrastText: '#DDE6ED',
     },
     secondary: {
       main: '#F79B19',
-      // contrastText: '#DDE6ED',
     },
     background: {
-      default: '#212121', // Override the default background color
+      default: '#212121',
     },
   },
   additionalPalette: {
@@ -89,4 +85,88 @@ const darkTheme = createTheme({
   },
 });
 
-export { lightTheme, darkTheme };
+const earthTheme = createTheme({
+  mode: 'light',
+  palette: {
+    primary: {
+      main: '#7CBA7A', // Moss green
+    },
+    secondary: {
+      main: '#004E64', // Deep ocean blue
+    },
+    background: {
+      default: '#D2B48C', // Sandy beige
+    },
+  },
+  additionalPalette: {
+    primary: '#8B3E23', // Earthy tone red
+    secondary: '#964B00', // Earthy brown
+  },
+  breakpoints: {
+    values: {
+      xs: 0,
+      sm: 600,
+      md: 900,
+      lg: 1200,
+      xl: 1536,
+    },
+  },
+  typography: {
+    fontFamily: [
+      '-apple-system',
+      'BlinkMacSystemFont',
+      '"Segoe UI"',
+      'Roboto',
+      '"Helvetica Neue"',
+      'Arial',
+      'sans-serif',
+      '"Apple Color Emoji"',
+      '"Segoe UI Emoji"',
+      '"Segoe UI Symbol"',
+    ].join(','),
+  },
+});
+
+const sunTheme = createTheme({
+  mode: 'light',
+  palette: {
+    primary: {
+      main: '#FFD700',
+    },
+    secondary: {
+      main: '#DAA520',
+    },
+    background: {
+      default: '#FF7F50',
+    },
+  },
+  additionalPalette: {
+    primary: '#FF4500',
+    secondary: '#FF6600',
+  },
+  breakpoints: {
+    values: {
+      xs: 0,
+      sm: 600,
+      md: 900,
+      lg: 1200,
+      xl: 1536,
+    },
+  },
+  typography: {
+    fontFamily: [
+      '-apple-system',
+      'BlinkMacSystemFont',
+      '"Segoe UI"',
+      'Roboto',
+      '"Helvetica Neue"',
+      'Arial',
+      'sans-serif',
+      '"Apple Color Emoji"',
+      '"Segoe UI Emoji"',
+      '"Segoe UI Symbol"',
+    ].join(','),
+  },
+});
+
+export { lightTheme, darkTheme, earthTheme, sunTheme };

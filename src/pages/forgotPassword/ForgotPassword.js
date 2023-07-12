@@ -64,7 +64,11 @@ export default function ForgotPassword() {
       <Container maxWidth='xs'>
         <Typography
           variant='h1'
-          sx={{ fontSize: '1.5rem', marginBottom: '1rem' }}
+          sx={{
+            fontSize: '1.5rem',
+            marginBottom: '1rem',
+            color: theme.palette.text.primary,
+          }}
         >
           Reset your password
         </Typography>
