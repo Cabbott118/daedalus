@@ -34,7 +34,9 @@ export default function Login() {
   const [isAlertShowing, setIsAlertShowing] = useState(false);
 
   const dispatch = useDispatch();
-  const { data, loading, error } = useSelector((state) => state.user);
+  const { data, loading, error, isLoggingOut } = useSelector(
+    (state) => state.user
+  );
 
   const handleClickShowPassword = () => setShowPassword((show) => !show);
 

@@ -8,15 +8,21 @@ const routes = {
   USER: '/user',
 
   // Customer
+  CUSTOMER_BASE: '/customer',
   CUSTOMER_ENROLLMENT: '/enrollment-customer',
   CUSTOMER: '/customer/:uid/dashboard',
 
   // Contractor
+  CONTRACTOR_BASE: '/contractor',
   CONTRACTOR_ENROLLMENT: '/enrollment-contractor',
-  CONTRACTOR: '/contractor/:uid/dashboard',
+  CONTRACTOR_DASHBOARD: '/contractor/:uid/dashboard',
 
-  // Dashboard
-  DASHBOARD: '/user/:uid/dashboard',
+  // User
+  USER_DASHBOARD: '/user/:uid/dashboard',
+
+  // Business
+  BUSINESS_BASE: '/business',
+  BUSINESS_DASHBOARD: '/business/:uid/dashboard',
 
   // Service Ticket
   SERVICE_TICKET: '/service-ticket',
@@ -28,6 +34,10 @@ const routes = {
   HOME: '/',
   FORGOT_PASSWORD: '/forgot-password',
   FORGOT_PASSWORD_CONFRIMATION: '/forgot-password-confirmation',
+
+  // Admin
+  ADMIN_BASE: '/admin',
+  ADMIN_DASHBOARD: '/admin/:uid/dashboard',
 };
 
 export default routes;

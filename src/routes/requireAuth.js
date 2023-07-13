@@ -7,11 +7,11 @@ import { useSelector } from 'react-redux';
 import routes from 'constants/routes';
 
 export default function RequireAuth({ children }) {
-  const { isAuthenticated } = useSelector((state) => state.user);
+  const { data } = useSelector((state) => state.user);
 
   const location = useLocation();
 
-  if (isAuthenticated === false) {
+  if (!data) {
     return <Navigate to={routes.LOGIN} state={{ from: location }} replace />;
   }
 

@@ -15,27 +15,30 @@ import { clearNotificationData } from 'store/slices/notificationsSlice';
 // Routes
 import routes from 'constants/routes';
 
-export default function Logout() {
+export default function Logout({ variant }) {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const location = useLocation();
 
-  function handleLogout(event) {
+  const handleLogout = async (event) => {
     event.preventDefault();
-    dispatch(logoutUser());
-    dispatch(clearUserData());
-    dispatch(clearCustomerData());
-    dispatch(clearContractorData());
-    dispatch(clearServiceTicketData());
-    dispatch(clearNotificationData());
+    await Promise.all([
+      dispatch(logoutUser()),
+      dispatch(clearUserData()),
+      dispatch(clearCustomerData()),
+      dispatch(clearContractorData()),
+      dispatch(clearServiceTicketData()),
+      dispatch(clearNotificationData()),
+    ]);
 
     navigate(routes.LOGIN, { state: { from: location } });
-  }
+  };
 
   return (
     <Button
       color='error'
-      variant='contained'
+      variant={variant}
+      fullWidth
       onClick={handleLogout}
       sx={{ textTransform: 'none' }}
     >

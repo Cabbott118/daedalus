@@ -1,11 +1,15 @@
 import { useEffect, useState } from 'react';
 
 // Components
+import Drawer from 'components/layout/Drawer';
+import Logout from 'components/common/Logout';
 import Notifications from 'pages/notifications/components/Notifications';
+
 import { ReactComponent as DaedalusFlying } from 'assets/images/daedalus.svg';
 
 // Constants
 import routes from 'constants/routes';
+import UserType from 'constants/userType';
 
 // Firebase
 import { getAuth, onAuthStateChanged } from 'firebase/auth';
@@ -18,28 +22,34 @@ import {
   onSnapshot,
 } from 'firebase/firestore';
 
+// Helpers
+import getUserInitials from 'services/helpers/getUserInitials';
+
 // MUI
 import {
   AppBar,
+  Avatar,
   Badge,
   Box,
   Button,
   Container,
   Divider,
-  Drawer,
   IconButton,
-  List,
-  ListItem,
-  ListItemButton,
   ListItemIcon,
-  ListItemText,
+  Menu,
+  MenuItem,
+  Popover,
+  Tab,
+  Tabs,
   Toolbar,
+  Tooltip,
+  Typography,
   useMediaQuery,
   useTheme,
 } from '@mui/material';
-import MenuIcon from '@mui/icons-material/Menu';
-import InboxIcon from '@mui/icons-material/Inbox';
-import MailIcon from '@mui/icons-material/Mail';
+import NotificationsIcon from '@mui/icons-material/Notifications';
+import Settings from '@mui/icons-material/Settings';
+import LogoutIcon from '@mui/icons-material/Logout';
 
 // React Router
 import { Link, Outlet } from 'react-router-dom';
@@ -56,12 +66,15 @@ export default function Navbar() {
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
   const [navLinks, setNavLinks] = useState([]);
-  const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+  const [anchorEl, setAnchorEl] = useState(null);
   const [unreadNotifications, setUnreadNotifications] = useState(null);
 
   const { data: userData } = useSelector((state) => state.user);
-  const { data: notificationsData, loading: notificationsLoading } =
-    useSelector((state) => state.notifications);
+  const { data: customerData } = useSelector((state) => state.customer);
+  const { data: contractorData } = useSelector((state) => state.contractor);
+  const { data: notificationsData } = useSelector(
+    (state) => state.notifications
+  );
 
   useEffect(() => {
     const filteredNotifications = notificationsData?.filter(
@@ -75,8 +88,15 @@ export default function Navbar() {
       if (user) {
         setNavLinks([
           {
-            name: 'Dashboard',
-            route: `${routes.DASHBOARD.replace(':uid', user?.uid)}`,
+            name: userData?.fullName?.firstName,
+            route: `${routes.USER_DASHBOARD.replace(':uid', user?.uid)}`,
+            variant: 'text',
+          },
+          {
+            name: customerData
+              ? customerData?.businessName
+              : contractorData?.businessName,
+            route: `${routes.BUSINESS_DASHBOARD.replace(':uid', user?.uid)}`,
             variant: 'text',
           },
           {
@@ -117,39 +137,14 @@ export default function Navbar() {
     return () => unsubscribe();
   }, [userData, db]);
 
-  const toggleDrawer = (event) => {
-    if (
-      event.type === 'keydown' &&
-      (event.key === 'Tab' || event.key === 'Shift')
-    ) {
-      return;
-    }
-
-    setIsDrawerOpen(!isDrawerOpen);
+  const open = Boolean(anchorEl);
+  const handleClick = (event) => {
+    setAnchorEl(event.currentTarget);
   };
-
-  const list = () => (
-    <Box
-      sx={{ width: 250 }}
-      role='presentation'
-      onClick={toggleDrawer}
-      onKeyDown={toggleDrawer}
-    >
-      <List>
-        {navLinks.map((navLink) => (
-          <ListItem key={navLink.name} disablePadding>
-            <ListItemButton component={Link} to={navLink.route}>
-              <ListItemText primary={navLink.name} />
-              {navLink.badgeContent > 0 && (
-                <Badge badgeContent={navLink.badgeContent} color='error' />
-              )}
-            </ListItemButton>
-          </ListItem>
-        ))}
-      </List>
-    </Box>
-  );
-
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+  console.log(contractorData);
   return (
     <>
       <Box sx={{ flexGrow: 1 }}>
@@ -177,14 +172,41 @@ export default function Navbar() {
                   />
                 </Button>
               </Link>
-
               {isMobile ? (
-                <IconButton color='primary' onClick={toggleDrawer}>
-                  <MenuIcon />
-                </IconButton>
+                <Drawer
+                  userData={userData}
+                  businessData={
+                    userData?.userType === UserType.CUSTOMER
+                      ? customerData
+                      : contractorData
+                  }
+                  unreadNotifications={unreadNotifications}
+                />
               ) : (
                 <>
-                  {navLinks.map((navLink) => (
+                  {/* <Button
+                    onClick={handleUserMenuClick}
+                    sx={{
+                      textTransform: 'none',
+                      color: theme.palette.text.primary,
+                    }}
+                  >
+                    {userData?.fullName?.firstName}
+                    <ArrowDropDownIcon />
+                  </Button> */}
+                  <Tooltip title='Account settings'>
+                    <IconButton
+                      onClick={handleClick}
+                      size='small'
+                      sx={{ ml: 2 }}
+                      aria-controls={open ? 'account-menu' : undefined}
+                      aria-haspopup='true'
+                      aria-expanded={open ? 'true' : undefined}
+                    >
+                      <Avatar>{getUserInitials(userData?.fullName)}</Avatar>
+                    </IconButton>
+                  </Tooltip>
+                  {/* {navLinks.map((navLink) => (
                     <Link key={navLink.name} to={navLink.route}>
                       <Button
                         variant={navLink.variant}
@@ -206,16 +228,108 @@ export default function Navbar() {
                         )}
                       </Button>
                     </Link>
-                  ))}
+                  ))} */}
                 </>
               )}
             </Toolbar>
           </AppBar>
-          <Drawer anchor='right' open={isDrawerOpen} onClose={toggleDrawer}>
-            {list()}
-          </Drawer>
         </Container>
       </Box>
+      {/* <Menu
+        // anchorEl={userAnchorEl}
+        open={userMenuOpen}
+        onClose={handleUserMenuClose}
+      >
+        <MenuItem
+          component={Link}
+          to={routes.USER_DASHBOARD.replace(':uid', userData?.uid)}
+          onClick={handleUserMenuClose}
+        >
+          Dashboard
+        </MenuItem>
+        <MenuItem
+          component={Link}
+          to={`${routes.NOTIFICATIONS.replace(':uid', userData?.uid)}`}
+          onClick={handleUserMenuClose}
+        >
+          Notifications
+          <Badge
+            badgeContent={unreadNotifications}
+            color='error'
+            sx={{ ml: 3 }}
+          />
+        </MenuItem>
+        <Divider />
+        <Logout />
+      </Menu> */}
+      <Menu
+        anchorEl={anchorEl}
+        id='account-menu'
+        open={open}
+        onClose={handleClose}
+        onClick={handleClose}
+        sx={{
+          mt: 1.5,
+        }}
+        transformOrigin={{ horizontal: 'right', vertical: 'top' }}
+        anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
+      >
+        <Typography variant='overline' sx={{ ml: 2 }}>
+          Account
+        </Typography>
+        <MenuItem
+          component={Link}
+          to={`${routes.NOTIFICATIONS.replace(':uid', userData?.uid)}`}
+        >
+          <Typography variant='inherit' sx={{ mr: 3 }}>
+            Notifications
+          </Typography>
+          <Badge badgeContent={unreadNotifications} color='error' />
+        </MenuItem>
+        <MenuItem
+          component={Link}
+          to={routes.USER_DASHBOARD.replace(':uid', userData?.uid)}
+        >
+          {`${userData?.fullName?.firstName}'s Dashboard`}
+        </MenuItem>
+        <Divider />
+        <Typography variant='overline' sx={{ ml: 2 }}>
+          Business
+        </Typography>
+        {userData?.userType === UserType.ADMIN ? (
+          <MenuItem
+            component={Link}
+            to={`${routes.ADMIN_DASHBOARD.replace(':uid', userData?.uid)}`}
+          >
+            Admin Dashboard
+          </MenuItem>
+        ) : (
+          <MenuItem
+            component={Link}
+            to={`${routes.BUSINESS_DASHBOARD.replace(
+              ':uid',
+              userData?.userType === UserType.CUSTOMER
+                ? customerData?.uid
+                : contractorData?.uid
+            )}`}
+          >
+            {`${
+              userData?.userType === UserType.CUSTOMER
+                ? customerData?.businessName
+                : contractorData?.businessName
+            }`}
+          </MenuItem>
+        )}
+        <Divider />
+        <MenuItem onClick={handleClose}>
+          <ListItemIcon>
+            <Settings fontSize='small' />
+          </ListItemIcon>
+          Settings
+        </MenuItem>
+        <Divider />
+        <Logout />
+      </Menu>
       <Outlet />
     </>
   );

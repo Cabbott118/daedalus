@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 
 // Components
 import Navbar from 'components/layout/Navbar';
@@ -21,6 +21,9 @@ import Login from 'pages/auth/Login';
 import Signup from 'pages/auth/Signup';
 import Dashboard from 'pages/dashboard/Dashboard';
 
+// Business
+import Business from 'pages/business/Business';
+
 // Customer
 import CustomerEnrollment from 'pages/auth/CustomerEnrollment';
 import Customer from 'pages/customer/Customer';
@@ -37,6 +40,9 @@ import Home from 'pages/home/Home';
 import ForgotPassword from 'pages/forgotPassword/ForgotPassword';
 import ForgotPasswordConfirmation from 'pages/forgotPassword/ForgotPasswordConfirmation';
 import RequireAuth from 'routes/requireAuth';
+
+// Admin
+import Admin from 'pages/admin/Admin';
 
 // Notifications
 import Notifications from 'pages/notifications/Notifications';
@@ -67,7 +73,7 @@ function App() {
       }
 
       // localStorage.setItem('selectedTheme', JSON.stringify(updatedTheme));
-      console.log(updatedTheme);
+
       return updatedTheme;
     });
   };
@@ -99,7 +105,7 @@ function App() {
               />
             </Route>
             <Route
-              path={routes.CUSTOMER} // place all routes that need user logged in under /customer/
+              path={routes.CUSTOMER_BASE} // place all routes that need user logged in under /customer/
               element={
                 <RequireAuth>
                   <Outlet />
@@ -110,7 +116,7 @@ function App() {
               <Route index path=':uid/dashboard' element={<Customer />} />
             </Route>
             <Route
-              path={routes.CONTRACTOR} // place all routes that need user logged in under /contractor/
+              path={routes.CONTRACTOR_BASE} // place all routes that need user logged in under /contractor/
               element={
                 <RequireAuth>
                   <Outlet />
@@ -119,6 +125,17 @@ function App() {
             >
               {/* Place your 'authenticated routes in here! They can be referenced by /contractor/<route> */}
               <Route index path=':uid/dashboard' element={<Contractor />} />
+            </Route>
+            <Route
+              path={routes.BUSINESS_BASE} // place all routes that need user logged in under /business/
+              element={
+                <RequireAuth>
+                  <Outlet />
+                </RequireAuth>
+              }
+            >
+              {/* Place your 'authenticated routes in here! They can be referenced by /business/<route> */}
+              <Route index path=':uid/dashboard' element={<Business />} />
             </Route>
             <Route
               path={routes.SERVICE_TICKET} // place all routes that need user logged in under /service-ticket/
@@ -130,6 +147,17 @@ function App() {
             >
               {/* Place your 'authenticated routes in here! They can be referenced by /service-ticket/<route> */}
               <Route index path=':uid' element={<ServiceTicket />} />
+            </Route>
+            <Route
+              path={routes.ADMIN_BASE} // place all routes that need user logged in under /admin/
+              element={
+                <RequireAuth>
+                  <Outlet />
+                </RequireAuth>
+              }
+            >
+              {/* Place your 'authenticated routes in here! They can be referenced by /admin/<route> */}
+              <Route index path=':uid/dashboard' element={<Admin />} />
             </Route>
             <Route
               path='*' // Providing a 404 page for '/' and thus the whole site.

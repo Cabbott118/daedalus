@@ -88,7 +88,7 @@ const Notifications = ({ userId }) => {
           <Typography variant='body1'>Loading notifications...</Typography>
         ) : (
           <>
-            {notificationsData?.length !== 0 && (
+            {notificationsData?.length !== 0 ? (
               <List dense={true}>
                 {notificationsData?.map((notification, index) => (
                   <ListItem
@@ -130,6 +130,10 @@ const Notifications = ({ userId }) => {
                   </ListItem>
                 ))}
               </List>
+            ) : (
+              <Typography variant='body1' sx={{ my: 3 }}>
+                No notifications to display
+              </Typography>
             )}
           </>
         )}
