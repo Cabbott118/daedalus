@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 // Components
 import Drawer from 'components/layout/Drawer';
 import Logout from 'components/common/Logout';
-import Notifications from 'pages/notifications/components/Notifications';
+// import Notifications from 'pages/notifications/components/Notifications';
 
 import { ReactComponent as DaedalusFlying } from 'assets/images/daedalus.svg';
 
@@ -38,18 +38,18 @@ import {
   ListItemIcon,
   Menu,
   MenuItem,
-  Popover,
-  Tab,
-  Tabs,
+  // Popover,
+  // Tab,
+  // Tabs,
   Toolbar,
   Tooltip,
   Typography,
   useMediaQuery,
   useTheme,
 } from '@mui/material';
-import NotificationsIcon from '@mui/icons-material/Notifications';
+// import NotificationsIcon from '@mui/icons-material/Notifications';
 import Settings from '@mui/icons-material/Settings';
-import LogoutIcon from '@mui/icons-material/Logout';
+// import LogoutIcon from '@mui/icons-material/Logout';
 
 // React Router
 import { Link, Outlet } from 'react-router-dom';
@@ -138,13 +138,15 @@ export default function Navbar() {
   }, [userData, db]);
 
   const open = Boolean(anchorEl);
+
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
   };
+
   const handleClose = () => {
     setAnchorEl(null);
   };
-  console.log(contractorData);
+
   return (
     <>
       <Box sx={{ flexGrow: 1 }}>
@@ -172,96 +174,48 @@ export default function Navbar() {
                   />
                 </Button>
               </Link>
-              {isMobile ? (
-                <Drawer
-                  userData={userData}
-                  businessData={
-                    userData?.userType === UserType.CUSTOMER
-                      ? customerData
-                      : contractorData
-                  }
-                  unreadNotifications={unreadNotifications}
-                />
-              ) : (
-                <>
-                  {/* <Button
-                    onClick={handleUserMenuClick}
-                    sx={{
-                      textTransform: 'none',
-                      color: theme.palette.text.primary,
-                    }}
-                  >
-                    {userData?.fullName?.firstName}
-                    <ArrowDropDownIcon />
-                  </Button> */}
-                  <Tooltip title='Account settings'>
-                    <IconButton
-                      onClick={handleClick}
-                      size='small'
-                      sx={{ ml: 2 }}
-                      aria-controls={open ? 'account-menu' : undefined}
-                      aria-haspopup='true'
-                      aria-expanded={open ? 'true' : undefined}
-                    >
-                      <Avatar>{getUserInitials(userData?.fullName)}</Avatar>
-                    </IconButton>
-                  </Tooltip>
-                  {/* {navLinks.map((navLink) => (
-                    <Link key={navLink.name} to={navLink.route}>
-                      <Button
-                        variant={navLink.variant}
-                        onClick={navLink.onClick}
-                        sx={{
-                          textTransform: 'none',
-                          color: theme.palette.text.primary,
-                        }}
+              {userData ? (
+                isMobile ? (
+                  <Drawer
+                    userData={userData}
+                    businessData={
+                      userData.userType === UserType.CUSTOMER
+                        ? customerData
+                        : contractorData
+                    }
+                    unreadNotifications={unreadNotifications}
+                  />
+                ) : (
+                  <>
+                    <Tooltip title='Account menu'>
+                      <IconButton
+                        onClick={handleClick}
+                        size='small'
+                        sx={{ ml: 2 }}
+                        aria-controls={open ? 'account-menu' : undefined}
+                        aria-haspopup='true'
+                        aria-expanded={open ? 'true' : undefined}
                       >
-                        {navLink.badgeContent ? (
-                          <Badge
-                            badgeContent={navLink.badgeContent}
-                            color='error'
-                          >
-                            {navLink.name}
-                          </Badge>
-                        ) : (
-                          navLink.name
-                        )}
-                      </Button>
-                    </Link>
-                  ))} */}
-                </>
+                        <Avatar>{getUserInitials(userData.fullName)}</Avatar>
+                      </IconButton>
+                    </Tooltip>
+                  </>
+                )
+              ) : (
+                <MenuItem
+                  component={Link}
+                  to={routes.LOGIN}
+                  sx={{
+                    color: theme.palette.primary.main,
+                  }}
+                >
+                  Login
+                </MenuItem>
               )}
             </Toolbar>
           </AppBar>
         </Container>
       </Box>
-      {/* <Menu
-        // anchorEl={userAnchorEl}
-        open={userMenuOpen}
-        onClose={handleUserMenuClose}
-      >
-        <MenuItem
-          component={Link}
-          to={routes.USER_DASHBOARD.replace(':uid', userData?.uid)}
-          onClick={handleUserMenuClose}
-        >
-          Dashboard
-        </MenuItem>
-        <MenuItem
-          component={Link}
-          to={`${routes.NOTIFICATIONS.replace(':uid', userData?.uid)}`}
-          onClick={handleUserMenuClose}
-        >
-          Notifications
-          <Badge
-            badgeContent={unreadNotifications}
-            color='error'
-            sx={{ ml: 3 }}
-          />
-        </MenuItem>
-        <Divider />
-        <Logout />
-      </Menu> */}
       <Menu
         anchorEl={anchorEl}
         id='account-menu'
