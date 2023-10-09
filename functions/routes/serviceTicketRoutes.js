@@ -92,8 +92,10 @@ router.post('/create-service-ticket', async (req, res) => {
       createdBy: uid,
       status: 'new',
       assigned: false,
-      customerName,
-      customerId,
+      customer: {
+        name: customerName,
+        id: customerId,
+      },
       reasonForServices,
       uid: '',
       createdAt: admin.firestore.FieldValue.serverTimestamp(),

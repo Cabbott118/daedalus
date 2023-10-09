@@ -187,7 +187,7 @@ function App() {
             element={<ForgotPasswordConfirmation />}
           />
         </Routes>
-        <button onClick={toggleTheme}>Toggle Theme</button>
+        {/* <button onClick={toggleTheme}>Toggle Theme</button> */}
       </BrowserRouter>
     </ThemeProvider>
   );

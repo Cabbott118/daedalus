@@ -228,9 +228,6 @@ export default function Navbar() {
         transformOrigin={{ horizontal: 'right', vertical: 'top' }}
         anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
       >
-        <Typography variant='overline' sx={{ ml: 2 }}>
-          Account
-        </Typography>
         <MenuItem
           component={Link}
           to={`${routes.NOTIFICATIONS.replace(':uid', userData?.uid)}`}
@@ -240,6 +237,10 @@ export default function Navbar() {
           </Typography>
           <Badge badgeContent={unreadNotifications} color='error' />
         </MenuItem>
+        <Divider />
+        <Typography variant='overline' sx={{ ml: 2 }}>
+          Account
+        </Typography>
         <MenuItem
           component={Link}
           to={routes.USER_DASHBOARD.replace(':uid', userData?.uid)}

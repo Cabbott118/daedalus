@@ -77,7 +77,7 @@ const AdminComponent = () => {
   if (serviceTickets) {
     rows = serviceTickets.map((ticket, index) => ({
       id: index + 1,
-      customerName: ticket.customerName,
+      customerName: ticket.customer?.name,
       assigned: ticket.assigned,
       reasonForServices: ticket.reasonForServices,
       createdAt: formatCreatedAt(ticket.createdAt),

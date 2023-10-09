@@ -58,15 +58,12 @@ const Drawer = ({ userData, businessData, unreadNotifications }) => {
 
   const list = () => (
     <Box
-      sx={{ width: 300 }}
+      sx={{ width: 300, pt: 1 }}
       role='presentation'
       onClick={toggleDrawer}
       onKeyDown={toggleDrawer}
     >
-      <List dense sx={{ flexGrow: 1 }}>
-        <Typography variant='overline' sx={{ p: 2 }}>
-          Account
-        </Typography>
+      <List dense>
         <ListItem disablePadding>
           <ListItemButton
             component={Link}
@@ -77,6 +74,11 @@ const Drawer = ({ userData, businessData, unreadNotifications }) => {
             <Badge badgeContent={unreadNotifications} color='error' />
           </ListItemButton>
         </ListItem>
+      </List>
+      <List dense sx={{ flexGrow: 1 }}>
+        <Typography variant='overline' sx={{ p: 2 }}>
+          Account
+        </Typography>
         <ListItem disablePadding>
           <ListItemButton
             component={Link}

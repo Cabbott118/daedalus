@@ -72,13 +72,13 @@ const ServiceTicketsComponent = ({
                   <TableCell>Company Receiving Services</TableCell>
                   <TableCell>Reason for Services</TableCell>
                   <TableCell>Status</TableCell>
-                  <TableCell>Created At</TableCell>
+                  <TableCell>Created on</TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
                 {serviceTickets?.map((data, index) => (
                   <TableRow key={index}>
-                    <TableCell>{data.customerName}</TableCell>
+                    <TableCell>{data.customer?.name}</TableCell>
                     <TableCell>
                       <Typography
                         variant='body2'
@@ -92,7 +92,9 @@ const ServiceTicketsComponent = ({
                         {data.reasonForServices}
                       </Typography>
                     </TableCell>
-                    <TableCell>{data.status}</TableCell>
+                    <TableCell sx={{ textTransform: 'capitalize' }}>
+                      {data.status}
+                    </TableCell>
                     <TableCell>{formatCreatedAt(data.createdAt)}</TableCell>
                   </TableRow>
                 ))}
@@ -124,7 +126,7 @@ const ServiceTicketsComponent = ({
               <TableBody>
                 {serviceTickets?.map((data, index) => (
                   <TableRow key={index}>
-                    <TableCell>{data.customerName}</TableCell>
+                    <TableCell>{data.customer?.name}</TableCell>
                     <TableCell>
                       <Typography
                         variant='body2'

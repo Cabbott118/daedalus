@@ -92,7 +92,7 @@ const ServiceTicketDialog = ({ open, onClose }) => {
                     color: theme.palette.text.primary,
                   }}
                 >
-                  {serviceTicketData?.customerName}
+                  {serviceTicketData?.customer?.name}
                 </Typography>
                 <Typography
                   variant='caption'

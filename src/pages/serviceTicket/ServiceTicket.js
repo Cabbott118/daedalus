@@ -26,7 +26,10 @@ import { useParams } from 'react-router-dom';
 
 // Redux
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchServiceTicket } from 'store/slices/serviceTicketSlice';
+import {
+  fetchServiceTicket,
+  updateServiceTicket,
+} from 'store/slices/serviceTicketSlice';
 
 const ServiceTicket = () => {
   const { uid } = useParams();
@@ -35,6 +38,9 @@ const ServiceTicket = () => {
 
   const { data: serviceTicketData, loading: serviceTicketLoading } =
     useSelector((state) => state.serviceTicket);
+  const { data: userData, loading: userLoading } = useSelector(
+    (state) => state.user
+  );
 
   useEffect(() => {
     dispatch(fetchServiceTicket(uid));
@@ -140,6 +146,18 @@ const ServiceTicket = () => {
     }
   };
 
+  const acceptServiceTicket = async () => {
+    const updateData = {
+      status: StatusType.ACCEPTED,
+    };
+
+    await dispatch(updateServiceTicket({ uid, updateData }));
+  };
+
+  const declineServiceTicket = () => {
+    alert('Declining cannot be done yet - to be developed');
+  };
+
   if (serviceTicketLoading)
     return (
       <Container>
@@ -178,7 +196,7 @@ const ServiceTicket = () => {
               color: theme.palette.text.primary,
             }}
           >
-            {serviceTicketData?.customerName}
+            {serviceTicketData?.customer?.name}
           </Typography>
           <Typography
             variant='caption'
@@ -248,6 +266,33 @@ const ServiceTicket = () => {
             $5,000
           </Typography>
         </Grid>
+        {userData?.userType === UserType.CONTRACTOR &&
+          serviceTicketData?.status === StatusType.ASSIGNED && (
+            <Grid container spacing={2} sx={{ mt: 1 }}>
+              <Grid item xs={12}>
+                <Button
+                  fullWidth
+                  variant='contained'
+                  color='primary'
+                  onClick={acceptServiceTicket}
+                  sx={{ textTransform: 'none' }}
+                >
+                  Accept
+                </Button>
+              </Grid>
+              <Grid item xs={12}>
+                <Button
+                  fullWidth
+                  variant='contained'
+                  color='error'
+                  onClick={declineServiceTicket}
+                  sx={{ textTransform: 'none' }}
+                >
+                  Decline
+                </Button>
+              </Grid>
+            </Grid>
+          )}
       </Grid>
     </Container>
   );
