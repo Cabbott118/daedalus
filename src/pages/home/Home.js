@@ -84,7 +84,8 @@ export default function Home() {
           <Grid container>
             <Grid item xs={12}>
               <Typography variant='h4' component='h1'>
-                <b>Welcome,</b> {userData?.fullName?.firstName}
+                <b style={{ color: theme.palette.primary.main }}>Welcome,</b>{' '}
+                {userData?.fullName?.firstName}
               </Typography>
             </Grid>
             <Grid item xs={12}>
