@@ -66,6 +66,12 @@ export default function Home() {
     }
   }, [userData, customerData, contractorData, dispatch]);
 
+  const colors = [
+    theme.palette.primary.light,
+    theme.palette.secondary.main,
+    'white',
+  ];
+
   if (userLoading || customerLoading || contractorLoading)
     return <Loader style={{ fill: theme.palette.primary.main }} />;
 
@@ -78,68 +84,93 @@ export default function Home() {
     );
 
   return (
-    <Container maxWidth='md' sx={{ mt: 3 }}>
-      {userData && (
-        <>
-          <Grid container>
-            <Grid item xs={12}>
-              <Typography variant='h4' component='h1'>
-                <b style={{ color: theme.palette.primary.main }}>Welcome,</b>{' '}
-                {userData?.fullName?.firstName}
-              </Typography>
-            </Grid>
-            <Grid item xs={12}>
-              {customerData && (
-                <Typography variant='subtitle1' component='h1'>
-                  {customerData?.businessName} - Daedalus
+    <>
+      <Box
+        sx={{
+          height: 80,
+          bgcolor: theme.palette.primary.dark,
+          position: 'relative',
+        }}
+      >
+        {[...Array(25)].map((_, index) => (
+          <div
+            key={index}
+            style={{
+              position: 'absolute',
+              width: '3px',
+              height: '3px',
+              backgroundColor: colors[index % colors.length],
+              borderRadius: '50%',
+              top: `${Math.random() * 80}px`,
+              left: `${Math.random() * 100}%`,
+            }}
+          ></div>
+        ))}
+      </Box>
+
+      <Container maxWidth='md' sx={{ mt: 3 }}>
+        {userData && (
+          <>
+            <Grid container>
+              <Grid item xs={12}>
+                <Typography variant='h4' component='h1'>
+                  <b style={{ color: theme.palette.primary.main }}>Welcome,</b>{' '}
+                  {userData?.fullName?.firstName}
                 </Typography>
-              )}
-              {contractorData && (
-                <Typography variant='subtitle1' component='h1'>
-                  {contractorData?.businessName} - Daedalus
-                </Typography>
-              )}
+              </Grid>
+              <Grid item xs={12}>
+                {customerData && (
+                  <Typography variant='subtitle1' component='h1'>
+                    {customerData?.businessName} - Daedalus
+                  </Typography>
+                )}
+                {contractorData && (
+                  <Typography variant='subtitle1' component='h1'>
+                    {contractorData?.businessName} - Daedalus
+                  </Typography>
+                )}
+              </Grid>
             </Grid>
-          </Grid>
-          <Grid container spacing={3} sx={{ mt: 5 }}>
-            <Grid item xs={12} md={4}>
-              {/* TODO: Make this its own component */}
-              <Paper
-                variant='outlined'
-                sx={{
-                  p: 3,
-                  borderTop: `1rem solid ${theme.palette.primary.main}`,
-                }}
-              >
-                <Typography
-                  variant='h5'
-                  component='h1'
-                  align='center'
-                  sx={{ fontSize: 20 }}
+            <Grid container spacing={3} sx={{ mt: 5 }}>
+              <Grid item xs={12} md={4}>
+                {/* TODO: Make this its own component */}
+                <Paper
+                  variant='outlined'
+                  sx={{
+                    p: 3,
+                    borderTop: `1rem solid ${theme.palette.primary.main}`,
+                  }}
                 >
-                  My Tickets
-                </Typography>
-                <Grid
-                  container
-                  direction='row'
-                  justifyContent='space-evenly'
-                  alignItems='center'
-                >
-                  <Grid item sx={{ pt: 2 }}>
-                    0 Open
+                  <Typography
+                    variant='h5'
+                    component='h1'
+                    align='center'
+                    sx={{ fontSize: 20 }}
+                  >
+                    My Tickets
+                  </Typography>
+                  <Grid
+                    container
+                    direction='row'
+                    justifyContent='space-evenly'
+                    alignItems='center'
+                  >
+                    <Grid item sx={{ pt: 2 }}>
+                      0 Open
+                    </Grid>
+                    <Grid item sx={{ pt: 2 }}>
+                      0 Closed
+                    </Grid>
                   </Grid>
-                  <Grid item sx={{ pt: 2 }}>
-                    0 Closed
-                  </Grid>
-                </Grid>
-              </Paper>
+                </Paper>
+              </Grid>
+              <Grid item xs={12} md={8}>
+                <ServiceTicketTabs />
+              </Grid>
             </Grid>
-            <Grid item xs={12} md={8}>
-              <ServiceTicketTabs />
-            </Grid>
-          </Grid>
-        </>
-      )}
-    </Container>
+          </>
+        )}
+      </Container>
+    </>
   );
 }
