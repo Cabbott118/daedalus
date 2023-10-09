@@ -90,22 +90,27 @@ export default function Home() {
           height: 80,
           bgcolor: theme.palette.primary.dark,
           position: 'relative',
+          overflow: 'hidden',
         }}
       >
-        {[...Array(25)].map((_, index) => (
-          <div
-            key={index}
-            style={{
-              position: 'absolute',
-              width: '3px',
-              height: '3px',
-              backgroundColor: colors[index % colors.length],
-              borderRadius: '50%',
-              top: `${Math.random() * 80}px`,
-              left: `${Math.random() * 100}%`,
-            }}
-          ></div>
-        ))}
+        {[...Array(30)].map((_, index) => {
+          const size = Math.random() * 10 + 2; // Random size between 5px and 25px
+
+          return (
+            <div
+              key={index}
+              style={{
+                position: 'absolute',
+                width: `${size}px`, // Symmetrical width
+                height: `${size}px`, // Symmetrical height
+                backgroundColor: colors[index % colors.length], // Cycle through the colors array
+                borderRadius: '50%',
+                top: `${Math.random() * 80}px`, // Random top position
+                left: `${Math.random() * 100}%`, // Random left position
+              }}
+            ></div>
+          );
+        })}
       </Box>
 
       <Container maxWidth='md' sx={{ mt: 3 }}>

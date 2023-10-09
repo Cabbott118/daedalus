@@ -192,8 +192,8 @@ export default function Navbar() {
                       color='error'
                       sx={{
                         position: 'absolute',
-                        top: 15,
-                        right: 15,
+                        top: 20,
+                        right: 25,
                       }}
                     />
                   </>
