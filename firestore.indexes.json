@@ -47,7 +47,21 @@
       "queryScope": "COLLECTION",
       "fields": [
         {
-          "fieldPath": "notificationOwner",
+          "fieldPath": "ticketOwner",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "createdAt",
+          "order": "ASCENDING"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "notifications",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "ticketOwner",
           "order": "ASCENDING"
         },
         {

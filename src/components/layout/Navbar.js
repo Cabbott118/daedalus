@@ -187,16 +187,25 @@ export default function Navbar() {
                   />
                 ) : (
                   <>
-                    <Tooltip title='Account menu'>
+                    <Tooltip title='Menu'>
                       <IconButton
                         onClick={handleClick}
                         size='small'
-                        sx={{ ml: 2 }}
+                        sx={{ ml: 2, position: 'relative' }}
                         aria-controls={open ? 'account-menu' : undefined}
                         aria-haspopup='true'
                         aria-expanded={open ? 'true' : undefined}
                       >
                         <Avatar>{getUserInitials(userData.fullName)}</Avatar>
+                        <Badge
+                          badgeContent={unreadNotifications}
+                          color='error'
+                          sx={{
+                            position: 'absolute',
+                            top: 10, // Adjust this value to position the badge vertically
+                            right: 10, // Adjust this value to position the badge horizontally
+                          }}
+                        />
                       </IconButton>
                     </Tooltip>
                   </>

@@ -103,7 +103,11 @@ const CreateServiceTicketDialog = ({ userId: uid, customerData }) => {
             <Button onClick={handleCloseDialog} sx={{ textTransform: 'none' }}>
               Cancel
             </Button>
-            <Button type='submit' sx={{ textTransform: 'none' }}>
+            <Button
+              variant='contained'
+              type='submit'
+              sx={{ textTransform: 'none' }}
+            >
               Submit
             </Button>
           </DialogActions>

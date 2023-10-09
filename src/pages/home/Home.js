@@ -4,6 +4,7 @@ import { useEffect } from 'react';
 import Loader from 'components/common/Loader';
 import Hero from 'pages/home/components/Hero';
 import EnrollmentBanner from 'pages/home/components/EnrollmentBanner';
+import ServiceTicketTabs from 'pages/home/components/serviceTicketList/ServiceTicketTabs';
 
 // Constants
 import UserType from 'constants/userType';
@@ -12,7 +13,14 @@ import UserType from 'constants/userType';
 import { getAuth, onAuthStateChanged } from 'firebase/auth';
 
 // MUI
-import { Button, Container, Grid, Typography, useTheme } from '@mui/material';
+import {
+  Box,
+  Container,
+  Grid,
+  Paper,
+  Typography,
+  useTheme,
+} from '@mui/material';
 
 // Redux
 import { useDispatch, useSelector } from 'react-redux';
@@ -70,19 +78,63 @@ export default function Home() {
     );
 
   return (
-    <Container maxWidth='sm'>
+    <Container maxWidth='md' sx={{ mt: 3 }}>
       {userData && (
         <>
-          <Grid container spacing={2}>
+          <Grid container>
             <Grid item xs={12}>
-              <Typography variant='p'>User name:</Typography>
-              <Typography variant='p'>
-                {userData?.fullName?.firstName} {userData?.fullName?.lastName}
+              <Typography variant='h4' component='h1'>
+                <b>Welcome,</b> {userData?.fullName?.firstName}
               </Typography>
             </Grid>
             <Grid item xs={12}>
-              <Typography variant='p'>User type:</Typography>
-              <Typography variant='p'>{userData?.userType}</Typography>
+              {customerData && (
+                <Typography variant='subtitle1' component='h1'>
+                  {customerData?.businessName} - Daedalus
+                </Typography>
+              )}
+              {contractorData && (
+                <Typography variant='subtitle1' component='h1'>
+                  {contractorData?.businessName} - Daedalus
+                </Typography>
+              )}
+            </Grid>
+          </Grid>
+          <Grid container spacing={3} sx={{ mt: 5 }}>
+            <Grid item xs={12} md={4}>
+              {/* TODO: Make this its own component */}
+              <Paper
+                variant='outlined'
+                sx={{
+                  p: 3,
+                  borderTop: `1rem solid ${theme.palette.primary.main}`,
+                }}
+              >
+                <Typography
+                  variant='h5'
+                  component='h1'
+                  align='center'
+                  sx={{ fontSize: 20 }}
+                >
+                  My Tickets
+                </Typography>
+                <Grid
+                  container
+                  direction='row'
+                  justifyContent='space-evenly'
+                  alignItems='center'
+                >
+                  <Grid item sx={{ pt: 2 }}>
+                    0 Open
+                  </Grid>
+                  <Grid item sx={{ pt: 2 }}>
+                    0 Closed
+                  </Grid>
+                </Grid>
+              </Paper>
+            </Grid>
+            <Grid item xs={12} md={8}>
+              <ServiceTicketTabs />
             </Grid>
           </Grid>
         </>
