@@ -176,15 +176,27 @@ export default function Navbar() {
               </Link>
               {userData ? (
                 isMobile ? (
-                  <Drawer
-                    userData={userData}
-                    businessData={
-                      userData.userType === UserType.CUSTOMER
-                        ? customerData
-                        : contractorData
-                    }
-                    unreadNotifications={unreadNotifications}
-                  />
+                  <>
+                    <Drawer
+                      userData={userData}
+                      businessData={
+                        userData.userType === UserType.CUSTOMER
+                          ? customerData
+                          : contractorData
+                      }
+                      unreadNotifications={unreadNotifications}
+                      sx={{ position: 'relative' }}
+                    />
+                    <Badge
+                      badgeContent={unreadNotifications}
+                      color='error'
+                      sx={{
+                        position: 'absolute',
+                        top: 15,
+                        right: 15,
+                      }}
+                    />
+                  </>
                 ) : (
                   <>
                     <Tooltip title='Menu'>
@@ -202,8 +214,8 @@ export default function Navbar() {
                           color='error'
                           sx={{
                             position: 'absolute',
-                            top: 10, // Adjust this value to position the badge vertically
-                            right: 10, // Adjust this value to position the badge horizontally
+                            top: 10,
+                            right: 10,
                           }}
                         />
                       </IconButton>
