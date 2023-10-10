@@ -12,12 +12,14 @@ app.use(cors({ origin: true }));
 const userRoutes = require('./routes/userRoutes');
 const customerRoutes = require('./routes/customerRoutes');
 const contractorRoutes = require('./routes/contractorRoutes');
+const businesRoutes = require('./routes/businessRoutes');
 const serviceTicketRoutes = require('./routes/serviceTicketRoutes');
 const notificationRoutes = require('./routes/notificationRoutes');
 
 app.use('/users', userRoutes);
 app.use('/customers', customerRoutes);
 app.use('/contractors', contractorRoutes);
+app.use('/businesses', businesRoutes);
 app.use('/service-tickets', serviceTicketRoutes);
 app.use('/notifications', notificationRoutes.router);
 

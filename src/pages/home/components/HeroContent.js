@@ -2,18 +2,7 @@
 import routes from 'constants/routes';
 
 // MUI
-import {
-  Box,
-  Button,
-  Card,
-  CardContent,
-  CardActionArea,
-  Container,
-  Grid,
-  Paper,
-  Typography,
-  useTheme,
-} from '@mui/material';
+import { Button, Grid, Typography, useTheme } from '@mui/material';
 
 // React Router
 import { useNavigate } from 'react-router-dom';

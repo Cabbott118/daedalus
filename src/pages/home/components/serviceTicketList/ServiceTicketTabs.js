@@ -5,7 +5,7 @@ import OpenTickets from 'pages/home/components/serviceTicketList/OpenTickets';
 import ClosedTickets from 'pages/home/components/serviceTicketList/ClosedTickets';
 
 // MUI
-import { Box, Tab, Tabs, Typography, useTheme } from '@mui/material';
+import { Box, Tab, Tabs } from '@mui/material';
 
 const ServiceTicketTabs = () => {
   const [selectedTab, setSelectedTab] = useState(0);

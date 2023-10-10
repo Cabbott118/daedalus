@@ -7,20 +7,10 @@ import heroImage from 'assets/images/hero-bg.jpg';
 import HeroContent from 'pages/home/components/HeroContent';
 
 // Constants
-import routes from 'constants/routes';
+// import routes from 'constants/routes';
 
 // MUI
-import {
-  Box,
-  Card,
-  CardContent,
-  CardActionArea,
-  Container,
-  Grid,
-  Paper,
-  Typography,
-  useTheme,
-} from '@mui/material';
+import { Box, useTheme } from '@mui/material';
 
 // React Router
 import { useNavigate } from 'react-router-dom';

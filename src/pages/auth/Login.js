@@ -23,7 +23,6 @@ import { Navigate } from 'react-router-dom';
 // Redux
 import { useDispatch, useSelector } from 'react-redux';
 import { loginUser, clearUserData } from 'store/slices/userSlice';
-import { fetchContractor } from 'store/slices/contractorSlice';
 
 export default function Login() {
   const pageName = 'Login';
@@ -34,9 +33,7 @@ export default function Login() {
   const [isAlertShowing, setIsAlertShowing] = useState(false);
 
   const dispatch = useDispatch();
-  const { data, loading, error, isLoggingOut } = useSelector(
-    (state) => state.user
-  );
+  const { data, loading, error } = useSelector((state) => state.user);
 
   const handleClickShowPassword = () => setShowPassword((show) => !show);
 

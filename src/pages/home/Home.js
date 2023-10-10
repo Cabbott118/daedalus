@@ -5,6 +5,8 @@ import Loader from 'components/common/Loader';
 import Hero from 'pages/home/components/Hero';
 import EnrollmentBanner from 'pages/home/components/EnrollmentBanner';
 import ServiceTicketTabs from 'pages/home/components/serviceTicketList/ServiceTicketTabs';
+import TicketCounter from 'pages/home/components/TicketCounter';
+import WelcomeBanner from 'pages/home/components/WelcomeBanner';
 
 // Constants
 import UserType from 'constants/userType';
@@ -13,20 +15,17 @@ import UserType from 'constants/userType';
 import { getAuth, onAuthStateChanged } from 'firebase/auth';
 
 // MUI
-import {
-  Box,
-  Container,
-  Grid,
-  Paper,
-  Typography,
-  useTheme,
-} from '@mui/material';
+import { Box, Container, Grid, Typography, useTheme } from '@mui/material';
 
 // Redux
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchUser } from 'store/slices/userSlice';
 import { fetchContractor } from 'store/slices/contractorSlice';
 import { fetchCustomer } from 'store/slices/customerSlice';
+import {
+  fetchServiceTicketsAssignedTo,
+  fetchServiceTicketsCreatedBy,
+} from 'store/slices/serviceTicketSlice';
 
 export default function Home() {
   document.title = 'Daedalus';
@@ -46,6 +45,7 @@ export default function Home() {
   const { data: contractorData, loading: contractorLoading } = useSelector(
     (state) => state.contractor
   );
+  const { serviceTickets } = useSelector((state) => state.serviceTicket);
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
@@ -59,11 +59,13 @@ export default function Home() {
   useEffect(() => {
     if (!customerData && !contractorData && userData) {
       if (userData.userType === UserType.CUSTOMER) {
-        dispatch(fetchCustomer(userData.uid));
+        dispatch(fetchCustomer(userData?.uid));
+        dispatch(fetchServiceTicketsCreatedBy(userData?.uid));
       } else if (userData.userType === UserType.CONTRACTOR) {
-        dispatch(fetchContractor(userData.uid));
+        dispatch(fetchContractor(userData?.uid));
       }
     }
+    dispatch(fetchServiceTicketsAssignedTo(contractorData?.uid));
   }, [userData, customerData, contractorData, dispatch]);
 
   const colors = [
@@ -71,6 +73,7 @@ export default function Home() {
     theme.palette.secondary.main,
     'white',
   ];
+  console.log(serviceTickets);
 
   if (userLoading || customerLoading || contractorLoading)
     return <Loader style={{ fill: theme.palette.primary.main }} />;
@@ -118,10 +121,7 @@ export default function Home() {
           <>
             <Grid container>
               <Grid item xs={12}>
-                <Typography variant='h4' component='h1'>
-                  <b style={{ color: theme.palette.primary.main }}>Welcome,</b>{' '}
-                  {userData?.fullName?.firstName}
-                </Typography>
+                <WelcomeBanner userData={userData} theme={theme} />
               </Grid>
               <Grid item xs={12}>
                 {customerData && (
@@ -138,36 +138,7 @@ export default function Home() {
             </Grid>
             <Grid container spacing={3} sx={{ mt: 5 }}>
               <Grid item xs={12} md={4}>
-                {/* TODO: Make this its own component */}
-                <Paper
-                  variant='outlined'
-                  sx={{
-                    p: 3,
-                    borderTop: `1rem solid ${theme.palette.primary.main}`,
-                  }}
-                >
-                  <Typography
-                    variant='h5'
-                    component='h1'
-                    align='center'
-                    sx={{ fontSize: 20 }}
-                  >
-                    My Tickets
-                  </Typography>
-                  <Grid
-                    container
-                    direction='row'
-                    justifyContent='space-evenly'
-                    alignItems='center'
-                  >
-                    <Grid item sx={{ pt: 2 }}>
-                      0 Open
-                    </Grid>
-                    <Grid item sx={{ pt: 2 }}>
-                      0 Closed
-                    </Grid>
-                  </Grid>
-                </Paper>
+                <TicketCounter theme={theme} />
               </Grid>
               <Grid item xs={12} md={8}>
                 <ServiceTicketTabs />
