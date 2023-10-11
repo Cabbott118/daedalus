@@ -3,7 +3,6 @@ import { useEffect, useState } from 'react';
 // Components
 import Drawer from 'components/layout/Drawer';
 import Logout from 'components/common/Logout';
-// import Notifications from 'pages/notifications/components/Notifications';
 
 import { ReactComponent as DaedalusFlying } from 'assets/images/daedalus.svg';
 
@@ -38,18 +37,14 @@ import {
   ListItemIcon,
   Menu,
   MenuItem,
-  // Popover,
-  // Tab,
-  // Tabs,
   Toolbar,
   Tooltip,
   Typography,
   useMediaQuery,
   useTheme,
 } from '@mui/material';
-// import NotificationsIcon from '@mui/icons-material/Notifications';
+
 import Settings from '@mui/icons-material/Settings';
-// import LogoutIcon from '@mui/icons-material/Logout';
 
 // React Router
 import { Link, Outlet } from 'react-router-dom';
@@ -70,8 +65,7 @@ export default function Navbar() {
   const [unreadNotifications, setUnreadNotifications] = useState(null);
 
   const { data: userData } = useSelector((state) => state.user);
-  const { data: customerData } = useSelector((state) => state.customer);
-  const { data: contractorData } = useSelector((state) => state.contractor);
+  const { data: businessData } = useSelector((state) => state.business);
   const { data: notificationsData } = useSelector(
     (state) => state.notifications
   );
@@ -93,9 +87,7 @@ export default function Navbar() {
             variant: 'text',
           },
           {
-            name: customerData
-              ? customerData?.businessName
-              : contractorData?.businessName,
+            name: businessData?.businessName,
             route: `${routes.BUSINESS_DASHBOARD.replace(':uid', user?.uid)}`,
             variant: 'text',
           },
@@ -179,11 +171,7 @@ export default function Navbar() {
                   <>
                     <Drawer
                       userData={userData}
-                      businessData={
-                        userData.userType === UserType.CUSTOMER
-                          ? customerData
-                          : contractorData
-                      }
+                      businessData={businessData}
                       unreadNotifications={unreadNotifications}
                       sx={{ position: 'relative' }}
                     />
@@ -208,7 +196,7 @@ export default function Navbar() {
                         aria-haspopup='true'
                         aria-expanded={open ? 'true' : undefined}
                       >
-                        <Avatar>{getUserInitials(userData.fullName)}</Avatar>
+                        <Avatar>{getUserInitials(userData?.fullName)}</Avatar>
                         <Badge
                           badgeContent={unreadNotifications}
                           color='error'
@@ -284,16 +272,10 @@ export default function Navbar() {
             component={Link}
             to={`${routes.BUSINESS_DASHBOARD.replace(
               ':uid',
-              userData?.userType === UserType.CUSTOMER
-                ? customerData?.uid
-                : contractorData?.uid
+              businessData?.uid
             )}`}
           >
-            {`${
-              userData?.userType === UserType.CUSTOMER
-                ? customerData?.businessName
-                : contractorData?.businessName
-            }`}
+            {`${businessData?.businessName}`}
           </MenuItem>
         )}
         <Divider />

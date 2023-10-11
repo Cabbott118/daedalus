@@ -55,7 +55,7 @@ const fetchContractor = createAsyncThunk(
   }
 );
 
-// Async thunk to update customer data
+// Async thunk to update contractor data
 // const uid = '123'
 // const updateData = {
 //   something: 'some value'
@@ -98,7 +98,7 @@ const contractorSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      // Create customer record
+      // Create contractor record
       .addCase(createContractor.pending, (state) => {
         return {
           ...state,

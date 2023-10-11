@@ -29,7 +29,8 @@ import {
   updateUser,
   clearUserData,
 } from 'store/slices/userSlice';
-import { createCustomer } from 'store/slices/customerSlice';
+// import { createCustomer } from 'store/slices/customerSlice';
+import { createBusiness } from 'store/slices/businessSlice';
 
 export default function CustomerEnrollment() {
   const pageName = 'Sign up as a Customer';
@@ -65,7 +66,13 @@ export default function CustomerEnrollment() {
             userType: 'customer',
           })
         );
-        dispatch(createCustomer({ businessName, ownerId: action.payload.uid }));
+        dispatch(
+          createBusiness({
+            businessName,
+            businessType: 'customer',
+            contactId: action.payload.uid,
+          })
+        );
       });
     } else {
       setPasswordMissmatch(true);

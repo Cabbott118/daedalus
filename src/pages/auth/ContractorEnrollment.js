@@ -29,7 +29,7 @@ import {
   updateUser,
   clearUserData,
 } from 'store/slices/userSlice';
-import { createContractor } from 'store/slices/contractorSlice';
+import { createBusiness } from 'store/slices/businessSlice';
 
 export default function ContractorEnrollment() {
   const pageName = 'Sign up as a Contractor';
@@ -66,7 +66,11 @@ export default function ContractorEnrollment() {
           })
         );
         dispatch(
-          createContractor({ businessName, ownerId: action.payload.uid })
+          createBusiness({
+            businessName,
+            businessType: 'contractor',
+            contactId: action.payload.uid,
+          })
         );
       });
     } else {

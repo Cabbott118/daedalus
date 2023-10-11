@@ -20,12 +20,11 @@ import { Box, Container, Grid, Typography, useTheme } from '@mui/material';
 // Redux
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchUser } from 'store/slices/userSlice';
-import { fetchContractor } from 'store/slices/contractorSlice';
-import { fetchCustomer } from 'store/slices/customerSlice';
-import {
-  fetchServiceTicketsAssignedTo,
-  fetchServiceTicketsCreatedBy,
-} from 'store/slices/serviceTicketSlice';
+// import {
+//   fetchServiceTicketsAssignedTo,
+//   fetchServiceTicketsCreatedBy,
+// } from 'store/slices/serviceTicketSlice';
+import { fetchCustomer, fetchContractor } from 'store/slices/businessSlice';
 
 export default function Home() {
   document.title = 'Daedalus';
@@ -39,13 +38,11 @@ export default function Home() {
     userProfileLoaded,
     loading: userLoading,
   } = useSelector((state) => state.user);
-  const { data: customerData, loading: customerLoading } = useSelector(
-    (state) => state.customer
-  );
-  const { data: contractorData, loading: contractorLoading } = useSelector(
-    (state) => state.contractor
-  );
+
   const { serviceTickets } = useSelector((state) => state.serviceTicket);
+  const { data: businessData, loading: businessLoading } = useSelector(
+    (state) => state.business
+  );
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
@@ -57,25 +54,23 @@ export default function Home() {
   }, [auth, dispatch, userProfileLoaded]);
 
   useEffect(() => {
-    if (!customerData && !contractorData && userData) {
+    if (!businessData && userData) {
       if (userData.userType === UserType.CUSTOMER) {
         dispatch(fetchCustomer(userData?.uid));
-        dispatch(fetchServiceTicketsCreatedBy(userData?.uid));
       } else if (userData.userType === UserType.CONTRACTOR) {
         dispatch(fetchContractor(userData?.uid));
       }
     }
-    dispatch(fetchServiceTicketsAssignedTo(contractorData?.uid));
-  }, [userData, customerData, contractorData, dispatch]);
+    // dispatch(fetchServiceTicketsAssignedTo(contractorData?.uid));
+  }, [userData, businessData, dispatch]);
 
   const colors = [
     theme.palette.primary.light,
     theme.palette.secondary.main,
     'white',
   ];
-  console.log(serviceTickets);
 
-  if (userLoading || customerLoading || contractorLoading)
+  if (userLoading || businessLoading)
     return <Loader style={{ fill: theme.palette.primary.main }} />;
 
   if (!userData)
@@ -124,14 +119,9 @@ export default function Home() {
                 <WelcomeBanner userData={userData} theme={theme} />
               </Grid>
               <Grid item xs={12}>
-                {customerData && (
+                {businessData && (
                   <Typography variant='subtitle1' component='h1'>
-                    {customerData?.businessName} - Daedalus
-                  </Typography>
-                )}
-                {contractorData && (
-                  <Typography variant='subtitle1' component='h1'>
-                    {contractorData?.businessName} - Daedalus
+                    {businessData?.businessName} - Daedalus
                   </Typography>
                 )}
               </Grid>
