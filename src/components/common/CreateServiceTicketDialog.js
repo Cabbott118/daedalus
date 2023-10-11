@@ -4,19 +4,21 @@ import { useState } from 'react';
 import Alert from 'components/common/Alert';
 
 // Constants
+import services from 'constants/serviceTypes';
+
+// Constants
 import routes from 'constants/routes';
 
 // MUI
 import {
   Box,
   Button,
-  Container,
   Dialog,
   DialogActions,
   DialogContent,
-  DialogContentText,
   DialogTitle,
   Grid,
+  MenuItem,
   TextField,
 } from '@mui/material';
 
@@ -30,7 +32,7 @@ import {
   clearServiceTicketData,
 } from 'store/slices/serviceTicketSlice';
 
-const CreateServiceTicketDialog = ({ userId: uid, customerData }) => {
+const CreateServiceTicketDialog = ({ userId: uid, businessData }) => {
   const [isAlertShowing, setIsAlertShowing] = useState(false);
   const [dialogOpen, setDialogOpen] = useState(false);
 
@@ -50,12 +52,18 @@ const CreateServiceTicketDialog = ({ userId: uid, customerData }) => {
     handleSubmit,
   } = useForm();
 
-  const onSubmit = ({ reasonForServices }) => {
+  const onSubmit = ({
+    titleForServices,
+    typeOfServices,
+    reasonForServices,
+  }) => {
     dispatch(
       createServiceTicket({
         uid,
-        customerName: customerData?.businessName,
-        customerId: customerData?.uid,
+        ownerId: businessData?.uid,
+        ownerName: businessData?.businessName,
+        titleForServices,
+        typeOfServices,
         reasonForServices,
       })
     );
@@ -69,7 +77,7 @@ const CreateServiceTicketDialog = ({ userId: uid, customerData }) => {
         variant='contained'
         color='primary'
         onClick={handleClickOpenDialog}
-        sx={{ textTransform: 'none' }}
+        sx={{ textTransform: 'none', mt: 3 }}
       >
         Create Service Ticket
       </Button>
@@ -79,12 +87,44 @@ const CreateServiceTicketDialog = ({ userId: uid, customerData }) => {
           onSubmit={handleSubmit(onSubmit)}
           sx={{ minWidth: '20rem' }}
         >
-          <DialogTitle>{`Service Ticket for ${customerData?.businessName}`}</DialogTitle>
+          <DialogTitle>{`Service Ticket for ${businessData?.businessName}`}</DialogTitle>
           <DialogContent>
             <Grid container spacing={3} sx={{ mt: 0 }}>
               <Grid item xs={12}>
                 <TextField
                   autoFocus
+                  label='Ticket Title'
+                  fullWidth
+                  {...register('titleForServices', { required: true })}
+                  error={errors.titleForServices?.type === 'required'}
+                  helperText={
+                    errors.titleForServices?.type === 'required' &&
+                    'A title the issue is required'
+                  }
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <TextField
+                  label='Service Type'
+                  select
+                  fullWidth
+                  defaultValue={''}
+                  {...register('typeOfServices', { required: true })}
+                  error={errors.typeOfServices?.type === 'required'}
+                  helperText={
+                    errors.typeOfServices?.type === 'required' &&
+                    'The type of service is required'
+                  }
+                >
+                  {services.map((service) => (
+                    <MenuItem key={service.value} value={service.value}>
+                      {service.name}
+                    </MenuItem>
+                  ))}
+                </TextField>
+              </Grid>
+              <Grid item xs={12}>
+                <TextField
                   label='Describe your issue'
                   multiline
                   rows={4}

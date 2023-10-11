@@ -92,7 +92,7 @@ const fetchCustomer = createAsyncThunk(
   'business/fetchCustomer',
   async (contactId) => {
     try {
-      const response = await get('/customers/get-customer-details', {
+      const response = await get('/businesses/get-customer-details', {
         contactId,
       });
       return response;

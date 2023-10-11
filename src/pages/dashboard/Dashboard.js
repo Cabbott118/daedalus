@@ -6,8 +6,6 @@ import UpdateDialog from 'pages/dashboard/components/UpdateDialog';
 import AccountComponent from 'pages/dashboard/components/account/AccountComponent';
 import ServiceTicketsComponent from 'pages/dashboard/components/serviceTickets/ServiceTicketsComponent';
 import BusinessInformationComponent from 'pages/dashboard/components/businessInformation/BusinessInformationComponent';
-import PaymentDetailsComponent from 'pages/dashboard/components/paymentDetails/PaymentDetailsComponent';
-import SecurityComponent from 'pages/dashboard/components/security/SecurityComponent';
 import AdminComponent from 'pages/dashboard/components/admin/AdminComponent';
 
 // Constants
@@ -42,12 +40,12 @@ export default function Dashboard() {
   const { data: userData, loading: userLoading } = useSelector(
     (state) => state.user
   );
-  const { data: customerData, loading: customerLoading } = useSelector(
-    (state) => state.customer
-  );
-  const { data: contractorData, loading: contractorLoading } = useSelector(
-    (state) => state.contractor
-  );
+  // const { data: customerData, loading: customerLoading } = useSelector(
+  //   (state) => state.customer
+  // );
+  // const { data: contractorData, loading: contractorLoading } = useSelector(
+  //   (state) => state.contractor
+  // );
 
   document.title = userData?.fullName?.firstName
     ? `${userData.fullName.firstName}'s Dashboard`
@@ -121,12 +119,10 @@ export default function Dashboard() {
         <ServiceTicketsComponent
           uid={userData?.uid}
           userData={userData}
-          customerData={customerData}
-          contractorData={contractorData}
+          // customerData={customerData}
+          // contractorData={contractorData}
         />
       );
-    if (activeItem === 'Payment details') return <PaymentDetailsComponent />;
-    if (activeItem === 'Security') return <SecurityComponent />;
     if (activeItem === 'Admin') return <AdminComponent />;
   };
 

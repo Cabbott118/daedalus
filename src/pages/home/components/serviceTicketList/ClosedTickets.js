@@ -1,14 +1,27 @@
 // MUI
 import { Box, Typography, useTheme } from '@mui/material';
 
-const ClosedTickets = (props) => {
-  const { children, value, index, ...other } = props;
+const ClosedTickets = ({
+  serviceTickets,
+  children,
+  value,
+  index,
+  ...other
+}) => {
+  console.log(serviceTickets);
+
+  if (serviceTickets.length === 0)
+    return (
+      <div role='tabpanel' hidden={value !== index} {...other}>
+        <Typography>You don't have any closed tasks</Typography>
+      </div>
+    );
 
   return (
     <div role='tabpanel' hidden={value !== index} {...other}>
       {value === index && (
         <Box sx={{ p: 3 }}>
-          <Typography>{children}</Typography>
+          <Typography>title</Typography>
         </Box>
       )}
     </div>

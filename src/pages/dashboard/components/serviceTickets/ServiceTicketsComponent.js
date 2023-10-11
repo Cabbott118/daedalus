@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 
 // Components
-import CreateServiceTicketDialog from 'pages/customer/components/CreateServiceTicketDialog';
+// import CreateServiceTicketDialog from 'pages/customer/components/CreateServiceTicketDialog';
 
 // Constants
 import UserType from 'constants/userType';
@@ -60,10 +60,10 @@ const ServiceTicketsComponent = ({
 
     return (
       <>
-        <CreateServiceTicketDialog
+        {/* <CreateServiceTicketDialog
           userId={userData?.uid}
           customerData={customerData}
-        />
+        /> */}
         {serviceTickets.length > 0 && (
           <TableContainer component={Paper}>
             <Table>

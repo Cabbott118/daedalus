@@ -4,6 +4,52 @@ const admin = require('firebase-admin');
 const express = require('express');
 const router = express.Router();
 
+router.post('/create-service-ticket', async (req, res) => {
+  try {
+    const {
+      uid,
+      ownerId,
+      ownerName,
+      titleForServices,
+      typeOfServices,
+      reasonForServices,
+    } = req.body;
+    const newTicket = {
+      status: 'new',
+      assigned: false,
+      owner: {
+        name: ownerName,
+        id: ownerId,
+        createdBy: uid,
+      },
+      titleForServices,
+      typeOfServices,
+      reasonForServices,
+      uid: '',
+      createdAt: admin.firestore.FieldValue.serverTimestamp(),
+    };
+
+    const ticketRef = await admin
+      .firestore()
+      .collection('serviceTickets')
+      .add(newTicket);
+
+    const ticketId = ticketRef.id;
+    await ticketRef.update({ uid: ticketId });
+
+    const createdTicketDoc = await ticketRef.get();
+    const createdTicket = createdTicketDoc.data();
+
+    return res.status(201).json({
+      message: 'Service ticket document created successfully',
+      ticket: createdTicket,
+    });
+  } catch (error) {
+    console.error('Error creating service ticket document', error);
+    return res.status(500).json({ message: 'Internal Server Error' });
+  }
+});
+
 router.get('/get-service-ticket-details', async (req, res) => {
   try {
     const uid = req.query.uid;
@@ -42,8 +88,8 @@ router.get('/get-service-tickets-assigned-to', async (req, res) => {
     const uid = req.query.uid;
     const ticketsRef = admin.firestore().collection('serviceTickets');
     const querySnapshot = await ticketsRef
-      .where('contractorId', '==', uid)
-      .orderBy('contractorId', 'desc')
+      .where('serviceProvider.id', '==', uid)
+      .orderBy('createdAt', 'desc')
       .get(); // Initialize the query
 
     if (querySnapshot.empty) {
@@ -66,14 +112,14 @@ router.get('/get-service-tickets-created-by', async (req, res) => {
     const uid = req.query.uid;
     const ticketsRef = admin.firestore().collection('serviceTickets');
     const querySnapshot = await ticketsRef
-      .where('createdBy', '==', uid)
+      .where('owner.id', '==', uid)
       .orderBy('createdAt', 'desc')
       .get(); // Initialize the query
 
     if (querySnapshot.empty) {
-      return res
-        .status(404)
-        .json({ message: 'No service tickets found for the specified owner' });
+      return res.status(404).json({
+        message: 'No service tickets found for the specified business',
+      });
     }
 
     const ticketsData = querySnapshot.docs.map((doc) => doc.data());
@@ -81,43 +127,6 @@ router.get('/get-service-tickets-created-by', async (req, res) => {
     return res.status(200).json(ticketsData);
   } catch (error) {
     console.error('Error retrieving ticket details:', error);
-    return res.status(500).json({ message: 'Internal Server Error' });
-  }
-});
-
-router.post('/create-service-ticket', async (req, res) => {
-  try {
-    const { uid, customerName, customerId, reasonForServices } = req.body;
-    const newTicket = {
-      createdBy: uid,
-      status: 'new',
-      assigned: false,
-      customer: {
-        name: customerName,
-        id: customerId,
-      },
-      reasonForServices,
-      uid: '',
-      createdAt: admin.firestore.FieldValue.serverTimestamp(),
-    };
-
-    const ticketRef = await admin
-      .firestore()
-      .collection('serviceTickets')
-      .add(newTicket);
-
-    const ticketId = ticketRef.id;
-    await ticketRef.update({ uid: ticketId });
-
-    const createdTicketDoc = await ticketRef.get();
-    const createdTicket = createdTicketDoc.data();
-
-    return res.status(201).json({
-      message: 'Service ticket document created successfully',
-      ticket: createdTicket,
-    });
-  } catch (error) {
-    console.error('Error creating service ticket document', error);
     return res.status(500).json({ message: 'Internal Server Error' });
   }
 });

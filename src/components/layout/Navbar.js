@@ -113,21 +113,21 @@ export default function Navbar() {
   }, [auth, unreadNotifications]);
 
   useEffect(() => {
-    if (!userData?.uid) return;
+    if (!businessData?.uid) return;
 
     const q = query(
       collection(db, 'notifications'),
-      where('notificationOwner', '==', userData?.uid),
+      where('notificationOwner', '==', businessData?.uid),
       orderBy('createdAt', 'desc')
     );
 
     const unsubscribe = onSnapshot(q, (snapshot) => {
       const notificationData = snapshot.docs.map((doc) => doc.data());
-      dispatch(fetchNotifications(userData?.uid));
+      dispatch(fetchNotifications(businessData?.uid));
     });
 
     return () => unsubscribe();
-  }, [userData, db]);
+  }, [businessData, db]);
 
   const open = Boolean(anchorEl);
 

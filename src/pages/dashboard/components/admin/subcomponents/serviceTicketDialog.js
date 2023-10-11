@@ -28,7 +28,8 @@ import { useForm } from 'react-hook-form';
 // Redux
 import { useDispatch, useSelector } from 'react-redux';
 import { updateServiceTicket } from 'store/slices/serviceTicketSlice';
-import { fetchContractors } from 'store/slices/contractorSlice';
+// import { fetchContractors } from 'store/slices/contractorSlice';
+import { fetchContractors } from 'store/slices/businessSlice';
 
 const ServiceTicketDialog = ({ open, onClose }) => {
   const dispatch = useDispatch();
@@ -36,8 +37,11 @@ const ServiceTicketDialog = ({ open, onClose }) => {
 
   const { data: serviceTicketData, loading: serviceTicketLoading } =
     useSelector((state) => state.serviceTicket);
-  const { data: contractorData, loading: contractorLoading } = useSelector(
-    (state) => state.contractor
+  // const { data: contractorData, loading: contractorLoading } = useSelector(
+  //   (state) => state.contractor
+  // );
+  const { data: businessData, loading: businessLoading } = useSelector(
+    (state) => state.business
   );
 
   const { register, handleSubmit } = useForm({
@@ -51,14 +55,16 @@ const ServiceTicketDialog = ({ open, onClose }) => {
   }, [dispatch]);
 
   const onSubmit = async (data) => {
-    const selectedContractor = contractorData?.find(
+    const selectedContractor = businessData?.find(
       (contractor) => contractor.uid === data.assignedTo
     );
 
     const uid = serviceTicketData?.uid;
     const updateData = {
-      contractorId: data.assignedTo,
-      contractorName: selectedContractor?.businessName,
+      serviceProvider: {
+        id: data.assignedTo,
+        name: selectedContractor?.businessName,
+      },
       assigned: true,
       status: StatusType.ASSIGNED,
     };
@@ -92,7 +98,7 @@ const ServiceTicketDialog = ({ open, onClose }) => {
                     color: theme.palette.text.primary,
                   }}
                 >
-                  {serviceTicketData?.customer?.name}
+                  {serviceTicketData?.owner?.name}
                 </Typography>
                 <Typography
                   variant='caption'
@@ -101,14 +107,19 @@ const ServiceTicketDialog = ({ open, onClose }) => {
                   {formatCreatedAt(serviceTicketData?.createdAt)}
                 </Typography>
                 <Grid item xs={12} sx={{ my: 2 }}>
-                  <Chip label='HVAC' variant='filled' color='primary' />
+                  <Chip
+                    label={serviceTicketData?.typeOfServices}
+                    variant='filled'
+                    color='primary'
+                  />
                 </Grid>
               </Grid>
               <Grid
                 item
                 xs={12}
                 sx={{
-                  bgcolor: theme.palette.background.default,
+                  // bgcolor: theme.palette.background.default,
+                  bgcolor: theme.additionalPalette.primary,
                   p: 3,
                   borderRadius: 2,
                   mt: 2,
@@ -165,10 +176,10 @@ const ServiceTicketDialog = ({ open, onClose }) => {
                       select
                       fullWidth
                       color='primary'
-                      defaultValue={contractorData?.contractorName || ''}
+                      defaultValue={businessData?.businessName || ''}
                       {...register('assignedTo')}
                     >
-                      {contractorData?.map((contractor, index) => (
+                      {businessData?.map((contractor, index) => (
                         <MenuItem key={index} value={contractor.uid}>
                           {contractor.businessName}
                         </MenuItem>
@@ -187,7 +198,7 @@ const ServiceTicketDialog = ({ open, onClose }) => {
                       variant='body2'
                       sx={{ color: theme.palette.text.primary }}
                     >
-                      {serviceTicketData?.contractorName}
+                      {serviceTicketData?.serviceProvider.name}
                     </Typography>
                     <Typography
                       variant='body1'

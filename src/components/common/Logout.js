@@ -9,6 +9,7 @@ import { useDispatch } from 'react-redux';
 import { clearUserData, logoutUser } from 'store/slices/userSlice';
 import { clearCustomerData } from 'store/slices/customerSlice';
 import { clearContractorData } from 'store/slices/contractorSlice';
+import { clearBusinessData } from 'store/slices/businessSlice';
 import { clearServiceTicketData } from 'store/slices/serviceTicketSlice';
 import { clearNotificationData } from 'store/slices/notificationsSlice';
 
@@ -27,6 +28,7 @@ export default function Logout({ variant }) {
       dispatch(clearUserData()),
       dispatch(clearCustomerData()),
       dispatch(clearContractorData()),
+      dispatch(clearBusinessData()),
       dispatch(clearServiceTicketData()),
       dispatch(clearNotificationData()),
     ]);

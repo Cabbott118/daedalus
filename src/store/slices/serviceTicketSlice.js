@@ -10,12 +10,21 @@ import { createSlice, createAction, createAsyncThunk } from '@reduxjs/toolkit';
 // dispatch(createServiceTicket({ uid, companyName, reasonForServices }));
 const createServiceTicket = createAsyncThunk(
   'serviceTicket/createServiceTicket',
-  async ({ uid, customerName, customerId, reasonForServices }) => {
+  async ({
+    uid,
+    ownerId,
+    ownerName,
+    titleForServices,
+    typeOfServices,
+    reasonForServices,
+  }) => {
     try {
       const response = await post('/service-tickets/create-service-ticket', {
         uid,
-        customerName,
-        customerId,
+        ownerId,
+        ownerName,
+        titleForServices,
+        typeOfServices,
         reasonForServices,
       });
       return response.ticket;

@@ -7,6 +7,7 @@ import EnrollmentBanner from 'pages/home/components/EnrollmentBanner';
 import ServiceTicketTabs from 'pages/home/components/serviceTicketList/ServiceTicketTabs';
 import TicketCounter from 'pages/home/components/TicketCounter';
 import WelcomeBanner from 'pages/home/components/WelcomeBanner';
+import CreateServiceTicketDialog from 'components/common/CreateServiceTicketDialog';
 
 // Constants
 import UserType from 'constants/userType';
@@ -20,10 +21,10 @@ import { Box, Container, Grid, Typography, useTheme } from '@mui/material';
 // Redux
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchUser } from 'store/slices/userSlice';
-// import {
-//   fetchServiceTicketsAssignedTo,
-//   fetchServiceTicketsCreatedBy,
-// } from 'store/slices/serviceTicketSlice';
+import {
+  fetchServiceTicketsAssignedTo,
+  fetchServiceTicketsCreatedBy,
+} from 'store/slices/serviceTicketSlice';
 import { fetchCustomer, fetchContractor } from 'store/slices/businessSlice';
 
 export default function Home() {
@@ -55,14 +56,25 @@ export default function Home() {
 
   useEffect(() => {
     if (!businessData && userData) {
-      if (userData.userType === UserType.CUSTOMER) {
+      if (userData?.userType === UserType.CUSTOMER) {
         dispatch(fetchCustomer(userData?.uid));
-      } else if (userData.userType === UserType.CONTRACTOR) {
+        dispatch(fetchServiceTicketsCreatedBy(businessData?.uid));
+      } else if (userData?.userType === UserType.CONTRACTOR) {
         dispatch(fetchContractor(userData?.uid));
+        dispatch(fetchServiceTicketsAssignedTo(businessData?.uid));
       }
     }
-    // dispatch(fetchServiceTicketsAssignedTo(contractorData?.uid));
   }, [userData, businessData, dispatch]);
+
+  useEffect(() => {
+    if (businessData) {
+      if (userData?.userType === UserType.CUSTOMER) {
+        dispatch(fetchServiceTicketsCreatedBy(businessData?.uid));
+      } else if (userData?.userType === UserType.CONTRACTOR) {
+        dispatch(fetchServiceTicketsAssignedTo(businessData?.uid));
+      }
+    }
+  }, [businessData, userData?.userType]);
 
   const colors = [
     theme.palette.primary.light,
@@ -128,10 +140,16 @@ export default function Home() {
             </Grid>
             <Grid container spacing={3} sx={{ mt: 5 }}>
               <Grid item xs={12} md={4}>
-                <TicketCounter theme={theme} />
+                <TicketCounter serviceTickets={serviceTickets} theme={theme} />
+                {userData?.userType === UserType.CUSTOMER ? (
+                  <CreateServiceTicketDialog
+                    userId={userData?.uid}
+                    businessData={businessData}
+                  />
+                ) : null}
               </Grid>
               <Grid item xs={12} md={8}>
-                <ServiceTicketTabs />
+                <ServiceTicketTabs serviceTickets={serviceTickets} />
               </Grid>
             </Grid>
           </>

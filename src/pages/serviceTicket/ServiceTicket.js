@@ -67,7 +67,7 @@ const ServiceTicket = () => {
             variant='body2'
             sx={{ color: theme.palette.text.primary }}
           >
-            {serviceTicketData?.contractorName}
+            {serviceTicketData?.serviceProvider?.name}
           </Typography>
         </>
       );
@@ -91,7 +91,7 @@ const ServiceTicket = () => {
             variant='body2'
             sx={{ color: theme.palette.text.primary }}
           >
-            {serviceTicketData?.contractorName}
+            {serviceTicketData?.serviceProvider?.name}
           </Typography>
         </>
       );
@@ -115,7 +115,7 @@ const ServiceTicket = () => {
             variant='body2'
             sx={{ color: theme.palette.text.primary }}
           >
-            {serviceTicketData?.contractorName}
+            {serviceTicketData?.serviceProvider?.name}
           </Typography>
         </>
       );
@@ -139,7 +139,7 @@ const ServiceTicket = () => {
             variant='body2'
             sx={{ color: theme.palette.text.primary }}
           >
-            {serviceTicketData?.contractorName}
+            {serviceTicketData?.serviceProvider?.name}
           </Typography>
         </>
       );
@@ -196,7 +196,7 @@ const ServiceTicket = () => {
               color: theme.palette.text.primary,
             }}
           >
-            {serviceTicketData?.customer?.name}
+            {serviceTicketData?.owner?.name}
           </Typography>
           <Typography
             variant='caption'
@@ -206,7 +206,11 @@ const ServiceTicket = () => {
           </Typography>
         </Grid>
         <Grid item xs={2} sx={{ my: 1 }}>
-          <Chip label='HVAC' variant='filled' color='primary' />
+          <Chip
+            label={serviceTicketData?.typeOfServices}
+            variant='filled'
+            color='primary'
+          />
         </Grid>
         <Grid item xs={2} sx={{ my: 1 }}>
           <Chip

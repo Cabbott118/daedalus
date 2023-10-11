@@ -4,14 +4,14 @@ import { useEffect, useState } from 'react';
 import routes from 'constants/routes';
 
 // Firebase
-import { getAuth } from 'firebase/auth';
+// import { getAuth } from 'firebase/auth';
 import {
   getFirestore,
-  collection,
-  query,
-  where,
-  orderBy,
-  onSnapshot,
+  // collection,
+  // query,
+  // where,
+  // orderBy,
+  // onSnapshot,
 } from 'firebase/firestore'; // Add necessary imports
 
 // Helpers
@@ -19,16 +19,16 @@ import formatCreatedAt from 'services/helpers/dateFormatter';
 
 // MUI
 import {
-  Button,
+  // Button,
   Container,
   Divider,
-  Grid,
+  // Grid,
   List,
   ListItem,
   ListItemText,
   ListItemButton,
   ListItemIcon,
-  Menu,
+  // Menu,
   Typography,
   useTheme,
 } from '@mui/material';
@@ -40,34 +40,34 @@ import { Link } from 'react-router-dom';
 // Redux
 import { useDispatch, useSelector } from 'react-redux';
 import {
-  fetchNotifications,
+  // fetchNotifications,
   updateNotification,
 } from 'store/slices/notificationsSlice';
 
 const Notifications = ({ userId }) => {
-  const db = getFirestore();
+  // const db = getFirestore();
   const dispatch = useDispatch();
   const theme = useTheme();
 
   const { data: notificationsData, loading: notificationsLoading } =
     useSelector((state) => state.notifications);
 
-  useEffect(() => {
-    if (!userId) return;
+  // useEffect(() => {
+  //   if (!userId) return;
 
-    const q = query(
-      collection(db, 'notifications'),
-      where('notificationOwner', '==', userId),
-      orderBy('createdAt', 'desc')
-    );
+  //   const q = query(
+  //     collection(db, 'notifications'),
+  //     where('notificationOwner', '==', userId),
+  //     orderBy('createdAt', 'desc')
+  //   );
 
-    const unsubscribe = onSnapshot(q, (snapshot) => {
-      const notificationData = snapshot.docs.map((doc) => doc.data());
-      dispatch(fetchNotifications(userId));
-    });
+  //   const unsubscribe = onSnapshot(q, (snapshot) => {
+  //     const notificationData = snapshot.docs.map((doc) => doc.data());
+  //     dispatch(fetchNotifications(userId));
+  //   });
 
-    return () => unsubscribe();
-  }, [userId, db]);
+  //   return () => unsubscribe();
+  // }, [userId, db]);
 
   const handleMarkAsRead = (uid) => {
     const updateData = {

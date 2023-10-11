@@ -6,10 +6,10 @@ const router = express.Router();
 
 router.get('/get-notifications', async (req, res) => {
   try {
-    const userId = req.query.userId;
+    const ownerId = req.query.ownerId;
     const notificationsRef = admin.firestore().collection('notifications');
     const querySnapshot = await notificationsRef
-      .where('notificationOwner', '==', userId)
+      .where('notificationOwner', '==', ownerId)
       .orderBy('createdAt', 'desc') // Add orderBy clause
       .get();
 
@@ -60,13 +60,14 @@ const createNotificationOnTicketCreation = functions.firestore
       const ticketId = context.params.ticketId;
 
       // Create a new notification document
-      console.log(snapshot.data());
       const notificationData = {
         ticketId,
         notificationType: 'service ticket',
         hasBeenRead: false,
-        notificationOwner: snapshot.data().createdBy,
-        message: 'A new service ticket has been created',
+        notificationOwner: snapshot.data().owner.id,
+        message: `A new service ticket has been created - ${
+          snapshot.data().titleForServices
+        }`,
         createdAt: admin.firestore.FieldValue.serverTimestamp(),
       };
 
@@ -79,8 +80,6 @@ const createNotificationOnTicketCreation = functions.firestore
 
       // Update the notification document with the uid field
       await notificationRef.update({ uid });
-
-      console.log('New notification ID:', uid);
     } catch (error) {
       console.error('Error creating notification:', error);
     }
@@ -93,17 +92,17 @@ const createNotificationOnTicketAssignment = functions.firestore
     const previousValue = change.before.data();
     const ticketId = context.params.ticketId;
 
-    // Check if the contractorId field was updated and if it was assigned for the first time
-    if (newValue.contractorId && !previousValue.contractorId) {
+    // Check if the serviceProvider.id field was updated and if it was assigned for the first time
+    if (newValue.assigned === true && previousValue.assigned === false) {
       try {
-        const contractorsRef = admin.firestore().collection('contractors');
+        const contractorsRef = admin.firestore().collection('businesses');
         const contractorSnapshot = await contractorsRef
-          .doc(newValue.contractorId)
+          .doc(newValue.serviceProvider.id)
           .get();
 
         if (contractorSnapshot.exists) {
           const contractorData = contractorSnapshot.data();
-          const ownerId = contractorData.ownerId;
+          const ownerId = contractorData.uid;
 
           // Create a new notification document in the notifications collection
           const notificationRef = admin
@@ -120,14 +119,12 @@ const createNotificationOnTicketAssignment = functions.firestore
             notificationType: 'service ticket',
             hasBeenRead: false,
             notificationOwner: ownerId,
-            message: 'You have been assigned a ticket',
+            message: `You have been assigned a ticket - ${newValue.titleForServices}`,
             createdAt: admin.firestore.FieldValue.serverTimestamp(),
           };
 
           // Add or update the notification document
           await notificationRef.set(notificationData);
-
-          console.log('Notification created:', notificationRef.id);
         } else {
           console.error('Contractor document not found');
         }
@@ -154,22 +151,19 @@ const createNotificationOnStatusChange = functions.firestore
           .doc(); // Use uid as the document ID
 
         const uid = notificationRef.id;
-
         // Set the notification properties
         const notificationData = {
           uid, // Add the uid field
           ticketId,
           notificationType: 'service ticket',
           hasBeenRead: false,
-          notificationOwner: newValue.createdBy, // Access createdBy from the newValue object
-          message: 'Your ticket has been assigned',
+          notificationOwner: newValue.owner.id, // Access id from the newValue object
+          message: `Your ticket has been assigned - ${newValue.titleForServices}`,
           createdAt: admin.firestore.FieldValue.serverTimestamp(),
         };
 
         // Add or update the notification document
         await notificationRef.set(notificationData);
-
-        console.log('Notification created:', notificationRef.id);
       } catch (error) {
         console.error('Error creating notification:', error);
       }
@@ -192,15 +186,13 @@ const createNotificationOnStatusChange = functions.firestore
           ticketId,
           notificationType: 'service ticket',
           hasBeenRead: false,
-          notificationOwner: newValue.createdBy, // Access createdBy from the newValue object
-          message: 'Your ticket has been accepted',
+          notificationOwner: newValue.owner.id, // Access id from the newValue object
+          message: `Your ticket has been accepted - ${newValue.titleForServices}`,
           createdAt: admin.firestore.FieldValue.serverTimestamp(),
         };
 
         // Add or update the notification document
         await notificationRef.set(notificationData);
-
-        console.log('Notification created:', notificationRef.id);
       } catch (error) {
         console.error('Error creating notification:', error);
       }
@@ -226,15 +218,13 @@ const createNotificationOnStatusChange = functions.firestore
           ticketId,
           notificationType: 'service ticket',
           hasBeenRead: false,
-          notificationOwner: newValue.createdBy, // Access createdBy from the newValue object
-          message: 'Your ticket is now in progress',
+          notificationOwner: newValue.owner.id, // Access id from the newValue object
+          message: `Your ticket is now in progress - ${newValue.titleForServices}`,
           createdAt: admin.firestore.FieldValue.serverTimestamp(),
         };
 
         // Add or update the notification document
         await notificationRef.set(notificationData);
-
-        console.log('Notification created:', notificationRef.id);
       } catch (error) {
         console.error('Error creating notification:', error);
       }
@@ -260,15 +250,13 @@ const createNotificationOnStatusChange = functions.firestore
           ticketId,
           notificationType: 'service ticket',
           hasBeenRead: false,
-          notificationOwner: newValue.createdBy, // Access createdBy from the newValue object
-          message: 'Your ticket has been completed',
+          notificationOwner: newValue.owner.id, // Access id from the newValue object
+          message: `Your ticket has been completed - ${newValue.titleForServices}`,
           createdAt: admin.firestore.FieldValue.serverTimestamp(),
         };
 
         // Add or update the notification document
         await notificationRef.set(notificationData);
-
-        console.log('Notification created:', notificationRef.id);
       } catch (error) {
         console.error('Error creating notification:', error);
       }

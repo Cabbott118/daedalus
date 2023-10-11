@@ -3,7 +3,7 @@ const StatusType = {
   ASSIGNED: 'assigned',
   ACCEPTED: 'accepted',
   IN_PROGRESS: 'in progress',
-  COMPETE: 'complete',
+  COMPLETE: 'complete',
 };
 
 export default StatusType;
