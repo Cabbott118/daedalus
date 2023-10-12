@@ -25,7 +25,6 @@ const OpenTickets = ({ serviceTickets, value, index, ...other }) => {
   const [selectedSort, setSelectedSort] = useState('option1');
   const [sortedServiceTickets, setSortedServiceTickets] =
     useState(serviceTickets);
-  console.log(sortedServiceTickets);
   const [openModal, setOpenModal] = useState(false);
   const [selectedServiceTicket, setSelectedServiceTicket] = useState(null);
 
@@ -48,14 +47,13 @@ const OpenTickets = ({ serviceTickets, value, index, ...other }) => {
         console.log(b.createdAt - a.createdAt);
         return b.createdAt - a.createdAt; // Date: Latest First
       }
-      // else if (selectedSort === 'option6') {
-      //   console.log(a.createdAt - b.createdAt);
-      //   return a.createdAt - b.createdAt; // Date: Earliest First
-      // }
       return 0;
     };
 
     const sortedServiceTickets = [...serviceTickets].sort(customSort);
+    if (selectedSort === 'option6') {
+      sortedServiceTickets.reverse(); // Date: Earliest First
+    }
     setSortedServiceTickets(sortedServiceTickets);
   }, [selectedSort, serviceTickets]);
 
@@ -91,7 +89,7 @@ const OpenTickets = ({ serviceTickets, value, index, ...other }) => {
                 <MenuItem value='option3'>Service Type: A - Z</MenuItem>
                 <MenuItem value='option4'>Service Type: Z - A</MenuItem>
                 <MenuItem value='option5'>Date: Latest First</MenuItem>
-                {/* <MenuItem value='option6'>Date: Earliest First</MenuItem> */}
+                <MenuItem value='option6'>Date: Earliest First</MenuItem>
               </TextField>
             </Grid>
           </Grid>
