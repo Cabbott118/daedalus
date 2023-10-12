@@ -19,7 +19,7 @@ import {
 const AdminComponent = () => {
   const dispatch = useDispatch();
   const [selectedRow, setSelectedRow] = useState(null);
-  const [open, setOpen] = useState(false);
+  const [openModal, setOpenModal] = useState(false);
 
   //   const { data: customerData, loading: customerLoading } = useSelector(
   //     (state) => state.customer
@@ -32,11 +32,11 @@ const AdminComponent = () => {
   const handleRowClick = (params) => {
     setSelectedRow(params.row);
     dispatch(fetchServiceTicket(params.row.uid));
-    setOpen(true);
+    setOpenModal(true);
   };
 
   const handleDialogClose = () => {
-    setOpen(false);
+    setOpenModal(false);
     dispatch(fetchServiceTickets());
   };
 
@@ -107,7 +107,7 @@ const AdminComponent = () => {
         // checkboxSelection
         onRowClick={handleRowClick}
       />
-      <ServiceTicketDialog open={open} onClose={handleDialogClose} />
+      <ServiceTicketDialog open={openModal} onClose={handleDialogClose} />
     </div>
   );
 };

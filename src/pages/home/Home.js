@@ -96,7 +96,7 @@ export default function Home() {
     <>
       <Box
         sx={{
-          height: 80,
+          height: 100,
           bgcolor: theme.palette.primary.dark,
           position: 'relative',
           overflow: 'hidden',
