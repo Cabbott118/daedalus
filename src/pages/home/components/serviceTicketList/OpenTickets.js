@@ -25,6 +25,7 @@ const OpenTickets = ({ serviceTickets, value, index, ...other }) => {
   const [selectedSort, setSelectedSort] = useState('option1');
   const [sortedServiceTickets, setSortedServiceTickets] =
     useState(serviceTickets);
+  console.log(sortedServiceTickets);
   const [openModal, setOpenModal] = useState(false);
   const [selectedServiceTicket, setSelectedServiceTicket] = useState(null);
 
@@ -36,29 +37,31 @@ const OpenTickets = ({ serviceTickets, value, index, ...other }) => {
     // Define a sorting function based on the selectedSort value
     const customSort = (a, b) => {
       if (selectedSort === 'option1') {
-        // Sort by status
         return a.status.localeCompare(b.status);
       } else if (selectedSort === 'option2') {
-        // Sort by typeOfServices
-        return a.typeOfServices.localeCompare(b.typeOfServices);
+        return b.status.localeCompare(a.status);
       } else if (selectedSort === 'option3') {
-        // Sort by createdAt (assuming createdAt is a timestamp)
-        return b.createdAt - a.createdAt;
+        return a.typeOfServices.localeCompare(b.typeOfServices);
+      } else if (selectedSort === 'option4') {
+        return b.typeOfServices.localeCompare(a.typeOfServices);
+      } else if (selectedSort === 'option5') {
+        console.log(b.createdAt - a.createdAt);
+        return b.createdAt - a.createdAt; // Date: Latest First
       }
+      // else if (selectedSort === 'option6') {
+      //   console.log(a.createdAt - b.createdAt);
+      //   return a.createdAt - b.createdAt; // Date: Earliest First
+      // }
       return 0;
     };
 
-    // Sort the serviceTickets array based on the selectedSort
     const sortedServiceTickets = [...serviceTickets].sort(customSort);
     setSortedServiceTickets(sortedServiceTickets);
-    // Update openTickets and closedTickets accordingly
-    // Replace openTickets and closedTickets with the sortedServiceTickets
   }, [selectedSort, serviceTickets]);
 
   const handleOpenModal = (serviceTicket) => {
     setSelectedServiceTicket(serviceTicket);
     setOpenModal(true);
-    console.log(selectedServiceTicket);
   };
 
   const handleDialogClose = () => {
@@ -83,9 +86,12 @@ const OpenTickets = ({ serviceTickets, value, index, ...other }) => {
                 value={selectedSort}
                 onChange={handleSortChange}
               >
-                <MenuItem value='option1'>Status</MenuItem>
-                <MenuItem value='option2'>Service Type</MenuItem>
-                <MenuItem value='option3'>Date</MenuItem>
+                <MenuItem value='option1'>Status: A - Z</MenuItem>
+                <MenuItem value='option2'>Status: Z - A</MenuItem>
+                <MenuItem value='option3'>Service Type: A - Z</MenuItem>
+                <MenuItem value='option4'>Service Type: Z - A</MenuItem>
+                <MenuItem value='option5'>Date: Latest First</MenuItem>
+                {/* <MenuItem value='option6'>Date: Earliest First</MenuItem> */}
               </TextField>
             </Grid>
           </Grid>
