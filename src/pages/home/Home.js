@@ -67,14 +67,14 @@ export default function Home() {
   }, [userData, businessData, dispatch]);
 
   useEffect(() => {
-    if (businessData) {
+    if (businessData && userData) {
       if (userData?.userType === UserType.CUSTOMER) {
         dispatch(fetchServiceTicketsCreatedBy(businessData?.uid));
       } else if (userData?.userType === UserType.CONTRACTOR) {
         dispatch(fetchServiceTicketsAssignedTo(businessData?.uid));
       }
     }
-  }, [businessData, userData?.userType]);
+  }, [businessData, userData]);
 
   const colors = [
     theme.palette.primary.light,

@@ -8,8 +8,6 @@ const ClosedTickets = ({
   index,
   ...other
 }) => {
-  console.log(serviceTickets);
-
   if (serviceTickets.length === 0)
     return (
       <div role='tabpanel' hidden={value !== index} {...other}>
