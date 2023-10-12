@@ -13,9 +13,6 @@ import formatCreatedAt from 'services/helpers/dateFormatter';
 import { Box, Chip, Grid, Paper, Typography } from '@mui/material';
 import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
 
-// React Router
-import { Link } from 'react-router-dom';
-
 const OpenTickets = ({ serviceTickets, value, index, ...other }) => {
   const [openModal, setOpenModal] = useState(false);
   const [selectedServiceTicket, setSelectedServiceTicket] = useState(null);

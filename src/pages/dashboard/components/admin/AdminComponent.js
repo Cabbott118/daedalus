@@ -11,6 +11,7 @@ import { DataGrid } from '@mui/x-data-grid';
 
 // Redux
 import { useDispatch, useSelector } from 'react-redux';
+import { fetchContractors } from 'store/slices/businessSlice';
 import {
   fetchServiceTicket,
   fetchServiceTickets,
@@ -21,9 +22,9 @@ const AdminComponent = () => {
   const [selectedRow, setSelectedRow] = useState(null);
   const [openModal, setOpenModal] = useState(false);
 
-  //   const { data: customerData, loading: customerLoading } = useSelector(
-  //     (state) => state.customer
-  //   );
+  const { data: businessData, loading: businessLoading } = useSelector(
+    (state) => state.business
+  );
 
   const { serviceTickets, loading: serviceTicketLoading } = useSelector(
     (state) => state.serviceTicket
@@ -42,6 +43,7 @@ const AdminComponent = () => {
 
   useEffect(() => {
     if (serviceTickets.length === 0) {
+      dispatch(fetchContractors());
       dispatch(fetchServiceTickets());
     }
   }, [serviceTickets, dispatch]);
@@ -107,7 +109,11 @@ const AdminComponent = () => {
         // checkboxSelection
         onRowClick={handleRowClick}
       />
-      <ServiceTicketDialog open={openModal} onClose={handleDialogClose} />
+      <ServiceTicketDialog
+        businessData={businessData}
+        open={openModal}
+        onClose={handleDialogClose}
+      />
     </div>
   );
 };

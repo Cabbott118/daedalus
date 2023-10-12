@@ -28,31 +28,19 @@ import { useForm } from 'react-hook-form';
 // Redux
 import { useDispatch, useSelector } from 'react-redux';
 import { updateServiceTicket } from 'store/slices/serviceTicketSlice';
-// import { fetchContractors } from 'store/slices/contractorSlice';
-import { fetchContractors } from 'store/slices/businessSlice';
 
-const ServiceTicketDialog = ({ open, onClose }) => {
+const ServiceTicketDialog = ({ businessData, open, onClose }) => {
   const dispatch = useDispatch();
   const theme = useTheme();
 
   const { data: serviceTicketData, loading: serviceTicketLoading } =
     useSelector((state) => state.serviceTicket);
-  // const { data: contractorData, loading: contractorLoading } = useSelector(
-  //   (state) => state.contractor
-  // );
-  const { data: businessData, loading: businessLoading } = useSelector(
-    (state) => state.business
-  );
 
   const { register, handleSubmit } = useForm({
     defaultValues: {
       assignedTo: serviceTicketData?.contractorName,
     },
   });
-
-  useEffect(() => {
-    dispatch(fetchContractors());
-  }, [dispatch]);
 
   const onSubmit = async (data) => {
     const selectedContractor = businessData?.find(
@@ -118,7 +106,6 @@ const ServiceTicketDialog = ({ open, onClose }) => {
                 item
                 xs={12}
                 sx={{
-                  // bgcolor: theme.palette.background.default,
                   bgcolor: theme.additionalPalette.primary,
                   p: 3,
                   borderRadius: 2,

@@ -209,14 +209,14 @@ const ServiceTicket = () => {
           <Chip
             label={serviceTicketData?.typeOfServices}
             variant='filled'
-            color='primary'
+            color='secondary'
           />
         </Grid>
         <Grid item xs={2} sx={{ my: 1 }}>
           <Chip
             label={serviceTicketData?.status}
             variant='filled'
-            color='primary'
+            color='secondary'
             sx={{ textTransform: 'uppercase' }}
           />
         </Grid>
