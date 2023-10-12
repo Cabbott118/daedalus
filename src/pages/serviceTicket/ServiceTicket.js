@@ -1,5 +1,8 @@
 import { useEffect } from 'react';
 
+// Components
+import TicketStatus from 'pages/serviceTicket/components/TicketStatus';
+
 // Constants
 import StatusType from 'constants/statusType';
 
@@ -17,9 +20,11 @@ import {
   Container,
   Grid,
   TextField,
+  Tooltip,
   Typography,
   useTheme,
 } from '@mui/material';
+import InfoIcon from '@mui/icons-material/Info';
 
 // React Router
 import { useParams } from 'react-router-dom';
@@ -45,106 +50,6 @@ const ServiceTicket = () => {
   useEffect(() => {
     dispatch(fetchServiceTicket(uid));
   }, [uid]);
-
-  const renderAssignmentStatus = () => {
-    if (serviceTicketData?.status === StatusType.NEW) {
-      return (
-        <Typography variant='body1' sx={{ color: theme.palette.text.primary }}>
-          This ticket will be assigned shortly
-        </Typography>
-      );
-    }
-    if (serviceTicketData?.status === StatusType.ASSIGNED) {
-      return (
-        <>
-          <Typography
-            variant='body1'
-            sx={{ color: theme.palette.text.primary }}
-          >
-            This ticket has been assigned to:
-          </Typography>
-          <Typography
-            variant='body2'
-            sx={{ color: theme.palette.text.primary }}
-          >
-            {serviceTicketData?.serviceProvider?.name}
-          </Typography>
-        </>
-      );
-    }
-    if (serviceTicketData?.status === StatusType.ACCEPTED) {
-      return (
-        <>
-          <Typography
-            variant='body1'
-            sx={{ color: theme.palette.text.primary }}
-          >
-            This ticket has been accepted
-          </Typography>
-          <Typography
-            variant='body1'
-            sx={{ color: theme.palette.text.primary }}
-          >
-            Services to be rendered by:
-          </Typography>
-          <Typography
-            variant='body2'
-            sx={{ color: theme.palette.text.primary }}
-          >
-            {serviceTicketData?.serviceProvider?.name}
-          </Typography>
-        </>
-      );
-    }
-    if (serviceTicketData?.status === StatusType.IN_PROGRESS) {
-      return (
-        <>
-          <Typography
-            variant='body1'
-            sx={{ color: theme.palette.text.primary }}
-          >
-            This ticket is in progress
-          </Typography>
-          <Typography
-            variant='body1'
-            sx={{ color: theme.palette.text.primary }}
-          >
-            Services being rendered by:
-          </Typography>
-          <Typography
-            variant='body2'
-            sx={{ color: theme.palette.text.primary }}
-          >
-            {serviceTicketData?.serviceProvider?.name}
-          </Typography>
-        </>
-      );
-    }
-    if (serviceTicketData?.status === StatusType.COMPETE) {
-      return (
-        <>
-          <Typography
-            variant='body1'
-            sx={{ color: theme.palette.text.primary }}
-          >
-            This ticket has been completed
-          </Typography>
-          <Typography
-            variant='body1'
-            sx={{ color: theme.palette.text.primary }}
-          >
-            Services rendered by:
-          </Typography>
-          <Typography
-            variant='body2'
-            sx={{ color: theme.palette.text.primary }}
-          >
-            {serviceTicketData?.serviceProvider?.name}
-          </Typography>
-        </>
-      );
-    }
-  };
 
   const acceptServiceTicket = async () => {
     const updateData = {
@@ -186,7 +91,7 @@ const ServiceTicket = () => {
         Service Request
       </Typography>
       <Grid container>
-        <Grid item xs={8}>
+        <Grid item xs={8} md={12}>
           <Typography
             variant='h6'
             sx={{
@@ -205,23 +110,25 @@ const ServiceTicket = () => {
             {formatCreatedAt(serviceTicketData?.createdAt)}
           </Typography>
         </Grid>
-        <Grid item xs={2} sx={{ my: 1 }}>
+        <Grid item xs={2} md={12}>
           <Chip
             label={serviceTicketData?.typeOfServices}
             variant='filled'
             color='secondary'
+            size='small'
           />
         </Grid>
-        <Grid item xs={2} sx={{ my: 1 }}>
+        <Grid item xs={2} md={12}>
           <Chip
             label={serviceTicketData?.status}
             variant='filled'
             color='secondary'
-            sx={{ textTransform: 'uppercase' }}
+            size='small'
+            sx={{ textTransform: 'capitalize' }}
           />
         </Grid>
         <Grid item xs={12} sx={{ mt: 2 }}>
-          {renderAssignmentStatus()}
+          <TicketStatus serviceTicketData={serviceTicketData} theme={theme} />
         </Grid>
         <Grid
           item
@@ -257,12 +164,27 @@ const ServiceTicket = () => {
           >
             1234 Tester's Lane, Polk City, FL 33868
           </Typography>
+
           <Typography
             variant='body1'
             sx={{ color: theme.palette.text.primary }}
           >
-            Not to exceed (NTE):
+            Not to exceed (NTE){' '}
+            <Tooltip
+              title='This can be edited from your profile.'
+              placement='top'
+            >
+              <InfoIcon
+                color='secondary'
+                sx={{
+                  bgcolor: theme.palette.secondary.contrastText,
+                  fontSize: 12,
+                  borderRadius: '50%',
+                }}
+              />
+            </Tooltip>
           </Typography>
+
           <Typography
             variant='body2'
             sx={{ color: theme.palette.text.primary }}

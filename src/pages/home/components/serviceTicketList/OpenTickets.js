@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 // Components
 import ServiceTicketModal from 'pages/home/components/ServiceTicketModal';
@@ -10,12 +10,50 @@ import routes from 'constants/routes';
 import formatCreatedAt from 'services/helpers/dateFormatter';
 
 // MUI
-import { Box, Chip, Grid, Paper, Typography } from '@mui/material';
+import {
+  Box,
+  Chip,
+  Grid,
+  MenuItem,
+  Paper,
+  TextField,
+  Typography,
+} from '@mui/material';
 import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
 
 const OpenTickets = ({ serviceTickets, value, index, ...other }) => {
+  const [selectedSort, setSelectedSort] = useState('option1');
+  const [sortedServiceTickets, setSortedServiceTickets] =
+    useState(serviceTickets);
   const [openModal, setOpenModal] = useState(false);
   const [selectedServiceTicket, setSelectedServiceTicket] = useState(null);
+
+  const handleSortChange = (e) => {
+    setSelectedSort(e.target.value);
+  };
+
+  useEffect(() => {
+    // Define a sorting function based on the selectedSort value
+    const customSort = (a, b) => {
+      if (selectedSort === 'option1') {
+        // Sort by status
+        return a.status.localeCompare(b.status);
+      } else if (selectedSort === 'option2') {
+        // Sort by typeOfServices
+        return a.typeOfServices.localeCompare(b.typeOfServices);
+      } else if (selectedSort === 'option3') {
+        // Sort by createdAt (assuming createdAt is a timestamp)
+        return b.createdAt - a.createdAt;
+      }
+      return 0;
+    };
+
+    // Sort the serviceTickets array based on the selectedSort
+    const sortedServiceTickets = [...serviceTickets].sort(customSort);
+    setSortedServiceTickets(sortedServiceTickets);
+    // Update openTickets and closedTickets accordingly
+    // Replace openTickets and closedTickets with the sortedServiceTickets
+  }, [selectedSort, serviceTickets]);
 
   const handleOpenModal = (serviceTicket) => {
     setSelectedServiceTicket(serviceTicket);
@@ -35,10 +73,24 @@ const OpenTickets = ({ serviceTickets, value, index, ...other }) => {
     <div role='tabpanel' hidden={value !== index} {...other}>
       {value === index && (
         <div>
-          {serviceTickets.map((serviceTicket, index) => (
+          <Grid container>
+            <Grid item xs={12} md={6}>
+              <TextField
+                label='Sort by'
+                fullWidth
+                select
+                color='primary'
+                value={selectedSort}
+                onChange={handleSortChange}
+              >
+                <MenuItem value='option1'>Status</MenuItem>
+                <MenuItem value='option2'>Service Type</MenuItem>
+                <MenuItem value='option3'>Date</MenuItem>
+              </TextField>
+            </Grid>
+          </Grid>
+          {sortedServiceTickets.map((serviceTicket, index) => (
             <Box
-              // component={Link}
-              // to={`${routes.SERVICE_TICKET}/${serviceTicket.uid}`}
               key={index}
               onClick={() => handleOpenModal(serviceTicket)}
               sx={{ textDecoration: 'none' }}
