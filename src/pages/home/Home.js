@@ -40,7 +40,9 @@ export default function Home() {
     loading: userLoading,
   } = useSelector((state) => state.user);
 
-  const { serviceTickets } = useSelector((state) => state.serviceTicket);
+  const { serviceTickets, loading: serviceTicketsLoading } = useSelector(
+    (state) => state.serviceTicket
+  );
   const { data: businessData, loading: businessLoading } = useSelector(
     (state) => state.business
   );
@@ -58,23 +60,20 @@ export default function Home() {
     if (!businessData && userData) {
       if (userData?.userType === UserType.CUSTOMER) {
         dispatch(fetchCustomer(userData?.uid));
-        dispatch(fetchServiceTicketsCreatedBy(businessData?.uid));
       } else if (userData?.userType === UserType.CONTRACTOR) {
         dispatch(fetchContractor(userData?.uid));
-        dispatch(fetchServiceTicketsAssignedTo(businessData?.uid));
       }
     }
-  }, [userData, businessData, dispatch]);
 
-  useEffect(() => {
     if (businessData && userData) {
       if (userData?.userType === UserType.CUSTOMER) {
         dispatch(fetchServiceTicketsCreatedBy(businessData?.uid));
       } else if (userData?.userType === UserType.CONTRACTOR) {
+        console.log('else if');
         dispatch(fetchServiceTicketsAssignedTo(businessData?.uid));
       }
     }
-  }, [businessData, userData]);
+  }, [userData, businessData, dispatch]);
 
   const colors = [
     theme.palette.primary.light,
@@ -140,7 +139,11 @@ export default function Home() {
             </Grid>
             <Grid container spacing={3} sx={{ mt: 5 }}>
               <Grid item xs={12} md={4}>
-                <TicketCounter serviceTickets={serviceTickets} theme={theme} />
+                <TicketCounter
+                  serviceTickets={serviceTickets}
+                  serviceTicketsLoading={serviceTicketsLoading}
+                  theme={theme}
+                />
                 {userData?.userType === UserType.CUSTOMER ? (
                   <CreateServiceTicketDialog
                     userId={userData?.uid}
@@ -149,7 +152,11 @@ export default function Home() {
                 ) : null}
               </Grid>
               <Grid item xs={12} md={8}>
-                <ServiceTicketTabs serviceTickets={serviceTickets} />
+                <ServiceTicketTabs
+                  serviceTickets={serviceTickets}
+                  serviceTicketsLoading={serviceTicketsLoading}
+                  theme={theme}
+                />
               </Grid>
             </Grid>
           </>

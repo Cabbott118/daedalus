@@ -4,9 +4,9 @@ import { useEffect, useState } from 'react';
 import StatusType from 'constants/statusType';
 
 // MUI
-import { Grid, Paper, Typography } from '@mui/material';
+import { Grid, Paper, Skeleton, Typography } from '@mui/material';
 
-const TicketCounter = ({ serviceTickets, theme }) => {
+const TicketCounter = ({ serviceTickets, serviceTicketsLoading, theme }) => {
   let [openTaskCount, setOpenTaskCount] = useState([]);
   let [closedTaskCount, setClosedTaskCount] = useState([]);
 
@@ -21,6 +21,9 @@ const TicketCounter = ({ serviceTickets, theme }) => {
     setOpenTaskCount(sortedOpenTickets);
     setClosedTaskCount(sortedClosedTickets);
   }, [serviceTickets]);
+
+  if (serviceTicketsLoading)
+    return <Skeleton variant='rounded' width={'100%'} height={129} />;
 
   return (
     <Paper

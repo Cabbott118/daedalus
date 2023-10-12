@@ -8,9 +8,13 @@ import ClosedTickets from 'pages/home/components/serviceTicketList/ClosedTickets
 import StatusType from 'constants/statusType';
 
 // MUI
-import { Box, Tab, Tabs } from '@mui/material';
+import { Box, Tab, Skeleton, Tabs } from '@mui/material';
 
-const ServiceTicketTabs = ({ serviceTickets }) => {
+const ServiceTicketTabs = ({
+  serviceTickets,
+  serviceTicketsLoading,
+  theme,
+}) => {
   const [selectedTab, setSelectedTab] = useState(0);
   const [openTickets, setOpenTickets] = useState([]);
   const [closedTickets, setClosedTickets] = useState([]);
@@ -42,13 +46,35 @@ const ServiceTicketTabs = ({ serviceTickets }) => {
           />
         </Tabs>
       </Box>
-      {/* TODO: Create Ticket Tiles to pass in as children */}
-      <OpenTickets serviceTickets={openTickets} value={selectedTab} index={0} />
-      <ClosedTickets
-        serviceTickets={closedTickets}
-        value={selectedTab}
-        index={1}
-      />
+
+      {serviceTicketsLoading ? (
+        <>
+          {Array(3)
+            .fill(1)
+            .map((card, index) => (
+              <Skeleton
+                key={index}
+                variant='rounded'
+                width={'100%'}
+                height={110}
+                sx={{ my: 2 }}
+              />
+            ))}
+        </>
+      ) : (
+        <>
+          <OpenTickets
+            serviceTickets={openTickets}
+            value={selectedTab}
+            index={0}
+          />
+          <ClosedTickets
+            serviceTickets={closedTickets}
+            value={selectedTab}
+            index={1}
+          />
+        </>
+      )}
     </Box>
   );
 };
