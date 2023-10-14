@@ -9,16 +9,20 @@ const app = express();
 app.use(cors({ origin: true }));
 
 // Import route modules
-const userRoutes = require('./routes/userRoutes');
-const customerRoutes = require('./routes/customerRoutes');
-const contractorRoutes = require('./routes/contractorRoutes');
+const userRoutes = require('./routes/users/userRoutes');
+const administratorRoutes = require('./routes/administrators/administratorRoutes');
+const customerRoutes = require('./routes/customers/customerRoutes');
+const contractorRoutes = require('./routes/contractors/contractorRoutes');
+const technicianRoutes = require('./routes/technicians/technicianRoutes');
 const businesRoutes = require('./routes/businessRoutes');
-const serviceTicketRoutes = require('./routes/serviceTicketRoutes');
+const serviceTicketRoutes = require('./routes/serviceTickets/serviceTicketRoutes');
 const notificationRoutes = require('./routes/notificationRoutes');
 
 app.use('/users', userRoutes);
+app.use('/administrators', administratorRoutes);
 app.use('/customers', customerRoutes);
 app.use('/contractors', contractorRoutes);
+app.use('/technicians', technicianRoutes);
 app.use('/businesses', businesRoutes);
 app.use('/service-tickets', serviceTicketRoutes);
 app.use('/notifications', notificationRoutes.router);

@@ -6,12 +6,14 @@ const router = express.Router();
 
 router.post('/create-user', async (req, res) => {
   try {
-    const { uid, email, fullName, userType } = req.body;
+    const { userId, email, firstName, lastName, userType } = req.body;
     const newUser = {
+      uid: userId,
       email,
-      fullName,
-      uid,
-      authProvider: 'local',
+      fullName: {
+        firstName,
+        lastName,
+      },
       userType,
     };
     await admin.firestore().collection('users').doc(uid).set(newUser);
