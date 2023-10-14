@@ -110,18 +110,23 @@ router.post('/add-contacts', async (req, res) => {
 
     await administratorRef.update({ contacts: updatedContacts });
 
-    return res
-      .status(200)
-      .json({ message: 'Contacts added to administrator successfully' });
+    // Retrieve the updated administrator document from Firestore
+    const updatedAdministratorDoc = await administratorRef.get();
+    const updatedAdministrator = updatedAdministratorDoc.data();
+
+    return res.status(200).json({
+      message: 'Contacts added to administrator successfully',
+      administrator: updatedAdministrator,
+    });
   } catch (error) {
     console.error('Error adding contacts to administrator:', error);
     return res.status(500).json({ message: 'Internal Server Error' });
   }
 });
 
-router.post('/add-line-of-service', async (req, res) => {
+router.post('/add-lines-of-service', async (req, res) => {
   try {
-    const { lineOfService, administratorId } = req.body;
+    const { linesOfService, administratorId } = req.body;
 
     const administratorRef = admin
       .firestore()
@@ -136,13 +141,18 @@ router.post('/add-line-of-service', async (req, res) => {
     // Update the line of service array in the administrator document
     const lineOfServiceArray =
       administratorSnapshot.get('linesOfService') || [];
-    const updatedLinesOfService = [...lineOfServiceArray, ...lineOfService]; // Use the lineOfService array from the payload
+    const updatedLinesOfService = [...lineOfServiceArray, ...linesOfService];
 
-    await administratorRef.update({ linesOfService: updatedLinesOfService }); // Update 'linesOfService' instead of 'contacts'
+    await administratorRef.update({ linesOfService: updatedLinesOfService });
 
-    return res
-      .status(200)
-      .json({ message: 'Line of service added to administrator successfully' });
+    // Retrieve the updated administrator document from Firestore
+    const updatedAdministratorDoc = await administratorRef.get();
+    const updatedAdministrator = updatedAdministratorDoc.data();
+
+    return res.status(200).json({
+      message: 'Line of service added to administrator successfully',
+      administrator: updatedAdministrator,
+    });
   } catch (error) {
     console.error('Error adding line of service to administrator:', error);
     return res.status(500).json({ message: 'Internal Server Error' });

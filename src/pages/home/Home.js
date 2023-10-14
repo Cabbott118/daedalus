@@ -3,11 +3,16 @@ import { useEffect } from 'react';
 // Components
 import Loader from 'components/common/Loader';
 import Hero from 'pages/home/components/Hero';
-import EnrollmentBanner from 'pages/home/components/EnrollmentBanner';
+// import EnrollmentBanner from 'pages/home/components/EnrollmentBanner';
 import ServiceTicketTabs from 'pages/home/components/serviceTicketList/ServiceTicketTabs';
 import TicketCounter from 'pages/home/components/TicketCounter';
 import WelcomeBanner from 'pages/home/components/WelcomeBanner';
 import CreateServiceTicketDialog from 'components/common/CreateServiceTicketDialog';
+
+// POC
+import CreateContractor from './CreateContractor';
+import CreateCustomer from './CreateCustomer';
+import CreateTechnician from './CreateTechnician';
 
 // Constants
 import UserType from 'constants/userType';
@@ -25,7 +30,7 @@ import {
   fetchServiceTicketsAssignedTo,
   fetchServiceTicketsCreatedBy,
 } from 'store/slices/serviceTicketSlice';
-import { fetchCustomer, fetchContractor } from 'store/slices/businessSlice';
+import { fetchAdministrator } from 'store/slices/administratorSlice';
 
 export default function Home() {
   document.title = 'Daedalus';
@@ -34,46 +39,45 @@ export default function Home() {
   const theme = useTheme();
   const dispatch = useDispatch();
 
-  const {
-    data: userData,
-    userProfileLoaded,
-    loading: userLoading,
-  } = useSelector((state) => state.user);
+  const { data: userData, loading: userLoading } = useSelector(
+    (state) => state.user
+  );
 
   const { serviceTickets, loading: serviceTicketsLoading } = useSelector(
     (state) => state.serviceTicket
   );
-  const { data: businessData, loading: businessLoading } = useSelector(
-    (state) => state.business
-  );
+  const { data: administratorData, loading: administratorLoading } =
+    useSelector((state) => state.administrator);
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
-      if (user && !userProfileLoaded) {
+      if (user) {
         await dispatch(fetchUser(user.uid));
       }
     });
     return () => unsubscribe();
-  }, [auth, dispatch, userProfileLoaded]);
+  }, [auth, dispatch]);
 
   useEffect(() => {
-    if (!businessData && userData) {
-      if (userData?.userType === UserType.CUSTOMER) {
-        dispatch(fetchCustomer(userData?.uid));
-      } else if (userData?.userType === UserType.CONTRACTOR) {
-        dispatch(fetchContractor(userData?.uid));
-      }
+    dispatch(fetchAdministrator(userData?.uid));
+    console.log('im running');
+    if (!administratorData && userData) {
+      dispatch(fetchAdministrator(userData?.uid));
+      //   if (userData?.userType === UserType.CUSTOMER) {
+      //     dispatch(fetchCustomer(userData?.uid));
+      //   } else if (userData?.userType === UserType.CONTRACTOR) {
+      //     dispatch(fetchContractor(userData?.uid));
+      //   }
     }
 
-    if (businessData && userData) {
-      if (userData?.userType === UserType.CUSTOMER) {
-        dispatch(fetchServiceTicketsCreatedBy(businessData?.uid));
-      } else if (userData?.userType === UserType.CONTRACTOR) {
-        console.log('else if');
-        dispatch(fetchServiceTicketsAssignedTo(businessData?.uid));
-      }
-    }
-  }, [userData, businessData, dispatch]);
+    // if (businessData && userData) {
+    //   if (userData?.userType === UserType.CUSTOMER) {
+    //     dispatch(fetchServiceTicketsCreatedBy(businessData?.uid));
+    //   } else if (userData?.userType === UserType.CONTRACTOR) {
+    //     dispatch(fetchServiceTicketsAssignedTo(businessData?.uid));
+    //   }
+    // }
+  }, []);
 
   const colors = [
     theme.palette.primary.light,
@@ -81,14 +85,14 @@ export default function Home() {
     'white',
   ];
 
-  if (userLoading || businessLoading)
+  if (userLoading || administratorLoading)
     return <Loader style={{ fill: theme.palette.primary.main }} />;
 
   if (!userData)
     return (
       <>
         <Hero />
-        <EnrollmentBanner />
+        {/* <EnrollmentBanner /> */}
       </>
     );
 
@@ -106,7 +110,7 @@ export default function Home() {
           const size = Math.random() * 10 + 2; // Random size between 5px and 25px
 
           return (
-            <div
+            <Box
               key={index}
               style={{
                 position: 'absolute',
@@ -117,7 +121,7 @@ export default function Home() {
                 top: `${Math.random() * 80}px`, // Random top position
                 left: `${Math.random() * 100}%`, // Random left position
               }}
-            ></div>
+            ></Box>
           );
         })}
       </Box>
@@ -130,9 +134,9 @@ export default function Home() {
                 <WelcomeBanner userData={userData} theme={theme} />
               </Grid>
               <Grid item xs={12}>
-                {businessData && (
+                {administratorData && (
                   <Typography variant='subtitle1' component='h1'>
-                    {businessData?.businessName} - Daedalus
+                    {administratorData?.name} - Daedalus
                   </Typography>
                 )}
               </Grid>
@@ -147,7 +151,7 @@ export default function Home() {
                 {userData?.userType === UserType.CUSTOMER ? (
                   <CreateServiceTicketDialog
                     userId={userData?.uid}
-                    businessData={businessData}
+                    // businessData={businessData}
                   />
                 ) : null}
               </Grid>
@@ -162,6 +166,9 @@ export default function Home() {
           </>
         )}
       </Container>
+      <CreateContractor />
+      <CreateCustomer />
+      <CreateTechnician />
     </>
   );
 }

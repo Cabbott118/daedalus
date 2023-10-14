@@ -164,9 +164,15 @@ router.post('/add-contacts', async (req, res) => {
 
     await customerRef.update({ contacts: updatedContacts });
 
+    const updatedCustomerDoc = await customerRef.get();
+    const updatedCustomer = updatedCustomerDoc.data();
+
     return res
       .status(200)
-      .json({ message: 'Contacts added to customer successfully' });
+      .json({
+        message: 'Contacts added to customer successfully',
+        customer: updatedCustomer,
+      });
   } catch (error) {
     console.error('Error adding contacts to customer:', error);
     return res.status(500).json({ message: 'Internal Server Error' });

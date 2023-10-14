@@ -13,8 +13,8 @@ import { Divider } from '@mui/material';
 
 // Redux
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchCustomer } from 'store/slices/customerSlice';
-import { fetchContractor } from 'store/slices/contractorSlice';
+// import { fetchCustomer } from 'store/slices/customerSlice';
+// import { fetchContractor } from 'store/slices/contractorSlice';
 
 const BusinessInformationComponent = ({ userData }) => {
   const dispatch = useDispatch();
@@ -22,12 +22,12 @@ const BusinessInformationComponent = ({ userData }) => {
   const [data, setData] = useState();
   const [loading, setLoading] = useState();
 
-  const { data: customerData, loading: customerLoading } = useSelector(
-    (state) => state.customer
-  );
-  const { data: contractorData, loading: contractorLoading } = useSelector(
-    (state) => state.contractor
-  );
+  // const { data: customerData, loading: customerLoading } = useSelector(
+  //   (state) => state.customer
+  // );
+  // const { data: contractorData, loading: contractorLoading } = useSelector(
+  //   (state) => state.contractor
+  // );
 
   // useEffect(() => {
   //   if (userData?.userType === UserType.CUSTOMER) {
@@ -38,26 +38,26 @@ const BusinessInformationComponent = ({ userData }) => {
   //   }
   // }, [userData]);
 
-  useEffect(() => {
-    if (!customerData && !contractorData && userData) {
-      if (userData.userType === UserType.CUSTOMER) {
-        dispatch(fetchCustomer(userData.uid));
-      } else if (userData.userType === UserType.CONTRACTOR) {
-        dispatch(fetchContractor(userData.uid));
-      }
-    }
-  }, [userData, customerData, contractorData, dispatch]);
+  // useEffect(() => {
+  //   if (!customerData && !contractorData && userData) {
+  //     if (userData.userType === UserType.CUSTOMER) {
+  //       dispatch(fetchCustomer(userData.uid));
+  //     } else if (userData.userType === UserType.CONTRACTOR) {
+  //       dispatch(fetchContractor(userData.uid));
+  //     }
+  //   }
+  // }, [userData, customerData, contractorData, dispatch]);
 
-  useEffect(() => {
-    if (userData?.userType === UserType.CUSTOMER) {
-      setLoading(customerLoading);
-      setData(customerData);
-    }
-    if (userData?.userType === UserType.CONTRACTOR) {
-      setLoading(contractorLoading);
-      setData(contractorData);
-    }
-  }, [customerData, contractorData]);
+  // useEffect(() => {
+  //   if (userData?.userType === UserType.CUSTOMER) {
+  //     setLoading(customerLoading);
+  //     setData(customerData);
+  //   }
+  //   if (userData?.userType === UserType.CONTRACTOR) {
+  //     setLoading(contractorLoading);
+  //     setData(contractorData);
+  //   }
+  // }, [customerData, contractorData]);
 
   return (
     <>

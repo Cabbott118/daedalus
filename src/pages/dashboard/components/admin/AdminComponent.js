@@ -11,42 +11,42 @@ import { DataGrid } from '@mui/x-data-grid';
 
 // Redux
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchContractors } from 'store/slices/businessSlice';
-import {
-  fetchServiceTicket,
-  fetchServiceTickets,
-} from 'store/slices/serviceTicketSlice';
+// import { fetchContractors } from 'store/slices/businessSlice';
+// import {
+//   fetchServiceTicket,
+//   fetchServiceTickets,
+// } from 'store/slices/serviceTicketSlice';
 
 const AdminComponent = () => {
   const dispatch = useDispatch();
   const [selectedRow, setSelectedRow] = useState(null);
   const [openModal, setOpenModal] = useState(false);
 
-  const { data: businessData, loading: businessLoading } = useSelector(
-    (state) => state.business
-  );
+  // const { data: businessData, loading: businessLoading } = useSelector(
+  //   (state) => state.business
+  // );
 
   const { serviceTickets, loading: serviceTicketLoading } = useSelector(
     (state) => state.serviceTicket
   );
 
-  const handleRowClick = (params) => {
-    setSelectedRow(params.row);
-    dispatch(fetchServiceTicket(params.row.uid));
-    setOpenModal(true);
-  };
+  // const handleRowClick = (params) => {
+  //   setSelectedRow(params.row);
+  //   dispatch(fetchServiceTicket(params.row.uid));
+  //   setOpenModal(true);
+  // };
 
-  const handleDialogClose = () => {
-    setOpenModal(false);
-    dispatch(fetchServiceTickets());
-  };
+  // const handleDialogClose = () => {
+  //   setOpenModal(false);
+  //   dispatch(fetchServiceTickets());
+  // };
 
-  useEffect(() => {
-    if (serviceTickets.length === 0) {
-      dispatch(fetchContractors());
-      dispatch(fetchServiceTickets());
-    }
-  }, [serviceTickets, dispatch]);
+  // useEffect(() => {
+  //   if (serviceTickets.length === 0) {
+  //     // dispatch(fetchContractors());
+  //     dispatch(fetchServiceTickets());
+  //   }
+  // }, [serviceTickets, dispatch]);
 
   const columns = [
     {
@@ -107,12 +107,12 @@ const AdminComponent = () => {
         }}
         pageSizeOptions={[5, 10, 25, 100]}
         // checkboxSelection
-        onRowClick={handleRowClick}
+        // onRowClick={handleRowClick}
       />
       <ServiceTicketDialog
-        businessData={businessData}
+        // businessData={businessData}
         open={openModal}
-        onClose={handleDialogClose}
+        // onClose={handleDialogClose}
       />
     </div>
   );

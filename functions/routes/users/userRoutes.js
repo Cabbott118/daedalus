@@ -16,12 +16,12 @@ router.post('/create-user', async (req, res) => {
       },
       userType,
     };
-    await admin.firestore().collection('users').doc(uid).set(newUser);
+    await admin.firestore().collection('users').doc(userId).set(newUser);
     // Retrieve the created user data from Firestore
     const createdUserDoc = await admin
       .firestore()
       .collection('users')
-      .doc(uid)
+      .doc(userId)
       .get();
     const createdUser = createdUserDoc.data();
     return res.status(201).json({

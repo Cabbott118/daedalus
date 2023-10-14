@@ -6,16 +6,14 @@ import { createSlice, createAction, createAsyncThunk } from '@reduxjs/toolkit';
 
 // API Requests to Firestore Database
 
-// Async thunk to create contractor data
-// const testTitle: 'test title'
-// dispatch(createContractor({ testTitle}));
 const createContractor = createAsyncThunk(
   'contractor/createContractor',
-  async ({ businessName, ownerId }) => {
+  async ({ companyName, linesOfService, ownerId }) => {
     try {
       const response = await post('/contractors/create-contractor', {
+        companyName,
+        linesOfService,
         ownerId,
-        businessName,
       });
       return response.contractor;
     } catch (error) {
@@ -24,8 +22,6 @@ const createContractor = createAsyncThunk(
   }
 );
 
-// Async thunk to fetch contractors data
-// dispatch(fetchContractors());
 const fetchContractors = createAsyncThunk(
   'contractor/fetchContractors',
   async () => {
@@ -38,16 +34,16 @@ const fetchContractors = createAsyncThunk(
   }
 );
 
-// Async thunk to fetch contractor data
-// const uid = '123'
-// dispatch(fetchContractor(uid));
-const fetchContractor = createAsyncThunk(
-  'contractor/fetchContractor',
+const fetchContractorByOwnerId = createAsyncThunk(
+  'contractor/fetchContractorByOwnerId',
   async (ownerId) => {
     try {
-      const response = await get('/contractors/get-contractor-details', {
-        ownerId,
-      });
+      const response = await get(
+        '/contractors/get-contractor-details-by-owner-id',
+        {
+          ownerId,
+        }
+      );
       return response;
     } catch {
       throw new Error('Failed to fetch contractor data.');
@@ -55,20 +51,56 @@ const fetchContractor = createAsyncThunk(
   }
 );
 
-// Async thunk to update contractor data
-// const uid = '123'
-// const updateData = {
-//   something: 'some value'
-// };
+const fetchContractorByContactId = createAsyncThunk(
+  'contractor/fetchContractorByContactId',
+  async (contactId) => {
+    try {
+      const response = await get(
+        '/contractors/get-contractor-details-by-contact-id',
+        {
+          contactId,
+        }
+      );
+      return response;
+    } catch {
+      throw new Error('Failed to fetch contractor data.');
+    }
+  }
+);
 
-// dispatch(updateContractor({ uid, updateData }));
+const createContacts = createAsyncThunk(
+  'contractor/createContacts',
+  async ({ contactId, contractorId }) => {
+    try {
+      const response = await post('/contractors/add-contacts', {
+        contactId,
+        contractorId,
+      });
+      return response.contractor;
+    } catch (error) {
+      throw new Error('Failed to add contact(s).');
+    }
+  }
+);
+
 const updateContractor = createAsyncThunk(
   'contractor/updateContractor',
-  async ({ uid, updateData }) => {
+  async ({
+    contractorId,
+    firstName,
+    lastName,
+    primaryContactId,
+    email,
+    contacts,
+  }) => {
     try {
       const response = await patch('/contractors/update-contractor', {
-        uid,
-        updateData,
+        contractorId,
+        firstName,
+        lastName,
+        primaryContactId,
+        email,
+        contacts,
       });
       return response.contractor;
     } catch (error) {
@@ -98,7 +130,7 @@ const contractorSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      // Create contractor record
+
       .addCase(createContractor.pending, (state) => {
         return {
           ...state,
@@ -121,7 +153,7 @@ const contractorSlice = createSlice({
           error: action.error.message,
         };
       })
-      // Get all contractor record details
+
       .addCase(fetchContractors.pending, (state) => {
         return {
           ...state,
@@ -144,15 +176,15 @@ const contractorSlice = createSlice({
           error: action.error.message,
         };
       })
-      // Get contractor record details
-      .addCase(fetchContractor.pending, (state) => {
+
+      .addCase(fetchContractorByOwnerId.pending, (state) => {
         return {
           ...state,
           loading: true,
           error: null,
         };
       })
-      .addCase(fetchContractor.fulfilled, (state, action) => {
+      .addCase(fetchContractorByOwnerId.fulfilled, (state, action) => {
         return {
           ...state,
           data: action.payload,
@@ -160,14 +192,60 @@ const contractorSlice = createSlice({
           error: null,
         };
       })
-      .addCase(fetchContractor.rejected, (state, action) => {
+      .addCase(fetchContractorByOwnerId.rejected, (state, action) => {
         return {
           ...state,
           loading: false,
           error: action.error.message,
         };
       })
-      // Update contractor record details
+
+      .addCase(fetchContractorByContactId.pending, (state) => {
+        return {
+          ...state,
+          loading: true,
+          error: null,
+        };
+      })
+      .addCase(fetchContractorByContactId.fulfilled, (state, action) => {
+        return {
+          ...state,
+          data: action.payload,
+          loading: false,
+          error: null,
+        };
+      })
+      .addCase(fetchContractorByContactId.rejected, (state, action) => {
+        return {
+          ...state,
+          loading: false,
+          error: action.error.message,
+        };
+      })
+
+      .addCase(createContacts.pending, (state) => {
+        return {
+          ...state,
+          loading: true,
+          error: null,
+        };
+      })
+      .addCase(createContacts.fulfilled, (state, action) => {
+        return {
+          ...state,
+          data: action.payload.contractor,
+          loading: false,
+          error: null,
+        };
+      })
+      .addCase(createContacts.rejected, (state, action) => {
+        return {
+          ...state,
+          loading: false,
+          error: action.error.message,
+        };
+      })
+
       .addCase(updateContractor.pending, (state) => {
         return {
           ...state,
@@ -198,7 +276,9 @@ export const { reducer: contractorReducer } = contractorSlice;
 export {
   createContractor,
   fetchContractors,
-  fetchContractor,
+  fetchContractorByOwnerId,
+  fetchContractorByContactId,
+  createContacts,
   updateContractor,
   clearContractorData,
 };

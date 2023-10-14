@@ -23,10 +23,10 @@ import {
 
 // Redux
 import { useDispatch, useSelector } from 'react-redux';
-import {
-  fetchServiceTicketsAssignedTo,
-  fetchServiceTicketsCreatedBy,
-} from 'store/slices/serviceTicketSlice';
+// import {
+//   fetchServiceTicketsAssignedTo,
+//   fetchServiceTicketsCreatedBy,
+// } from 'store/slices/serviceTicketSlice';
 
 const ServiceTicketsComponent = ({
   uid,
@@ -37,21 +37,21 @@ const ServiceTicketsComponent = ({
   const dispatch = useDispatch();
   const { serviceTickets } = useSelector((state) => state.serviceTicket);
 
-  useEffect(() => {
-    if (
-      userData?.userType === UserType.CUSTOMER &&
-      customerData?.address &&
-      customerData?.primaryContact &&
-      uid
-    ) {
-      dispatch(fetchServiceTicketsCreatedBy(uid));
-    }
+  // useEffect(() => {
+  //   if (
+  //     userData?.userType === UserType.CUSTOMER &&
+  //     customerData?.address &&
+  //     customerData?.primaryContact &&
+  //     uid
+  //   ) {
+  //     dispatch(fetchServiceTicketsCreatedBy(uid));
+  //   }
 
-    if (userData?.userType === UserType.CONTRACTOR && contractorData?.uid) {
-      const assignedToId = contractorData?.uid;
-      dispatch(fetchServiceTicketsAssignedTo(assignedToId));
-    }
-  }, [dispatch, uid, userData, customerData, contractorData]);
+  //   if (userData?.userType === UserType.CONTRACTOR && contractorData?.uid) {
+  //     const assignedToId = contractorData?.uid;
+  //     dispatch(fetchServiceTicketsAssignedTo(assignedToId));
+  //   }
+  // }, [dispatch, uid, userData, customerData, contractorData]);
 
   if (userData?.userType === UserType.CUSTOMER) {
     if (!customerData?.address || !customerData?.primaryContact) {

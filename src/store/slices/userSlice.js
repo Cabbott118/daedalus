@@ -68,18 +68,15 @@ const deleteUser = createAsyncThunk('user/deleteUser', async (uid) => {
 
 // API Requests to Firestore Database
 
-// Async thunk to create user data
-// const email: 'caleb@caleb.com'
-// const uid: '123'
-// dispatch(createUser({ email, uid }));
 const createUser = createAsyncThunk(
   'user/createUser',
-  async ({ email, uid, fullName, userType }) => {
+  async ({ email, userId, firstName, lastName, userType }) => {
     try {
       const response = await post('/users/create-user', {
         email,
-        uid,
-        fullName,
+        userId,
+        firstName,
+        lastName,
         userType,
       });
       return response.user;
@@ -89,9 +86,6 @@ const createUser = createAsyncThunk(
   }
 );
 
-// Async thunk to fetch user data
-// const uid = '123'
-// dispatch(fetchUser(uid));
 const fetchUser = createAsyncThunk('user/fetchUser', async (uid) => {
   try {
     const response = await get('/users/get-user-details', { uid });
@@ -101,16 +95,6 @@ const fetchUser = createAsyncThunk('user/fetchUser', async (uid) => {
   }
 });
 
-// Async thunk to update user data
-// const uid = '123'
-// const updateData = {
-//   fullName: {
-//     firstName: 'Caleb',
-//     lastName: 'Abbott',
-//   },
-// };
-
-// dispatch(updateUser({ uid, updateData }));
 const updateUser = createAsyncThunk(
   'user/updateUser',
   async ({ uid, updateData }) => {
@@ -131,7 +115,6 @@ const userSlice = createSlice({
   name: 'user',
   initialState: {
     data: null,
-    // userProfileLoaded: false,
     loading: false,
     error: null,
   },
@@ -139,7 +122,6 @@ const userSlice = createSlice({
     clearUserData: (state) => {
       return {
         data: null,
-        // userProfileLoaded: false,
         loading: false,
         error: null,
       };
@@ -147,11 +129,10 @@ const userSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      // Login user
+
       .addCase(loginUser.pending, (state) => {
         return {
           ...state,
-          // userProfileLoaded: false,
           loading: true,
           error: null,
         };
@@ -160,7 +141,6 @@ const userSlice = createSlice({
         return {
           ...state,
           data: action.payload,
-          // userProfileLoaded: true,
           loading: false,
           error: null,
         };
@@ -168,16 +148,14 @@ const userSlice = createSlice({
       .addCase(loginUser.rejected, (state, action) => {
         return {
           ...state,
-          // userProfileLoaded: false,
           loading: false,
           error: action.payload,
         };
       })
-      // Sign up user
+
       .addCase(signUpUser.pending, (state) => {
         return {
           ...state,
-          // userProfileLoaded: false,
           loading: true,
           error: null,
         };
@@ -186,7 +164,6 @@ const userSlice = createSlice({
         return {
           ...state,
           data: action.payload,
-          // userProfileLoaded: true,
           loading: false,
           error: null,
         };
@@ -194,16 +171,14 @@ const userSlice = createSlice({
       .addCase(signUpUser.rejected, (state, action) => {
         return {
           ...state,
-          // userProfileLoaded: false,
           loading: false,
           error: action.payload,
         };
       })
-      // Logout user
+
       .addCase(logoutUser.pending, (state) => {
         return {
           ...state,
-          // userProfileLoaded: false,
           loading: true,
           error: null,
         };
@@ -212,7 +187,6 @@ const userSlice = createSlice({
         return {
           ...state,
           data: null,
-          // userProfileLoaded: false,
           loading: false,
           error: null,
         };
@@ -220,16 +194,14 @@ const userSlice = createSlice({
       .addCase(logoutUser.rejected, (state, action) => {
         return {
           ...state,
-          // userProfileLoaded: true,
           loading: false,
           error: action.payload,
         };
       })
-      // Delete user
+
       .addCase(deleteUser.pending, (state) => {
         return {
           ...state,
-          // userProfileLoaded: false,
           loading: true,
           error: null,
         };
@@ -238,7 +210,6 @@ const userSlice = createSlice({
         return {
           ...state,
           data: null,
-          // userProfileLoaded: false,
           loading: false,
           error: null,
         };
@@ -246,16 +217,14 @@ const userSlice = createSlice({
       .addCase(deleteUser.rejected, (state, action) => {
         return {
           ...state,
-          // userProfileLoaded: true,
           loading: false,
           error: action.payload,
         };
       })
-      // Create user record
+
       .addCase(createUser.pending, (state) => {
         return {
           ...state,
-          // userProfileLoaded: false,
           loading: true,
           error: null,
         };
@@ -264,7 +233,6 @@ const userSlice = createSlice({
         return {
           ...state,
           data: action.payload,
-          // userProfileLoaded: true,
           loading: false,
           error: null,
         };
@@ -272,16 +240,14 @@ const userSlice = createSlice({
       .addCase(createUser.rejected, (state, action) => {
         return {
           ...state,
-          // userProfileLoaded: false,
           loading: false,
           error: action.error.message,
         };
       })
-      // Get user record details
+
       .addCase(fetchUser.pending, (state) => {
         return {
           ...state,
-          // userProfileLoaded: false,
           loading: true,
           error: null,
         };
@@ -290,7 +256,6 @@ const userSlice = createSlice({
         return {
           ...state,
           data: action.payload,
-          // userProfileLoaded: true,
           loading: false,
           error: null,
         };
@@ -298,16 +263,14 @@ const userSlice = createSlice({
       .addCase(fetchUser.rejected, (state, action) => {
         return {
           ...state,
-          // userProfileLoaded: false,
           loading: false,
           error: action.error.message,
         };
       })
-      // Update user record details
+
       .addCase(updateUser.pending, (state) => {
         return {
           ...state,
-          // userProfileLoaded: true,
           loading: true,
           error: null,
         };
@@ -315,7 +278,6 @@ const userSlice = createSlice({
       .addCase(updateUser.fulfilled, (state, action) => {
         return {
           ...state,
-          // userProfileLoaded: true,
           data: action.payload,
           loading: false,
         };
@@ -323,7 +285,6 @@ const userSlice = createSlice({
       .addCase(updateUser.rejected, (state, action) => {
         return {
           ...state,
-          // userProfileLoaded: true,
           loading: false,
           error: action.error.message,
         };

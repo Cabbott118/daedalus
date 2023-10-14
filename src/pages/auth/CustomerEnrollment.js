@@ -30,7 +30,7 @@ import {
   clearUserData,
 } from 'store/slices/userSlice';
 // import { createCustomer } from 'store/slices/customerSlice';
-import { createBusiness } from 'store/slices/businessSlice';
+import { createAdministrator } from 'store/slices/administratorSlice';
 
 export default function CustomerEnrollment() {
   const pageName = 'Sign up as a Customer';
@@ -67,7 +67,7 @@ export default function CustomerEnrollment() {
           })
         );
         dispatch(
-          createBusiness({
+          createAdministrator({
             businessName,
             businessType: 'customer',
             contactId: action.payload.uid,

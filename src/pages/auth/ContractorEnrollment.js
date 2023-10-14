@@ -29,7 +29,7 @@ import {
   updateUser,
   clearUserData,
 } from 'store/slices/userSlice';
-import { createBusiness } from 'store/slices/businessSlice';
+import { createAdministrator } from 'store/slices/administratorSlice';
 
 export default function ContractorEnrollment() {
   const pageName = 'Sign up as a Contractor';
@@ -66,7 +66,7 @@ export default function ContractorEnrollment() {
           })
         );
         dispatch(
-          createBusiness({
+          createAdministrator({
             businessName,
             businessType: 'contractor',
             contactId: action.payload.uid,

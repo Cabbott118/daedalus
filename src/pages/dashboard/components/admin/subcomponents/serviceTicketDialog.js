@@ -27,7 +27,7 @@ import { useForm } from 'react-hook-form';
 
 // Redux
 import { useDispatch, useSelector } from 'react-redux';
-import { updateServiceTicket } from 'store/slices/serviceTicketSlice';
+// import { updateServiceTicket } from 'store/slices/serviceTicketSlice';
 
 const ServiceTicketDialog = ({ businessData, open, onClose }) => {
   const dispatch = useDispatch();
@@ -43,22 +43,20 @@ const ServiceTicketDialog = ({ businessData, open, onClose }) => {
   });
 
   const onSubmit = async (data) => {
-    const selectedContractor = businessData?.find(
-      (contractor) => contractor.uid === data.assignedTo
-    );
-
-    const uid = serviceTicketData?.uid;
-    const updateData = {
-      serviceProvider: {
-        id: data.assignedTo,
-        name: selectedContractor?.businessName,
-      },
-      assigned: true,
-      status: StatusType.ASSIGNED,
-    };
-
-    await dispatch(updateServiceTicket({ uid, updateData }));
-    onClose();
+    // const selectedContractor = businessData?.find(
+    //   (contractor) => contractor.uid === data.assignedTo
+    // );
+    // const uid = serviceTicketData?.uid;
+    // const updateData = {
+    //   serviceProvider: {
+    //     id: data.assignedTo,
+    //     name: selectedContractor?.businessName,
+    //   },
+    //   assigned: true,
+    //   status: StatusType.ASSIGNED,
+    // };
+    // await dispatch(updateServiceTicket({ uid, updateData }));
+    // onClose();
   };
 
   return (

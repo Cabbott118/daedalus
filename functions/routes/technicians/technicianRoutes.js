@@ -77,9 +77,9 @@ router.get('/get-technician-details-by-owner-id', async (req, res) => {
 
 router.get('/get-technician-by-id', async (req, res) => {
   try {
-    const uid = req.query.uid;
+    const technicianId = req.query.technicianId;
     const techniciansRef = admin.firestore().collection('technicians'); // Update collection name to 'technicians'
-    const doc = await techniciansRef.doc(uid).get();
+    const doc = await techniciansRef.doc(technicianId).get();
 
     if (!doc.exists) {
       return res

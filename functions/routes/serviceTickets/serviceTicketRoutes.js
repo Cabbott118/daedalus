@@ -76,8 +76,11 @@ router.get('/get-all-service-tickets', async (req, res) => {
 
 router.get('/get-service-ticket-details', async (req, res) => {
   try {
-    const uid = req.query.uid;
-    const ticketRef = admin.firestore().collection('serviceTickets').doc(uid);
+    const ticketId = req.query.ticketId;
+    const ticketRef = admin
+      .firestore()
+      .collection('serviceTickets')
+      .doc(ticketId);
     const ticketDoc = await ticketRef.get();
 
     if (!ticketDoc.exists) {
@@ -94,10 +97,10 @@ router.get('/get-service-ticket-details', async (req, res) => {
 
 router.get('/get-service-tickets-created-by', async (req, res) => {
   try {
-    const uid = req.query.uid;
+    const customerId = req.query.customerId;
     const ticketsRef = admin.firestore().collection('serviceTickets');
     const querySnapshot = await ticketsRef
-      .where('customer.id', '==', uid)
+      .where('customer.id', '==', customerId)
       .orderBy('createdAt', 'desc')
       .get(); // Initialize the query
 
@@ -118,10 +121,10 @@ router.get('/get-service-tickets-created-by', async (req, res) => {
 
 router.get('/get-service-tickets-assigned-to-provider', async (req, res) => {
   try {
-    const uid = req.query.uid;
+    const serviceProviderId = req.query.serviceProviderId;
     const ticketsRef = admin.firestore().collection('serviceTickets');
     const querySnapshot = await ticketsRef
-      .where('serviceProvider.id', '==', uid)
+      .where('serviceProvider.id', '==', serviceProviderId)
       .orderBy('createdAt', 'desc')
       .get(); // Initialize the query
 
@@ -142,10 +145,10 @@ router.get('/get-service-tickets-assigned-to-provider', async (req, res) => {
 
 router.get('/get-service-tickets-assigned-to-technician', async (req, res) => {
   try {
-    const uid = req.query.uid;
+    const technicianId = req.query.technicianId;
     const ticketsRef = admin.firestore().collection('serviceTickets');
     const querySnapshot = await ticketsRef
-      .where('serviceProvider.technician.id', '==', uid)
+      .where('serviceProvider.technician.id', '==', technicianId)
       .orderBy('createdAt', 'desc')
       .get(); // Initialize the query
 
@@ -166,17 +169,17 @@ router.get('/get-service-tickets-assigned-to-technician', async (req, res) => {
 
 router.patch('/update-service-ticket-status', async (req, res) => {
   try {
-    const { uid, status } = req.body;
+    const { ticketId, status } = req.body;
     await admin
       .firestore()
       .collection('serviceTickets')
-      .doc(uid)
+      .doc(ticketId)
       .update({ status });
     // Retrieve the updated service ticket data from Firestore
     const updatedTicketDoc = await admin
       .firestore()
       .collection('serviceTickets')
-      .doc(uid)
+      .doc(ticketId)
       .get();
     const updatedTicket = updatedTicketDoc.data();
     return res.status(200).json({
@@ -191,11 +194,11 @@ router.patch('/update-service-ticket-status', async (req, res) => {
 
 router.patch('/update-service-ticket-technician', async (req, res) => {
   try {
-    const { uid, technicianId, firstName, lastName } = req.body;
+    const { ticketId, technicianId, firstName, lastName } = req.body;
     const serviceTicketRef = admin
       .firestore()
       .collection('serviceTickets')
-      .doc(uid);
+      .doc(ticketId);
 
     const fieldPath = new Firestore.FieldPath('serviceProvider', 'technician');
 

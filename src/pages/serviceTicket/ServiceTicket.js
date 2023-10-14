@@ -31,10 +31,10 @@ import { useParams } from 'react-router-dom';
 
 // Redux
 import { useDispatch, useSelector } from 'react-redux';
-import {
-  fetchServiceTicket,
-  updateServiceTicket,
-} from 'store/slices/serviceTicketSlice';
+// import {
+//   fetchServiceTicket,
+//   updateServiceTicket,
+// } from 'store/slices/serviceTicketSlice';
 
 const ServiceTicket = () => {
   const { uid } = useParams();
@@ -47,16 +47,16 @@ const ServiceTicket = () => {
     (state) => state.user
   );
 
-  useEffect(() => {
-    dispatch(fetchServiceTicket(uid));
-  }, [uid]);
+  // useEffect(() => {
+  //   dispatch(fetchServiceTicket(uid));
+  // }, [uid]);
 
   const acceptServiceTicket = async () => {
     const updateData = {
       status: StatusType.ACCEPTED,
     };
 
-    await dispatch(updateServiceTicket({ uid, updateData }));
+    // await dispatch(updateServiceTicket({ uid, updateData }));
   };
 
   const declineServiceTicket = () => {

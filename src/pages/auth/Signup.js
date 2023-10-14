@@ -24,6 +24,7 @@ import { Navigate } from 'react-router-dom';
 // Redux
 import { useDispatch, useSelector } from 'react-redux';
 import { signUpUser, createUser, clearUserData } from 'store/slices/userSlice';
+import { createAdministrator } from 'store/slices/administratorSlice';
 
 export default function Signup() {
   const pageName = 'Sign up';
@@ -47,10 +48,39 @@ export default function Signup() {
   } = useForm();
 
   const onSubmit = (data) => {
-    const { email, password, confirmPassword } = data;
+    const {
+      email,
+      password,
+      confirmPassword,
+      firstName,
+      lastName,
+      // companyName,
+      // linesOfService,
+    } = data;
+    console.log(data);
     if (passwordMatch(password, confirmPassword)) {
       dispatch(clearUserData());
-      dispatch(signUpUser({ email, password }));
+      dispatch(signUpUser({ email, password })).then((action) => {
+        dispatch(
+          createUser({
+            email,
+            userId: action.payload.uid,
+            firstName,
+            lastName,
+            userType: 'administrator',
+          })
+        );
+        dispatch(
+          createAdministrator({
+            companyName: 'Company Name',
+            firstName,
+            lastName,
+            email,
+            linesOfService: ['HVAC'],
+            ownerId: action.payload.uid,
+          })
+        );
+      });
     } else {
       setPasswordMissmatch(true);
     }
@@ -67,13 +97,6 @@ export default function Signup() {
     }
   }, [error]);
 
-  useEffect(() => {
-    if (data?.uid) {
-      const { email, fullName } = getValues();
-      dispatch(createUser({ email, uid: data.uid, fullName }));
-    }
-  }, [data]);
-
   if (data) {
     return <Navigate to={routes.HOME} replace />;
   }
@@ -87,10 +110,10 @@ export default function Signup() {
             <TextField
               autoFocus
               label='First Name'
-              {...register('fullName.firstName', { required: true })}
-              error={errors.fullName?.firstName?.type === 'required'}
+              {...register('firstName', { required: true })}
+              error={errors.firstName?.type === 'required'}
               helperText={
-                errors.fullName?.firstName?.type === 'required' &&
+                errors.firstName?.type === 'required' &&
                 'First name is required'
               }
             />
@@ -98,11 +121,10 @@ export default function Signup() {
           <Grid item xs={6}>
             <TextField
               label='Last Name'
-              {...register('fullName.lastName', { required: true })}
-              error={errors.fullName?.lastName?.type === 'required'}
+              {...register('lastName', { required: true })}
+              error={errors.lastName?.type === 'required'}
               helperText={
-                errors.fullName?.lastName?.type === 'required' &&
-                'Last name is required'
+                errors.lastName?.type === 'required' && 'Last name is required'
               }
             />
           </Grid>

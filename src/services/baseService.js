@@ -5,6 +5,7 @@ export const api = createApi({
   reducerPath: 'api',
   baseQuery: fetchBaseQuery({
     baseUrl: process.env.REACT_APP_FIREBASE_BASE_URL,
+    // baseUrl: process.env.REACT_APP_FIREBASE_LOCAL_URL,
   }),
   endpoints: () => ({}),
 });

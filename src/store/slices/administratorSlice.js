@@ -5,122 +5,101 @@ import { get, post, patch, del } from 'lib/axios';
 import { createSlice, createAction, createAsyncThunk } from '@reduxjs/toolkit';
 
 // API Requests to Firestore Database
-
-const createCustomer = createAsyncThunk(
-  'customer/createCustomer',
+const createAdministrator = createAsyncThunk(
+  'administrator/createAdministrator',
   async ({
     companyName,
+    firstName,
+    lastName,
+    email,
+    linesOfService,
     ownerId,
-    predefinedLinesOfService,
-    street,
-    city,
-    zip,
-    state,
   }) => {
     try {
-      const response = await post('/customers/create-customer', {
+      const response = await post('/administrators/create-administrator', {
         companyName,
+        firstName,
+        lastName,
+        email,
+        linesOfService,
         ownerId,
-        predefinedLinesOfService,
-        street,
-        city,
-        zip,
-        state,
       });
-      return response.customer;
+      return response.administrator;
     } catch (error) {
-      throw new Error('Failed to create customer data.');
+      throw new Error('Failed to create administrator data.');
     }
   }
 );
 
-const fetchCustomerByOwnerId = createAsyncThunk(
-  'contractor/fetchCustomerByOwnerId',
-  async (ownerId) => {
+const fetchAdministrators = createAsyncThunk(
+  'administrator/fetchAdministrators',
+  async () => {
     try {
-      const response = await get(
-        '/customers/get-customer-details-by-owner-id',
-        {
-          ownerId,
-        }
-      );
+      const response = await get('/administrators/get-all-administrators', {});
       return response;
     } catch {
-      throw new Error('Failed to fetch customer data.');
+      throw new Error('Failed to fetch administrator data.');
     }
   }
 );
 
-const fetchCustomerByContactId = createAsyncThunk(
-  'contractor/fetchCustomerByContactId',
+const fetchAdministrator = createAsyncThunk(
+  'administrator/fetchAdministrator',
   async (contactId) => {
     try {
-      const response = await get(
-        '/customers/get-customer-details-by-contact-id',
-        {
-          contactId,
-        }
-      );
+      const response = await get('/administrators/get-administrator-details', {
+        contactId,
+      });
       return response;
     } catch {
-      throw new Error('Failed to fetch customer data.');
+      throw new Error('Failed to fetch administrator data.');
     }
   }
 );
 
 const createContacts = createAsyncThunk(
-  'customer/createContacts',
-  async ({ contactId, customerId }) => {
+  'administrator/createContacts',
+  async ({ administratorId, contactId }) => {
     try {
-      const response = await post('/customer/add-contacts', {
+      const response = await post('/administrators/add-contacts', {
+        administratorId,
         contactId,
-        customerId,
       });
-      return response.contractor;
+      return response;
     } catch (error) {
       throw new Error('Failed to add contact(s).');
     }
   }
 );
 
-const updateCustomer = createAsyncThunk(
-  'customer/updateCustomer',
-  async ({
-    customerId,
-    firstName,
-    lastName,
-    primaryContactId,
-    email,
-    contacts,
-  }) => {
+const addLinesOfService = createAsyncThunk(
+  'administrator/addLinesOfService',
+  async ({ administratorId, linesOfService }) => {
     try {
-      const response = await patch('/customers/update-customer', {
-        customerId,
-        firstName,
-        lastName,
-        primaryContactId,
-        email,
-        contacts,
+      const response = await post('/administrators/add-line-of-service', {
+        administratorId,
+        linesOfService,
       });
-      return response.customer;
+      return response;
     } catch (error) {
-      throw new Error('Failed to update customer data.');
+      throw new Error('Failed to add line(s) of service.');
     }
   }
 );
 
-// Action to clear user data, typically after logout
-const clearCustomerData = createAction('customer/clearCustomerData');
+const clearAdministratorData = createAction(
+  'administrator/clearAdministratorData'
+);
 
-const customerSlice = createSlice({
-  name: 'customer',
+const administratorSlice = createSlice({
+  name: 'administrator',
   initialState: {
     data: null,
     loading: false,
     error: null,
   },
   reducers: {
-    clearCustomerData: (state) => {
+    clearAdministratorData: (state) => {
       return {
         data: null,
         loading: false,
@@ -131,14 +110,14 @@ const customerSlice = createSlice({
   extraReducers: (builder) => {
     builder
 
-      .addCase(createCustomer.pending, (state) => {
+      .addCase(createAdministrator.pending, (state) => {
         return {
           ...state,
           loading: true,
           error: null,
         };
       })
-      .addCase(createCustomer.fulfilled, (state, action) => {
+      .addCase(createAdministrator.fulfilled, (state, action) => {
         return {
           ...state,
           data: action.payload,
@@ -146,7 +125,7 @@ const customerSlice = createSlice({
           error: null,
         };
       })
-      .addCase(createCustomer.rejected, (state, action) => {
+      .addCase(createAdministrator.rejected, (state, action) => {
         return {
           ...state,
           loading: false,
@@ -154,14 +133,14 @@ const customerSlice = createSlice({
         };
       })
 
-      .addCase(fetchCustomerByOwnerId.pending, (state) => {
+      .addCase(fetchAdministrators.pending, (state) => {
         return {
           ...state,
           loading: true,
           error: null,
         };
       })
-      .addCase(fetchCustomerByOwnerId.fulfilled, (state, action) => {
+      .addCase(fetchAdministrators.fulfilled, (state, action) => {
         return {
           ...state,
           data: action.payload,
@@ -169,7 +148,7 @@ const customerSlice = createSlice({
           error: null,
         };
       })
-      .addCase(fetchCustomerByOwnerId.rejected, (state, action) => {
+      .addCase(fetchAdministrators.rejected, (state, action) => {
         return {
           ...state,
           loading: false,
@@ -177,14 +156,14 @@ const customerSlice = createSlice({
         };
       })
 
-      .addCase(fetchCustomerByContactId.pending, (state) => {
+      .addCase(fetchAdministrator.pending, (state) => {
         return {
           ...state,
           loading: true,
           error: null,
         };
       })
-      .addCase(fetchCustomerByContactId.fulfilled, (state, action) => {
+      .addCase(fetchAdministrator.fulfilled, (state, action) => {
         return {
           ...state,
           data: action.payload,
@@ -192,7 +171,7 @@ const customerSlice = createSlice({
           error: null,
         };
       })
-      .addCase(fetchCustomerByContactId.rejected, (state, action) => {
+      .addCase(fetchAdministrator.rejected, (state, action) => {
         return {
           ...state,
           loading: false,
@@ -210,7 +189,7 @@ const customerSlice = createSlice({
       .addCase(createContacts.fulfilled, (state, action) => {
         return {
           ...state,
-          data: action.payload.customer,
+          data: action.payload.administrator,
           loading: false,
           error: null,
         };
@@ -223,22 +202,22 @@ const customerSlice = createSlice({
         };
       })
 
-      .addCase(updateCustomer.pending, (state) => {
+      .addCase(addLinesOfService.pending, (state) => {
         return {
           ...state,
           loading: true,
           error: null,
         };
       })
-      .addCase(updateCustomer.fulfilled, (state, action) => {
+      .addCase(addLinesOfService.fulfilled, (state, action) => {
         return {
           ...state,
-          data: action.payload,
+          data: action.payload.administrator,
           loading: false,
           error: null,
         };
       })
-      .addCase(updateCustomer.rejected, (state, action) => {
+      .addCase(addLinesOfService.rejected, (state, action) => {
         return {
           ...state,
           loading: false,
@@ -249,12 +228,12 @@ const customerSlice = createSlice({
 });
 
 // Export the async thunk and reducer
-export const { reducer: customerReducer } = customerSlice;
+export const { reducer: administratorReducer } = administratorSlice;
 export {
-  createCustomer,
-  fetchCustomerByOwnerId,
-  fetchCustomerByContactId,
+  createAdministrator,
+  fetchAdministrators,
+  fetchAdministrator,
   createContacts,
-  updateCustomer,
-  clearCustomerData,
+  addLinesOfService,
+  clearAdministratorData,
 };

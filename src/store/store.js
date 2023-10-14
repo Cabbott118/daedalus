@@ -1,9 +1,10 @@
 import { configureStore } from '@reduxjs/toolkit';
 // import { setupListeners } from '@reduxjs/toolkit/query';
 import { userReducer } from 'store/slices/userSlice';
-import { businessReducer } from 'store/slices/businessSlice';
+import { administratorReducer } from 'store/slices/administratorSlice';
 import { customerReducer } from 'store/slices/customerSlice';
 import { contractorReducer } from 'store/slices/contractorSlice';
+import { technicianReducer } from 'store/slices/technicianSlice';
 import { serviceTicketReducer } from './slices/serviceTicketSlice';
 import { notificationsReducer } from './slices/notificationsSlice';
 
@@ -18,9 +19,10 @@ const store = configureStore({
   reducer: {
     // [api.reducerPath]: api.reducer,
     user: userReducer,
-    business: businessReducer,
+    administrator: administratorReducer,
     customer: customerReducer,
     contractor: contractorReducer,
+    technician: technicianReducer,
     serviceTicket: serviceTicketReducer,
     notifications: notificationsReducer,
   },

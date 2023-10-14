@@ -65,7 +65,9 @@ export default function Navbar() {
   const [unreadNotifications, setUnreadNotifications] = useState(null);
 
   const { data: userData } = useSelector((state) => state.user);
-  const { data: businessData } = useSelector((state) => state.business);
+  const { data: administratorData } = useSelector(
+    (state) => state.administrator
+  );
   const { data: notificationsData } = useSelector(
     (state) => state.notifications
   );
@@ -87,7 +89,7 @@ export default function Navbar() {
             variant: 'text',
           },
           {
-            name: businessData?.businessName,
+            name: administratorData?.name,
             route: `${routes.BUSINESS_DASHBOARD.replace(':uid', user?.uid)}`,
             variant: 'text',
           },
@@ -113,21 +115,21 @@ export default function Navbar() {
   }, [auth, unreadNotifications]);
 
   useEffect(() => {
-    if (!businessData?.uid) return;
+    if (!administratorData?.uid) return;
 
     const q = query(
       collection(db, 'notifications'),
-      where('notificationOwner', '==', businessData?.uid),
+      where('notificationOwner', '==', administratorData?.uid),
       orderBy('createdAt', 'desc')
     );
 
     const unsubscribe = onSnapshot(q, (snapshot) => {
       const notificationData = snapshot.docs.map((doc) => doc.data());
-      dispatch(fetchNotifications(businessData?.uid));
+      dispatch(fetchNotifications(administratorData?.uid));
     });
 
     return () => unsubscribe();
-  }, [businessData, db]);
+  }, [administratorData, db]);
 
   const open = Boolean(anchorEl);
 
@@ -171,7 +173,7 @@ export default function Navbar() {
                   <>
                     <Drawer
                       userData={userData}
-                      businessData={businessData}
+                      businessData={administratorData}
                       unreadNotifications={unreadNotifications}
                       sx={{ position: 'relative' }}
                     />
@@ -272,10 +274,10 @@ export default function Navbar() {
             component={Link}
             to={`${routes.BUSINESS_DASHBOARD.replace(
               ':uid',
-              businessData?.uid
+              administratorData?.uid
             )}`}
           >
-            {`${businessData?.businessName}`}
+            {`${administratorData?.businessName}`}
           </MenuItem>
         )}
         <Divider />

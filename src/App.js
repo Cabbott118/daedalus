@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 // Components
 import Navbar from 'components/layout/Navbar';
@@ -57,24 +57,20 @@ function App() {
   //   if (storedTheme) setSelectedTheme(JSON.parse(storedTheme));
   // }, []);
 
-  const toggleTheme = () => {
-    setSelectedTheme((prevTheme) => {
-      let updatedTheme;
-      if (prevTheme === lightTheme) {
-        updatedTheme = darkTheme;
-      } else if (prevTheme === darkTheme) {
-        updatedTheme = sunTheme;
-      } else if (prevTheme === sunTheme) {
-        updatedTheme = earthTheme;
-      } else {
-        updatedTheme = lightTheme;
-      }
+  // const toggleTheme = () => {
+  //   setSelectedTheme((prevTheme) => {
+  //     let updatedTheme;
+  //     if (prevTheme === lightTheme) {
+  //       updatedTheme = darkTheme;
+  //     } else {
+  //       updatedTheme = lightTheme;
+  //     }
 
-      // localStorage.setItem('selectedTheme', JSON.stringify(updatedTheme));
+  //     localStorage.setItem('selectedTheme', JSON.stringify(updatedTheme));
 
-      return updatedTheme;
-    });
-  };
+  //     return updatedTheme;
+  //   });
+  // };
 
   return (
     <ThemeProvider theme={selectedTheme}>
@@ -163,7 +159,7 @@ function App() {
             element={<ForgotPasswordConfirmation />}
           />
         </Routes>
-        <button onClick={toggleTheme}>Toggle Theme</button>
+        {/* <button onClick={toggleTheme}>Toggle Theme</button> */}
       </BrowserRouter>
     </ThemeProvider>
   );

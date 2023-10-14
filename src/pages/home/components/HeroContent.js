@@ -5,19 +5,19 @@ import routes from 'constants/routes';
 import { Button, Grid, Typography, useTheme } from '@mui/material';
 
 // React Router
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 const HeroContent = () => {
   const theme = useTheme();
   const navigate = useNavigate();
 
-  const handleCustomerClick = () => {
-    navigate(routes.CUSTOMER_ENROLLMENT);
-  };
+  // const handleCustomerClick = () => {
+  //   navigate(routes.CUSTOMER_ENROLLMENT);
+  // };
 
-  const handleContractorClick = () => {
-    navigate(routes.CONTRACTOR_ENROLLMENT);
-  };
+  // const handleContractorClick = () => {
+  //   navigate(routes.CONTRACTOR_ENROLLMENT);
+  // };
 
   return (
     <Grid
@@ -59,6 +59,8 @@ const HeroContent = () => {
           <Button
             variant='contained'
             fullWidth
+            component={Link}
+            to='/signup'
             sx={{
               width: '300px',
               color: '#fff',
