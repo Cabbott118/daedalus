@@ -6,11 +6,26 @@ const router = express.Router();
 
 router.post('/create-contractor', async (req, res) => {
   try {
-    const { companyName, linesOfService, ownerId } = req.body;
+    const {
+      companyName,
+      ownerId,
+      linesOfService,
+      firstName,
+      lastName,
+      primaryContactId,
+      email,
+      contactId,
+    } = req.body;
     const newContractor = {
       name: companyName,
       ownerId,
       linesOfService,
+      primaryContact: {
+        fullName: { firstName, lastName },
+        id: primaryContactId,
+        email,
+      },
+      contacts: [{ id: contactId }],
     };
 
     const newContractorRef = await admin
@@ -166,12 +181,10 @@ router.post('/add-contacts', async (req, res) => {
     const updatedContractorDoc = await contractorRef.get();
     const updatedContractor = updatedContractorDoc.data();
 
-    return res
-      .status(200)
-      .json({
-        message: 'Contacts added to contractor successfully',
-        contractor: updatedContractor,
-      });
+    return res.status(200).json({
+      message: 'Contacts added to contractor successfully',
+      contractor: updatedContractor,
+    });
   } catch (error) {
     console.error('Error adding contacts to contractor:', error);
     return res.status(500).json({ message: 'Internal Server Error' });

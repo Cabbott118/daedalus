@@ -86,6 +86,26 @@ const createUser = createAsyncThunk(
   }
 );
 
+const createFirebaseUser = createAsyncThunk(
+  'user/createFirebaseUser',
+  async ({ email, password, firstName, lastName, userType }) => {
+    try {
+      const response = await post('/users/create-firebase-user', {
+        email,
+        password,
+        firstName,
+        lastName,
+        userType,
+      });
+      console.log(response);
+      return response.user;
+    } catch (error) {
+      console.log(error);
+      throw new Error('Failed to create firebase user.');
+    }
+  }
+);
+
 const fetchUser = createAsyncThunk('user/fetchUser', async (uid) => {
   try {
     const response = await get('/users/get-user-details', { uid });
@@ -245,6 +265,28 @@ const userSlice = createSlice({
         };
       })
 
+      .addCase(createFirebaseUser.pending, (state) => {
+        return {
+          ...state,
+          loading: true,
+          error: null,
+        };
+      })
+      .addCase(createFirebaseUser.fulfilled, (state, action) => {
+        return {
+          ...state,
+          loading: false,
+          error: null,
+        };
+      })
+      .addCase(createFirebaseUser.rejected, (state, action) => {
+        return {
+          ...state,
+          loading: false,
+          error: action.error.message,
+        };
+      })
+
       .addCase(fetchUser.pending, (state) => {
         return {
           ...state,
@@ -300,6 +342,7 @@ export {
   logoutUser,
   deleteUser,
   createUser,
+  createFirebaseUser,
   fetchUser,
   updateUser,
   clearUserData,

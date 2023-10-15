@@ -6,7 +6,7 @@ import { Button } from '@mui/material';
 
 // Redux
 import { useDispatch, useSelector } from 'react-redux';
-import { signUpUser, createUser } from 'store/slices/userSlice';
+import { createFirebaseUser, createUser } from 'store/slices/userSlice';
 import { createContractor } from 'store/slices/contractorSlice';
 
 const CreateContractor = () => {
@@ -17,7 +17,7 @@ const CreateContractor = () => {
   const { data: administratorData, loading: administratorLoading } =
     useSelector((state) => state.administrator);
 
-  let email = 'caleb@caleb.com';
+  let email = 'caleb@ca.com';
   let password = '123123';
   let firstName = 'Caleb';
   let lastName = 'Abbott';
@@ -26,17 +26,27 @@ const CreateContractor = () => {
 
   const handleCreateContractorClick = () => {
     const ownerId = administratorData?.uid;
-    dispatch(signUpUser({ email, password })).then((action) => {
+    dispatch(
+      createFirebaseUser({
+        email,
+        password,
+        firstName,
+        lastName,
+        userType: 'contractor',
+      })
+    ).then((action) => {
       dispatch(
-        createUser({
-          email,
-          userId: action.payload.uid,
+        createContractor({
+          companyName,
+          linesOfService,
+          ownerId,
           firstName,
           lastName,
-          userType: 'contractor',
+          primaryContactId: action.payload.uid,
+          email,
+          contactId: action.payload.uid,
         })
       );
-      dispatch(createContractor({ companyName, linesOfService, ownerId }));
     });
   };
 

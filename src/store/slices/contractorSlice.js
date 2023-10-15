@@ -8,12 +8,26 @@ import { createSlice, createAction, createAsyncThunk } from '@reduxjs/toolkit';
 
 const createContractor = createAsyncThunk(
   'contractor/createContractor',
-  async ({ companyName, linesOfService, ownerId }) => {
+  async ({
+    companyName,
+    ownerId,
+    linesOfService,
+    firstName,
+    lastName,
+    primaryContactId,
+    email,
+    contactId,
+  }) => {
     try {
       const response = await post('/contractors/create-contractor', {
         companyName,
-        linesOfService,
         ownerId,
+        linesOfService,
+        firstName,
+        lastName,
+        primaryContactId,
+        email,
+        contactId,
       });
       return response.contractor;
     } catch (error) {

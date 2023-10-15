@@ -51,7 +51,7 @@ export default function Home() {
   );
   const { data: administratorData, loading: administratorLoading } =
     useSelector((state) => state.administrator);
-
+  console.log(auth);
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
       if (user) {

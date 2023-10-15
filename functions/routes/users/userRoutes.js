@@ -34,6 +34,43 @@ router.post('/create-user', async (req, res) => {
   }
 });
 
+router.post('/create-firebase-user', async (req, res) => {
+  try {
+    const { email, password, firstName, lastName, userType } = req.body;
+
+    const userRecord = await admin.auth().createUser({
+      email,
+      password,
+    });
+
+    // Now, create a record in the Firestore "users" collection
+    const userRecordData = {
+      uid: userRecord.uid,
+      email,
+      fullName: {
+        firstName,
+        lastName,
+      },
+      userType,
+      // Add other user details as needed
+    };
+
+    await admin
+      .firestore()
+      .collection('users')
+      .doc(userRecord.uid)
+      .set(userRecordData);
+
+    return res.status(201).json({
+      message: 'User created successfully',
+      user: userRecord,
+    });
+  } catch (error) {
+    console.error('Error creating Firebase user', error);
+    return res.status(500).json({ message: 'Internal Server Error' });
+  }
+});
+
 router.get('/get-user-details', async (req, res) => {
   try {
     const uid = req.query.uid;
