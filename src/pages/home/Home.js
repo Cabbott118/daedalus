@@ -31,6 +31,9 @@ import {
   fetchServiceTicketsCreatedBy,
 } from 'store/slices/serviceTicketSlice';
 import { fetchAdministrator } from 'store/slices/administratorSlice';
+import { fetchCustomerByContactId } from 'store/slices/customerSlice';
+import { fetchContractorByContactId } from 'store/slices/contractorSlice';
+import { fetchTechnicianDetailsByUserId } from 'store/slices/technicianSlice';
 
 export default function Home() {
   document.title = 'Daedalus';
@@ -59,15 +62,14 @@ export default function Home() {
   }, [auth, dispatch]);
 
   useEffect(() => {
-    dispatch(fetchAdministrator(userData?.uid));
-    console.log('im running');
-    if (!administratorData && userData) {
+    if (userData?.userType === UserType.ADMINISTRATOR) {
       dispatch(fetchAdministrator(userData?.uid));
-      //   if (userData?.userType === UserType.CUSTOMER) {
-      //     dispatch(fetchCustomer(userData?.uid));
-      //   } else if (userData?.userType === UserType.CONTRACTOR) {
-      //     dispatch(fetchContractor(userData?.uid));
-      //   }
+    } else if (userData?.userType === UserType.CONTRACTOR) {
+      dispatch(fetchContractorByContactId(userData?.uid));
+    } else if (userData?.userType === UserType.CUSTOMER) {
+      dispatch(fetchCustomerByContactId(userData?.uid));
+    } else if (userData?.userType === UserType.TECHNICIAN) {
+      dispatch(fetchTechnicianDetailsByUserId(userData?.uid));
     }
 
     // if (businessData && userData) {
@@ -77,7 +79,7 @@ export default function Home() {
     //     dispatch(fetchServiceTicketsAssignedTo(businessData?.uid));
     //   }
     // }
-  }, []);
+  }, [userData]);
 
   const colors = [
     theme.palette.primary.light,

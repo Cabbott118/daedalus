@@ -3,6 +3,7 @@ const UserType = {
   ADMINISTRATOR: 'administrator',
   CUSTOMER: 'customer',
   CONTRACTOR: 'contractor',
+  TECHNICIAN: 'technician',
   ADMIN: 'admin',
 };
 

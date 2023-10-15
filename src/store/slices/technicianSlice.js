@@ -8,16 +8,32 @@ import { createSlice, createAction, createAsyncThunk } from '@reduxjs/toolkit';
 
 const createTechnician = createAsyncThunk(
   'technician/createTechnician',
-  async ({ firstName, lastName, ownerId }) => {
+  async ({ firstName, lastName, ownerId, userId }) => {
     try {
       const response = await post('/technicians/create-technician', {
         firstName,
         lastName,
         ownerId,
+        userId,
       });
       return response.technician;
     } catch (error) {
       throw new Error('Failed to create technician data.');
+    }
+  }
+);
+
+const fetchTechnicianDetailsByUserId = createAsyncThunk(
+  'technician/fetchTechnicianDetailsByUserId',
+  async (userId) => {
+    try {
+      const response = await get(
+        '/technicians/get-technician-details-by-user-id',
+        { userId }
+      );
+      return response;
+    } catch (error) {
+      throw new Error('Failed to fetch technician data.');
     }
   }
 );
@@ -66,7 +82,7 @@ const fetchTechnicianById = createAsyncThunk(
 );
 
 // Action to clear user data, typically after logout
-const clearTechnicianData = createAction('contractor/clearTechnicianData');
+const clearTechnicianData = createAction('technician/clearTechnicianData');
 
 const technicianSlice = createSlice({
   name: 'technician',
@@ -103,6 +119,29 @@ const technicianSlice = createSlice({
         };
       })
       .addCase(createTechnician.rejected, (state, action) => {
+        return {
+          ...state,
+          loading: false,
+          error: action.error.message,
+        };
+      })
+
+      .addCase(fetchTechnicianDetailsByUserId.pending, (state) => {
+        return {
+          ...state,
+          loading: true,
+          error: null,
+        };
+      })
+      .addCase(fetchTechnicianDetailsByUserId.fulfilled, (state, action) => {
+        return {
+          ...state,
+          data: action.payload,
+          loading: false,
+          error: null,
+        };
+      })
+      .addCase(fetchTechnicianDetailsByUserId.rejected, (state, action) => {
         return {
           ...state,
           loading: false,
@@ -185,6 +224,7 @@ const technicianSlice = createSlice({
 export const { reducer: technicianReducer } = technicianSlice;
 export {
   createTechnician,
+  fetchTechnicianDetailsByUserId,
   fetchTechnicians,
   fetchTechnicianDetailsByOwnerId,
   fetchTechnicianById,

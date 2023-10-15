@@ -10,6 +10,7 @@ import { clearUserData, logoutUser } from 'store/slices/userSlice';
 import { clearCustomerData } from 'store/slices/customerSlice';
 import { clearContractorData } from 'store/slices/contractorSlice';
 import { clearAdministratorData } from 'store/slices/administratorSlice';
+import { clearTechnicianData } from 'store/slices/technicianSlice';
 import { clearServiceTicketData } from 'store/slices/serviceTicketSlice';
 import { clearNotificationData } from 'store/slices/notificationsSlice';
 
@@ -29,6 +30,7 @@ export default function Logout({ variant }) {
       dispatch(clearCustomerData()),
       dispatch(clearContractorData()),
       dispatch(clearAdministratorData()),
+      dispatch(clearTechnicianData()),
       dispatch(clearServiceTicketData()),
       dispatch(clearNotificationData()),
     ]);

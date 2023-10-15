@@ -6,13 +6,14 @@ const router = express.Router();
 
 router.post('/create-technician', async (req, res) => {
   try {
-    const { firstName, lastName, ownerId } = req.body;
+    const { firstName, lastName, ownerId, userId } = req.body;
     const newTechnician = {
       fullName: {
         firstName,
         lastName,
       },
       ownerId,
+      userId,
     };
 
     const newTechnicianRef = await admin
@@ -34,6 +35,28 @@ router.post('/create-technician', async (req, res) => {
     });
   } catch (error) {
     console.error('Error creating technician document', error);
+    return res.status(500).json({ message: 'Internal Server Error' });
+  }
+});
+
+router.get('/get-technician-details-by-user-id', async (req, res) => {
+  try {
+    const userId = req.query.userId;
+    const techniciansRef = admin.firestore().collection('technicians');
+    const querySnapshot = await techniciansRef.where('uid', '==', userId).get();
+
+    if (querySnapshot.empty) {
+      return res
+        .status(404)
+        .json({ message: 'No technician found for the specified userId.' });
+    }
+
+    // Assuming only one document is returned, you can directly access the data
+    const technicianData = querySnapshot.docs[0].data();
+
+    return res.status(200).json(technicianData);
+  } catch (error) {
+    console.error('Error retrieving technician details:', error);
     return res.status(500).json({ message: 'Internal Server Error' });
   }
 });
