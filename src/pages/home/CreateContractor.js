@@ -6,7 +6,7 @@ import { Button } from '@mui/material';
 
 // Redux
 import { useDispatch, useSelector } from 'react-redux';
-import { createFirebaseUser, createUser } from 'store/slices/userSlice';
+import { createFirebaseUser } from 'store/slices/userSlice';
 import { createContractor } from 'store/slices/contractorSlice';
 
 const CreateContractor = () => {

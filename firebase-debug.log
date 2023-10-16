@@ -1,0 +1,97 @@
+[debug] [2023-10-16T14:52:11.646Z] ----------------------------------------------------------------------
+[debug] [2023-10-16T14:52:11.648Z] Command:       C:\Program Files\nodejs\node.exe C:\Users\Caleb Abbott\AppData\Roaming\npm\node_modules\firebase-tools\lib\bin\firebase.js emulators:start --only functions
+[debug] [2023-10-16T14:52:11.648Z] CLI Version:   11.29.1
+[debug] [2023-10-16T14:52:11.648Z] Platform:      win32
+[debug] [2023-10-16T14:52:11.648Z] Node Version:  v16.16.0
+[debug] [2023-10-16T14:52:11.669Z] Time:          Mon Oct 16 2023 10:52:11 GMT-0400 (Eastern Daylight Time)
+[debug] [2023-10-16T14:52:11.669Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2023-10-16T14:52:11.673Z] >>> [apiv2][query] GET https://firebase-public.firebaseio.com/cli.json [none]
+[debug] [2023-10-16T14:52:11.761Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2023-10-16T14:52:11.761Z] > authorizing via signed-in user (calebhaabbott94@gmail.com)
+[info] i  emulators: Starting emulators: functions {"metadata":{"emulator":{"name":"hub"},"message":"Starting emulators: functions"}}
+[debug] [2023-10-16T14:52:11.772Z] [logging] Logging Emulator only supports listening on one address (127.0.0.1). Not listening on ::1
+[debug] [2023-10-16T14:52:11.772Z] assigned listening specs for emulators {"user":{"hub":[{"address":"127.0.0.1","family":"IPv4","port":4400},{"address":"::1","family":"IPv6","port":4400}],"ui":[{"address":"127.0.0.1","family":"IPv4","port":4000},{"address":"::1","family":"IPv6","port":4000}],"logging":[{"address":"127.0.0.1","family":"IPv4","port":4500}]},"metadata":{"message":"assigned listening specs for emulators"}}
+[debug] [2023-10-16T14:52:11.779Z] [hub] writing locator at C:\Users\CALEBA~1\AppData\Local\Temp\hub-daedalus-ae712.json
+[debug] [2023-10-16T14:52:11.802Z] [functions] Functions Emulator only supports listening on one address (127.0.0.1). Not listening on ::1
+[debug] [2023-10-16T14:52:11.803Z] [eventarc] Eventarc Emulator only supports listening on one address (127.0.0.1). Not listening on ::1
+[debug] [2023-10-16T14:52:11.803Z] late-assigned ports for functions and eventarc emulators {"user":{"hub":[{"address":"127.0.0.1","family":"IPv4","port":4400},{"address":"::1","family":"IPv6","port":4400}],"ui":[{"address":"127.0.0.1","family":"IPv4","port":4000},{"address":"::1","family":"IPv6","port":4000}],"logging":[{"address":"127.0.0.1","family":"IPv4","port":4500}],"functions":[{"address":"127.0.0.1","family":"IPv4","port":5001}],"eventarc":[{"address":"127.0.0.1","family":"IPv4","port":9299}]},"metadata":{"message":"late-assigned ports for functions and eventarc emulators"}}
+[warn] !  functions: The following emulators are not running, calls to these services from the Functions emulator will affect production: auth, firestore, database, hosting, pubsub, storage {"metadata":{"emulator":{"name":"functions"},"message":"The following emulators are not running, calls to these services from the Functions emulator will affect production: \u001b[1mauth, firestore, database, hosting, pubsub, storage\u001b[22m"}}
+[debug] [2023-10-16T14:52:11.808Z] defaultcredentials: writing to file C:\Users\Caleb Abbott\AppData\Roaming\firebase\calebhaabbott94_gmail_com_application_default_credentials.json
+[debug] [2023-10-16T14:52:11.811Z] Setting GAC to C:\Users\Caleb Abbott\AppData\Roaming\firebase\calebhaabbott94_gmail_com_application_default_credentials.json {"metadata":{"emulator":{"name":"functions"},"message":"Setting GAC to C:\\Users\\Caleb Abbott\\AppData\\Roaming\\firebase\\calebhaabbott94_gmail_com_application_default_credentials.json"}}
+[debug] [2023-10-16T14:52:11.812Z] > refreshing access token with scopes: []
+[debug] [2023-10-16T14:52:11.813Z] >>> [apiv2][query] POST https://www.googleapis.com/oauth2/v3/token [none]
+[debug] [2023-10-16T14:52:11.813Z] >>> [apiv2][body] POST https://www.googleapis.com/oauth2/v3/token [omitted]
+[debug] [2023-10-16T14:52:11.939Z] <<< [apiv2][status] GET https://firebase-public.firebaseio.com/cli.json 200
+[debug] [2023-10-16T14:52:11.939Z] <<< [apiv2][body] GET https://firebase-public.firebaseio.com/cli.json {"cloudBuildErrorAfter":1594252800000,"cloudBuildWarnAfter":1590019200000,"defaultNode10After":1594252800000,"minVersion":"3.0.5","node8DeploysDisabledAfter":1613390400000,"node8RuntimeDisabledAfter":1615809600000,"node8WarnAfter":1600128000000}
+[debug] [2023-10-16T14:52:11.982Z] <<< [apiv2][status] POST https://www.googleapis.com/oauth2/v3/token 200
+[debug] [2023-10-16T14:52:11.982Z] <<< [apiv2][body] POST https://www.googleapis.com/oauth2/v3/token [omitted]
+[debug] [2023-10-16T14:52:11.996Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects/daedalus-ae712/adminSdkConfig [none]
+[debug] [2023-10-16T14:52:12.285Z] <<< [apiv2][status] GET https://firebase.googleapis.com/v1beta1/projects/daedalus-ae712/adminSdkConfig 200
+[debug] [2023-10-16T14:52:12.285Z] <<< [apiv2][body] GET https://firebase.googleapis.com/v1beta1/projects/daedalus-ae712/adminSdkConfig {"projectId":"daedalus-ae712","storageBucket":"daedalus-ae712.appspot.com"}
+[debug] [2023-10-16T14:52:12.309Z] Ignoring unsupported arg: auto_download {"metadata":{"emulator":{"name":"ui"},"message":"Ignoring unsupported arg: auto_download"}}
+[debug] [2023-10-16T14:52:12.309Z] Ignoring unsupported arg: port {"metadata":{"emulator":{"name":"ui"},"message":"Ignoring unsupported arg: port"}}
+[debug] [2023-10-16T14:52:12.309Z] Starting Emulator UI with command {"binary":"node","args":["C:\\Users\\Caleb Abbott\\.cache\\firebase\\emulators\\ui-v1.11.5\\server\\server.js"],"optionalArgs":[],"joinArgs":false} {"metadata":{"emulator":{"name":"ui"},"message":"Starting Emulator UI with command {\"binary\":\"node\",\"args\":[\"C:\\\\Users\\\\Caleb Abbott\\\\.cache\\\\firebase\\\\emulators\\\\ui-v1.11.5\\\\server\\\\server.js\"],\"optionalArgs\":[],\"joinArgs\":false}"}}
+[info] i  ui: Emulator UI logging to ui-debug.log {"metadata":{"emulator":{"name":"ui"},"message":"Emulator UI logging to \u001b[1mui-debug.log\u001b[22m"}}
+[debug] [2023-10-16T14:52:12.444Z] Web / API server started at 127.0.0.1:4000
+ {"metadata":{"emulator":{"name":"ui"},"message":"Web / API server started at 127.0.0.1:4000\n"}}
+[debug] [2023-10-16T14:52:12.445Z] Web / API server started at ::1:4000
+ {"metadata":{"emulator":{"name":"ui"},"message":"Web / API server started at ::1:4000\n"}}
+[info] i  functions: Watching "C:\Web Projects\daedalus\functions" for Cloud Functions... {"metadata":{"emulator":{"name":"functions"},"message":"Watching \"C:\\Web Projects\\daedalus\\functions\" for Cloud Functions..."}}
+[debug] [2023-10-16T14:52:12.587Z] Validating nodejs source
+[warn] !  functions: package.json indicates an outdated version of firebase-functions. Please upgrade using npm install --save firebase-functions@latest in your functions directory. 
+[debug] [2023-10-16T14:52:14.114Z] > [functions] package.json contents: {
+  "name": "functions",
+  "description": "Cloud Functions for Firebase",
+  "scripts": {
+    "serve": "firebase emulators:start --only functions",
+    "shell": "firebase functions:shell",
+    "start": "npm run shell",
+    "deploy": "firebase deploy --only functions",
+    "logs": "firebase functions:log"
+  },
+  "engines": {
+    "node": "16"
+  },
+  "main": "index.js",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "firebase-admin": "^11.5.0",
+    "firebase-functions": "^4.2.0"
+  },
+  "devDependencies": {
+    "firebase-functions-test": "^3.0.0"
+  },
+  "private": true
+}
+[debug] [2023-10-16T14:52:14.114Z] Building nodejs source
+[debug] [2023-10-16T14:52:14.114Z] Failed to find version of module node: reached end of search path C:\Web Projects\daedalus\functions\node_modules
+[info] +  functions: Using node@16 from host. 
+[debug] [2023-10-16T14:52:14.116Z] Could not find functions.yaml. Must use http discovery
+[debug] [2023-10-16T14:52:14.121Z] Found firebase-functions binary at 'C:\Web Projects\daedalus\functions\node_modules\.bin\firebase-functions'
+[debug] [2023-10-16T14:52:14.332Z] Serving at port 8227
+
+[debug] [2023-10-16T14:52:14.873Z] Got response from /__/functions.yaml {"endpoints":{"createNotificationOnTicketCreation":{"platform":"gcfv1","availableMemoryMb":null,"timeoutSeconds":null,"minInstances":null,"maxInstances":null,"ingressSettings":null,"serviceAccountEmail":null,"vpc":null,"eventTrigger":{"eventType":"providers/cloud.firestore/eventTypes/document.create","eventFilters":{"resource":"projects/daedalus-ae712/databases/(default)/documents/serviceTickets/{ticketId}"},"retry":false},"labels":{},"entryPoint":"createNotificationOnTicketCreation"},"createNotificationOnTicketAssignment":{"platform":"gcfv1","availableMemoryMb":null,"timeoutSeconds":null,"minInstances":null,"maxInstances":null,"ingressSettings":null,"serviceAccountEmail":null,"vpc":null,"eventTrigger":{"eventType":"providers/cloud.firestore/eventTypes/document.update","eventFilters":{"resource":"projects/daedalus-ae712/databases/(default)/documents/serviceTickets/{ticketId}"},"retry":false},"labels":{},"entryPoint":"createNotificationOnTicketAssignment"},"createNotificationOnStatusChange":{"platform":"gcfv1","availableMemoryMb":null,"timeoutSeconds":null,"minInstances":null,"maxInstances":null,"ingressSettings":null,"serviceAccountEmail":null,"vpc":null,"eventTrigger":{"eventType":"providers/cloud.firestore/eventTypes/document.update","eventFilters":{"resource":"projects/daedalus-ae712/databases/(default)/documents/serviceTickets/{ticketId}"},"retry":false},"labels":{},"entryPoint":"createNotificationOnStatusChange"},"api":{"platform":"gcfv1","availableMemoryMb":null,"timeoutSeconds":null,"minInstances":null,"maxInstances":null,"ingressSettings":null,"serviceAccountEmail":null,"vpc":null,"httpsTrigger":{},"entryPoint":"api"}},"specVersion":"v1alpha1","requiredAPIs":[]}
+[debug] [2023-10-16T14:52:14.881Z] shutdown requested via /__/quitquitquit
+
+[info] +  functions: Loaded functions definitions from source: createNotificationOnTicketCreation, createNotificationOnTicketAssignment, createNotificationOnStatusChange, api. {"metadata":{"emulator":{"name":"functions"},"message":"Loaded functions definitions from source: createNotificationOnTicketCreation, createNotificationOnTicketAssignment, createNotificationOnStatusChange, api."}}
+[info] i  functions[us-central1-createNotificationOnTicketCreation]: function ignored because the firestore emulator does not exist or is not running. {"metadata":{"emulator":{"name":"functions"},"message":"function ignored because the firestore emulator does not exist or is not running."}}
+[info] i  functions[us-central1-createNotificationOnTicketAssignment]: function ignored because the firestore emulator does not exist or is not running. {"metadata":{"emulator":{"name":"functions"},"message":"function ignored because the firestore emulator does not exist or is not running."}}
+[info] i  functions[us-central1-createNotificationOnStatusChange]: function ignored because the firestore emulator does not exist or is not running. {"metadata":{"emulator":{"name":"functions"},"message":"function ignored because the firestore emulator does not exist or is not running."}}
+[info] +  functions[us-central1-api]: http function initialized (http://127.0.0.1:5001/daedalus-ae712/us-central1/api). {"metadata":{"emulator":{"name":"functions"},"message":"\u001b[1mhttp\u001b[22m function initialized (http://127.0.0.1:5001/daedalus-ae712/us-central1/api)."}}
+[info] 
+┌─────────────────────────────────────────────────────────────┐
+│ ✔  All emulators ready! It is now safe to connect your app. │
+│ i  View Emulator UI at http://127.0.0.1:4000/               │
+└─────────────────────────────────────────────────────────────┘
+
+┌───────────┬────────────────┬─────────────────────────────────┐
+│ Emulator  │ Host:Port      │ View in Emulator UI             │
+├───────────┼────────────────┼─────────────────────────────────┤
+│ Functions │ 127.0.0.1:5001 │ http://127.0.0.1:4000/functions │
+└───────────┴────────────────┴─────────────────────────────────┘
+  Emulator Hub running at 127.0.0.1:4400
+  Other reserved ports: 4500
+
+Issues? Report them at https://github.com/firebase/firebase-tools/issues and attach the *-debug.log files.
+ 

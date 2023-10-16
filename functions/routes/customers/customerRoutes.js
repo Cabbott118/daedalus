@@ -14,6 +14,11 @@ router.post('/create-customer', async (req, res) => {
       city,
       zip,
       state,
+      firstName,
+      lastName,
+      primaryContactId,
+      email,
+      contactId,
     } = req.body;
     const newCustomer = {
       name: companyName,
@@ -25,6 +30,12 @@ router.post('/create-customer', async (req, res) => {
         zip,
         state,
       },
+      primaryContact: {
+        fullName: { firstName, lastName },
+        id: primaryContactId,
+        email,
+      },
+      contacts: [{ id: contactId }],
     };
 
     const newCustomerRef = await admin
@@ -167,12 +178,10 @@ router.post('/add-contacts', async (req, res) => {
     const updatedCustomerDoc = await customerRef.get();
     const updatedCustomer = updatedCustomerDoc.data();
 
-    return res
-      .status(200)
-      .json({
-        message: 'Contacts added to customer successfully',
-        customer: updatedCustomer,
-      });
+    return res.status(200).json({
+      message: 'Contacts added to customer successfully',
+      customer: updatedCustomer,
+    });
   } catch (error) {
     console.error('Error adding contacts to customer:', error);
     return res.status(500).json({ message: 'Internal Server Error' });

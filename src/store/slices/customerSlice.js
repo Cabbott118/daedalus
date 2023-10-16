@@ -16,6 +16,11 @@ const createCustomer = createAsyncThunk(
     city,
     zip,
     state,
+    firstName,
+    lastName,
+    primaryContactId,
+    email,
+    contactId,
   }) => {
     try {
       const response = await post('/customers/create-customer', {
@@ -26,6 +31,11 @@ const createCustomer = createAsyncThunk(
         city,
         zip,
         state,
+        firstName,
+        lastName,
+        primaryContactId,
+        email,
+        contactId,
       });
       return response.customer;
     } catch (error) {
