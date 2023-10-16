@@ -31,10 +31,11 @@ import { useParams } from 'react-router-dom';
 
 // Redux
 import { useDispatch, useSelector } from 'react-redux';
-// import {
-//   fetchServiceTicket,
-//   updateServiceTicket,
-// } from 'store/slices/serviceTicketSlice';
+import {
+  fetchServiceTicketDetails,
+  updateServiceTicketTechnician,
+} from 'store/slices/serviceTicketSlice';
+import { updateServiceTicketStatus } from 'store/slices/serviceTicketSlice';
 
 const ServiceTicket = () => {
   const { uid } = useParams();
@@ -47,16 +48,22 @@ const ServiceTicket = () => {
     (state) => state.user
   );
 
-  // useEffect(() => {
-  //   dispatch(fetchServiceTicket(uid));
-  // }, [uid]);
+  useEffect(() => {
+    dispatch(fetchServiceTicketDetails(uid));
+  }, [uid]);
 
   const acceptServiceTicket = async () => {
-    const updateData = {
-      status: StatusType.ACCEPTED,
-    };
-
-    // await dispatch(updateServiceTicket({ uid, updateData }));
+    await dispatch(
+      updateServiceTicketStatus({ ticketId: uid, status: StatusType.ACCEPTED })
+    );
+    await dispatch(
+      updateServiceTicketTechnician({
+        ticketId: uid,
+        technicianId: userData?.uid,
+        firstName: userData?.fullName.firstName,
+        lastName: userData?.fullName.lastName,
+      })
+    );
   };
 
   const declineServiceTicket = () => {
@@ -101,7 +108,7 @@ const ServiceTicket = () => {
               color: theme.palette.text.primary,
             }}
           >
-            {serviceTicketData?.owner?.name}
+            {serviceTicketData?.customer?.name}
           </Typography>
           <Typography
             variant='caption'
@@ -112,7 +119,7 @@ const ServiceTicket = () => {
         </Grid>
         <Grid item xs={2} md={12}>
           <Chip
-            label={serviceTicketData?.typeOfServices}
+            label={serviceTicketData?.lineOfService}
             variant='filled'
             color='secondary'
             size='small'
@@ -162,7 +169,10 @@ const ServiceTicket = () => {
             variant='body2'
             sx={{ mb: 2, color: theme.palette.text.primary }}
           >
-            1234 Tester's Lane, Polk City, FL 33868
+            {serviceTicketData?.customer.address.street},{' '}
+            {serviceTicketData?.customer.address.city},{' '}
+            {serviceTicketData?.customer.address.state}.{' '}
+            {serviceTicketData?.customer.address.zipCode}
           </Typography>
 
           <Typography

@@ -88,11 +88,11 @@ const createUser = createAsyncThunk(
 
 const createFirebaseUser = createAsyncThunk(
   'user/createFirebaseUser',
-  async ({ email, password, firstName, lastName, userType }) => {
+  async ({ email, firstName, lastName, userType }) => {
     try {
       const response = await post('/users/create-firebase-user', {
         email,
-        password,
+        password: process.env.REACT_APP_STANDARD_USER_CREATION,
         firstName,
         lastName,
         userType,

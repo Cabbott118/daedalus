@@ -17,7 +17,10 @@ const createServiceTicket = createAsyncThunk(
     lineOfService,
     notToExceed,
     serviceProviderId,
-    serviceProviderName,
+    street,
+    city,
+    state,
+    zipCode,
   }) => {
     try {
       const response = await post('/service-tickets/create-service-ticket', {
@@ -29,7 +32,10 @@ const createServiceTicket = createAsyncThunk(
         lineOfService,
         notToExceed,
         serviceProviderId,
-        serviceProviderName,
+        street,
+        city,
+        state,
+        zipCode,
       });
       return response.ticket;
     } catch (error) {
@@ -116,12 +122,12 @@ const fetchServiceTicketsAssignedToTechnician = createAsyncThunk(
 
 const updateServiceTicketStatus = createAsyncThunk(
   'serviceTicket/updateServiceTicketStatus',
-  async ({ uid, status }) => {
+  async ({ ticketId, status }) => {
     try {
       const response = await patch(
         '/service-tickets/update-service-ticket-status',
         {
-          uid,
+          ticketId,
           status,
         }
       );
@@ -134,12 +140,12 @@ const updateServiceTicketStatus = createAsyncThunk(
 
 const updateServiceTicketTechnician = createAsyncThunk(
   'serviceTicket/updateServiceTicketTechnician',
-  async ({ uid, technicianId, firstName, lastName }) => {
+  async ({ ticketId, technicianId, firstName, lastName }) => {
     try {
       const response = await patch(
         '/service-tickets/update-service-ticket-technician',
         {
-          uid,
+          ticketId,
           technicianId,
           firstName,
           lastName,

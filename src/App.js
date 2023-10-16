@@ -25,13 +25,18 @@ import Dashboard from 'pages/dashboard/Dashboard';
 import Business from 'pages/business/Business';
 
 // Customer
-import CustomerEnrollment from 'pages/auth/CustomerEnrollment';
+// import CustomerEnrollment from 'pages/auth/CustomerEnrollment';
+import CreateCustomer from 'pages/create/customer/CreateCustomer';
+
+// Contractor
+// import ContractorEnrollment from 'pages/auth/ContractorEnrollment';
+import CreateContractor from 'pages/create/contractor/CreateContractor';
+
+// Technician
+import CreateTechnician from 'pages/create/technician/CreateTechnician';
 
 // Service Ticket
 import ServiceTicket from 'pages/serviceTicket/ServiceTicket';
-
-// Contractor
-import ContractorEnrollment from 'pages/auth/ContractorEnrollment';
 
 // General
 import Home from 'pages/home/Home';
@@ -82,6 +87,7 @@ function App() {
               index // Equivalent to saying the page content for '/'
               element={<Home />}
             />
+
             <Route
               path={routes.USER} // place all routes that need user logged in under /user/
               element={
@@ -98,6 +104,7 @@ function App() {
                 element={<Notifications />}
               />
             </Route>
+
             <Route
               path={routes.BUSINESS_BASE} // place all routes that need user logged in under /business/
               element={
@@ -109,6 +116,7 @@ function App() {
               {/* Place your 'authenticated routes in here! They can be referenced by /business/<route> */}
               <Route index path=':uid/dashboard' element={<Business />} />
             </Route>
+
             <Route
               path={routes.SERVICE_TICKET} // place all routes that need user logged in under /service-ticket/
               element={
@@ -120,6 +128,7 @@ function App() {
               {/* Place your 'authenticated routes in here! They can be referenced by /service-ticket/<route> */}
               <Route index path=':uid' element={<ServiceTicket />} />
             </Route>
+
             <Route
               path={routes.ADMIN_BASE} // place all routes that need user logged in under /admin/
               element={
@@ -131,6 +140,7 @@ function App() {
               {/* Place your 'authenticated routes in here! They can be referenced by /admin/<route> */}
               <Route index path=':uid/dashboard' element={<Admin />} />
             </Route>
+
             <Route
               path='*' // Providing a 404 page for '/' and thus the whole site.
               element={
@@ -143,15 +153,17 @@ function App() {
               }
             />
           </Route>
+
           <Route path={routes.LOGIN} element={<Login />} />
           <Route path={routes.SIGNUP} element={<Signup />} />
+          <Route path={routes.CREATE_CUSTOMER} element={<CreateCustomer />} />
           <Route
-            path={routes.CUSTOMER_ENROLLMENT}
-            element={<CustomerEnrollment />}
+            path={routes.CREATE_CONTRACTOR}
+            element={<CreateContractor />}
           />
           <Route
-            path={routes.CONTRACTOR_ENROLLMENT}
-            element={<ContractorEnrollment />}
+            path={routes.CREATE_TECHNICIAN}
+            element={<CreateTechnician />}
           />
           <Route path={routes.FORGOT_PASSWORD} element={<ForgotPassword />} />
           <Route

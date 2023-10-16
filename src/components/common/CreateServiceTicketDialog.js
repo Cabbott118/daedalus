@@ -32,9 +32,10 @@ import {
   clearServiceTicketData,
 } from 'store/slices/serviceTicketSlice';
 
-const CreateServiceTicketDialog = ({ userId: uid, businessData }) => {
+const CreateServiceTicketDialog = ({ userId, customerData }) => {
   const [isAlertShowing, setIsAlertShowing] = useState(false);
   const [dialogOpen, setDialogOpen] = useState(false);
+  const [amount, setAmount] = useState('');
 
   const dispatch = useDispatch();
 
@@ -46,6 +47,11 @@ const CreateServiceTicketDialog = ({ userId: uid, businessData }) => {
     setDialogOpen(false);
   };
 
+  const handleAmountChange = (event) => {
+    const value = event.target.value;
+    setAmount(value);
+  };
+
   const {
     register,
     formState: { errors },
@@ -54,17 +60,24 @@ const CreateServiceTicketDialog = ({ userId: uid, businessData }) => {
 
   const onSubmit = ({
     titleForServices,
-    typeOfServices,
+    lineOfService,
+    notToExceed,
     reasonForServices,
   }) => {
     dispatch(
       createServiceTicket({
-        uid,
-        ownerId: businessData?.uid,
-        ownerName: businessData?.businessName,
+        userId,
+        customerId: customerData?.uid,
+        customerName: customerData?.name,
         titleForServices,
-        typeOfServices,
+        lineOfService,
+        notToExceed,
         reasonForServices,
+        serviceProviderId: customerData?.ownerId,
+        street: customerData?.primaryAddress.street,
+        city: customerData?.primaryAddress.city,
+        state: customerData?.primaryAddress.state,
+        zipCode: customerData?.primaryAddress.zipCode,
       })
     );
     setDialogOpen(false);
@@ -87,7 +100,7 @@ const CreateServiceTicketDialog = ({ userId: uid, businessData }) => {
           onSubmit={handleSubmit(onSubmit)}
           sx={{ minWidth: '20rem' }}
         >
-          <DialogTitle>{`Service Ticket for ${businessData?.businessName}`}</DialogTitle>
+          <DialogTitle>{`Service Ticket for ${customerData?.name}`}</DialogTitle>
           <DialogContent>
             <Grid container spacing={3} sx={{ mt: 0 }}>
               <Grid item xs={12}>
@@ -109,19 +122,39 @@ const CreateServiceTicketDialog = ({ userId: uid, businessData }) => {
                   select
                   fullWidth
                   defaultValue={''}
-                  {...register('typeOfServices', { required: true })}
-                  error={errors.typeOfServices?.type === 'required'}
+                  {...register('lineOfService', { required: true })}
+                  error={errors.lineOfService?.type === 'required'}
                   helperText={
-                    errors.typeOfServices?.type === 'required' &&
+                    errors.lineOfService?.type === 'required' &&
                     'The type of service is required'
                   }
                 >
-                  {services.map((service) => (
-                    <MenuItem key={service.value} value={service.value}>
-                      {service.name}
+                  {customerData?.predefinedLinesOfService.map((service) => (
+                    <MenuItem key={service} value={service}>
+                      {service}
                     </MenuItem>
                   ))}
                 </TextField>
+              </Grid>
+              <Grid item xs={12}>
+                <TextField
+                  label='Not to Exceed'
+                  type='number'
+                  fullWidth
+                  onChange={handleAmountChange}
+                  // Use InputProps to customize the input field
+                  InputProps={{
+                    startAdornment: (
+                      <div style={{ marginRight: '8px', color: '#777' }}>$</div>
+                    ),
+                  }}
+                  {...register('notToExceed', { required: true })}
+                  error={errors.notToExceed?.type === 'required'}
+                  helperText={
+                    errors.notToExceed?.type === 'required' &&
+                    'A not to exceed value is required'
+                  }
+                />
               </Grid>
               <Grid item xs={12}>
                 <TextField

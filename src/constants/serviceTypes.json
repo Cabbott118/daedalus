@@ -1,10 +1,14 @@
 [
   {
-    "name": "HVAC",
-    "value": "HVAC"
+    "name": "HVAC"
   },
   {
-    "name": "Mechanical",
-    "value": "MECH"
+    "name": "Plumbing"
+  },
+  {
+    "name": "Refrigeration"
+  },
+  {
+    "name": "Electrical"
   }
 ]

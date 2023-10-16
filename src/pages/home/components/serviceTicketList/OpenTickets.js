@@ -68,7 +68,7 @@ const OpenTickets = ({ serviceTickets, value, index, ...other }) => {
 
   const chipData = [
     { label: 'status', key: 'status' },
-    { label: 'typeOfServices', key: 'typeOfServices' },
+    { label: 'lineOfService', key: 'lineOfService' },
   ];
   return (
     <div role='tabpanel' hidden={value !== index} {...other}>
@@ -121,7 +121,7 @@ const OpenTickets = ({ serviceTickets, value, index, ...other }) => {
                       ))}
                       <Typography variant='h6' sx={{ fontWeight: 400 }}>
                         {serviceTicket.titleForServices} for{' '}
-                        {serviceTicket.owner.name}
+                        {serviceTicket.customer.name}
                       </Typography>
                       <Typography variant='body2'>
                         {formatCreatedAt(serviceTicket?.createdAt)}

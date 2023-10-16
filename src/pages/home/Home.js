@@ -10,9 +10,9 @@ import WelcomeBanner from 'pages/home/components/WelcomeBanner';
 import CreateServiceTicketDialog from 'components/common/CreateServiceTicketDialog';
 
 // POC
-import CreateContractor from './CreateContractor';
-import CreateCustomer from './CreateCustomer';
-import CreateTechnician from './CreateTechnician';
+import CreateContractor from 'pages/create/contractor/CreateContractor';
+import CreateCustomer from 'pages/create/customer/CreateCustomer';
+import CreateTechnician from 'pages/create/technician/CreateTechnician';
 
 // Constants
 import UserType from 'constants/userType';
@@ -26,10 +26,7 @@ import { Box, Container, Grid, Typography, useTheme } from '@mui/material';
 // Redux
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchUser } from 'store/slices/userSlice';
-import {
-  fetchServiceTicketsAssignedTo,
-  fetchServiceTicketsCreatedBy,
-} from 'store/slices/serviceTicketSlice';
+import { fetchServiceTicketsCreatedBy } from 'store/slices/serviceTicketSlice';
 import { fetchAdministrator } from 'store/slices/administratorSlice';
 import { fetchCustomerByContactId } from 'store/slices/customerSlice';
 import { fetchContractorByContactId } from 'store/slices/contractorSlice';
@@ -49,9 +46,22 @@ export default function Home() {
   const { serviceTickets, loading: serviceTicketsLoading } = useSelector(
     (state) => state.serviceTicket
   );
+
   const { data: administratorData, loading: administratorLoading } =
     useSelector((state) => state.administrator);
-  console.log(auth);
+
+  const { data: contractorData, loading: contractorLoading } = useSelector(
+    (state) => state.contractor
+  );
+
+  const { data: customerData, loading: customerLoading } = useSelector(
+    (state) => state.customer
+  );
+
+  const { data: technicianData, loading: technicianLoading } = useSelector(
+    (state) => state.technician
+  );
+
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
       if (user) {
@@ -72,13 +82,15 @@ export default function Home() {
       dispatch(fetchTechnicianById(userData?.uid));
     }
 
-    // if (businessData && userData) {
-    //   if (userData?.userType === UserType.CUSTOMER) {
-    //     dispatch(fetchServiceTicketsCreatedBy(businessData?.uid));
-    //   } else if (userData?.userType === UserType.CONTRACTOR) {
-    //     dispatch(fetchServiceTicketsAssignedTo(businessData?.uid));
-    //   }
-    // }
+    if (administratorData) {
+      console.log(administratorData);
+    } else if (contractorData) {
+      console.log(contractorData);
+    } else if (customerData) {
+      dispatch(fetchServiceTicketsCreatedBy(customerData?.uid));
+    } else if (technicianData) {
+      console.log(technicianData);
+    }
   }, [userData]);
 
   const colors = [
@@ -153,7 +165,7 @@ export default function Home() {
                 {userData?.userType === UserType.CUSTOMER ? (
                   <CreateServiceTicketDialog
                     userId={userData?.uid}
-                    // businessData={businessData}
+                    customerData={customerData}
                   />
                 ) : null}
               </Grid>

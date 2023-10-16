@@ -9,13 +9,18 @@ const routes = {
 
   // Customer
   CUSTOMER_BASE: '/customer',
-  CUSTOMER_ENROLLMENT: '/enrollment-customer',
+  // CUSTOMER_ENROLLMENT: '/enrollment-customer',
   CUSTOMER: '/customer/:uid/dashboard',
+  CREATE_CUSTOMER: '/create-customer',
 
   // Contractor
   CONTRACTOR_BASE: '/contractor',
-  CONTRACTOR_ENROLLMENT: '/enrollment-contractor',
+  // CONTRACTOR_ENROLLMENT: '/enrollment-contractor',
   CONTRACTOR_DASHBOARD: '/contractor/:uid/dashboard',
+  CREATE_CONTRACTOR: '/create-contractor',
+
+  // Technician
+  CREATE_TECHNICIAN: '/create-technician',
 
   // User
   USER_DASHBOARD: '/user/:uid/dashboard',
@@ -35,7 +40,7 @@ const routes = {
   FORGOT_PASSWORD: '/forgot-password',
   FORGOT_PASSWORD_CONFRIMATION: '/forgot-password-confirmation',
 
-  // Admin
+  // Super Admin
   ADMIN_BASE: '/admin',
   ADMIN_DASHBOARD: '/admin/:uid/dashboard',
 };

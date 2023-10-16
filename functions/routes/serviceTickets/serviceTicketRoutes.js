@@ -5,6 +5,60 @@ const { Firestore } = require('firebase-admin/firestore');
 const express = require('express');
 const router = express.Router();
 
+// router.post('/create-service-ticket', async (req, res) => {
+//   try {
+//     const {
+//       userId,
+//       customerId,
+//       customerName,
+//       titleForServices,
+//       reasonForServices,
+//       lineOfService,
+//       notToExceed,
+//       serviceProviderId,
+//       serviceProviderName,
+//     } = req.body;
+//     const newTicket = {
+//       status: 'new',
+//       assigned: false,
+//       customer: {
+//         id: customerId,
+//         name: customerName,
+//         createdByUserId: userId,
+//       },
+//       titleForServices,
+//       reasonForServices,
+//       lineOfService,
+//       notToExceed,
+//       serviceProvider: {
+//         id: serviceProviderId,
+//         name: serviceProviderName,
+//       },
+//       // Weird, but okay
+//       createdAt: Firestore.FieldValue.serverTimestamp(),
+//     };
+
+//     const ticketRef = await admin
+//       .firestore()
+//       .collection('serviceTickets')
+//       .add(newTicket);
+
+//     const ticketId = ticketRef.id;
+//     await ticketRef.update({ uid: ticketId });
+
+//     const createdTicketDoc = await ticketRef.get();
+//     const createdTicket = createdTicketDoc.data();
+
+//     return res.status(201).json({
+//       message: 'Service ticket document created successfully',
+//       ticket: createdTicket,
+//     });
+//   } catch (error) {
+//     console.error('Error creating service ticket document', error);
+//     return res.status(500).json({ message: 'Internal Server Error' });
+//   }
+// });
+
 router.post('/create-service-ticket', async (req, res) => {
   try {
     const {
@@ -16,8 +70,32 @@ router.post('/create-service-ticket', async (req, res) => {
       lineOfService,
       notToExceed,
       serviceProviderId,
-      serviceProviderName,
+      street,
+      city,
+      state,
+      zipCode,
     } = req.body;
+
+    // Function to query the 'contractors' collection
+    const queryContractors = admin
+      .firestore()
+      .collection('contractors')
+      .doc(serviceProviderId)
+      .get();
+
+    // Function to query the 'administrators' collection
+    const queryAdministrators = admin
+      .firestore()
+      .collection('administrators')
+      .doc(serviceProviderId)
+      .get();
+
+    // Wait for both queries to complete
+    const [contractorSnapshot, administratorSnapshot] = await Promise.all([
+      queryContractors,
+      queryAdministrators,
+    ]);
+
     const newTicket = {
       status: 'new',
       assigned: false,
@@ -25,6 +103,12 @@ router.post('/create-service-ticket', async (req, res) => {
         id: customerId,
         name: customerName,
         createdByUserId: userId,
+        address: {
+          street,
+          city,
+          state,
+          zipCode,
+        },
       },
       titleForServices,
       reasonForServices,
@@ -32,9 +116,11 @@ router.post('/create-service-ticket', async (req, res) => {
       notToExceed,
       serviceProvider: {
         id: serviceProviderId,
-        name: serviceProviderName,
+        // Check if a document was found in 'contractors' or 'administrators'
+        name: contractorSnapshot.exists
+          ? contractorSnapshot.data().name
+          : administratorSnapshot.data().name,
       },
-      // Weird, but okay
       createdAt: Firestore.FieldValue.serverTimestamp(),
     };
 
@@ -42,7 +128,6 @@ router.post('/create-service-ticket', async (req, res) => {
       .firestore()
       .collection('serviceTickets')
       .add(newTicket);
-
     const ticketId = ticketRef.id;
     await ticketRef.update({ uid: ticketId });
 
@@ -59,6 +144,7 @@ router.post('/create-service-ticket', async (req, res) => {
   }
 });
 
+// Super admin
 router.get('/get-all-service-tickets', async (req, res) => {
   try {
     const ticketsRef = admin.firestore().collection('serviceTickets');

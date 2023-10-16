@@ -12,7 +12,7 @@ router.post('/create-customer', async (req, res) => {
       predefinedLinesOfService,
       street,
       city,
-      zip,
+      zipCode,
       state,
       firstName,
       lastName,
@@ -27,7 +27,7 @@ router.post('/create-customer', async (req, res) => {
       primaryAddress: {
         street,
         city,
-        zip,
+        zipCode,
         state,
       },
       primaryContact: {
