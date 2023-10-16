@@ -33,7 +33,7 @@ import {
 import { fetchAdministrator } from 'store/slices/administratorSlice';
 import { fetchCustomerByContactId } from 'store/slices/customerSlice';
 import { fetchContractorByContactId } from 'store/slices/contractorSlice';
-import { fetchTechnicianDetailsByUserId } from 'store/slices/technicianSlice';
+import { fetchTechnicianById } from 'store/slices/technicianSlice';
 
 export default function Home() {
   document.title = 'Daedalus';
@@ -69,7 +69,7 @@ export default function Home() {
     } else if (userData?.userType === UserType.CUSTOMER) {
       dispatch(fetchCustomerByContactId(userData?.uid));
     } else if (userData?.userType === UserType.TECHNICIAN) {
-      dispatch(fetchTechnicianDetailsByUserId(userData?.uid));
+      dispatch(fetchTechnicianById(userData?.uid));
     }
 
     // if (businessData && userData) {

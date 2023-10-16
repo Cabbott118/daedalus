@@ -23,21 +23,6 @@ const createTechnician = createAsyncThunk(
   }
 );
 
-const fetchTechnicianDetailsByUserId = createAsyncThunk(
-  'technician/fetchTechnicianDetailsByUserId',
-  async (userId) => {
-    try {
-      const response = await get(
-        '/technicians/get-technician-details-by-user-id',
-        { userId }
-      );
-      return response;
-    } catch (error) {
-      throw new Error('Failed to fetch technician data.');
-    }
-  }
-);
-
 const fetchTechnicians = createAsyncThunk(
   'technician/fetchTechnicians',
   async () => {
@@ -126,29 +111,6 @@ const technicianSlice = createSlice({
         };
       })
 
-      .addCase(fetchTechnicianDetailsByUserId.pending, (state) => {
-        return {
-          ...state,
-          loading: true,
-          error: null,
-        };
-      })
-      .addCase(fetchTechnicianDetailsByUserId.fulfilled, (state, action) => {
-        return {
-          ...state,
-          data: action.payload,
-          loading: false,
-          error: null,
-        };
-      })
-      .addCase(fetchTechnicianDetailsByUserId.rejected, (state, action) => {
-        return {
-          ...state,
-          loading: false,
-          error: action.error.message,
-        };
-      })
-
       .addCase(fetchTechnicians.pending, (state) => {
         return {
           ...state,
@@ -224,7 +186,6 @@ const technicianSlice = createSlice({
 export const { reducer: technicianReducer } = technicianSlice;
 export {
   createTechnician,
-  fetchTechnicianDetailsByUserId,
   fetchTechnicians,
   fetchTechnicianDetailsByOwnerId,
   fetchTechnicianById,

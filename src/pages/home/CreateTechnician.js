@@ -6,7 +6,7 @@ import { Button } from '@mui/material';
 
 // Redux
 import { useDispatch, useSelector } from 'react-redux';
-import { signUpUser, createUser } from 'store/slices/userSlice';
+import { createFirebaseUser } from 'store/slices/userSlice';
 import { createTechnician } from 'store/slices/technicianSlice';
 
 const CreateTechnician = () => {
@@ -20,10 +20,10 @@ const CreateTechnician = () => {
     (state) => state.contractor
   );
 
-  let email = 'technician2@test.com';
+  let email = 'technician2235235@test.com';
   let password = '123123';
-  let firstName = 'Tech2';
-  let lastName = 'Nician2';
+  let firstName = '142314';
+  let lastName = '1241234';
 
   const handleCreateTechnicianClick = () => {
     let ownerId;
@@ -31,19 +31,17 @@ const CreateTechnician = () => {
       ownerId = administratorData?.uid;
     } else {
       ownerId = contractorData?.uid;
-      console.log(ownerId);
     }
 
-    dispatch(signUpUser({ email, password })).then((action) => {
-      dispatch(
-        createUser({
-          email,
-          userId: action.payload.uid,
-          firstName,
-          lastName,
-          userType: 'technician',
-        })
-      );
+    dispatch(
+      createFirebaseUser({
+        email,
+        password,
+        firstName,
+        lastName,
+        userType: 'technician',
+      })
+    ).then((action) => {
       dispatch(
         createTechnician({
           firstName,

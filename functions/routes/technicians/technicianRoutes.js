@@ -8,55 +8,33 @@ router.post('/create-technician', async (req, res) => {
   try {
     const { firstName, lastName, ownerId, userId } = req.body;
     const newTechnician = {
+      uid: userId,
       fullName: {
         firstName,
         lastName,
       },
       ownerId,
-      userId,
     };
 
-    const newTechnicianRef = await admin
+    await admin
       .firestore()
       .collection('technicians')
-      .add(newTechnician);
+      .doc(userId)
+      .set(newTechnician);
 
-    // Retrieve the document ID
-    const technicianId = newTechnicianRef.id;
-    await newTechnicianRef.update({ uid: technicianId });
+    const createdTechnicianDoc = await admin
+      .firestore()
+      .collection('technicians')
+      .doc(userId)
+      .get();
 
-    // Retrieve the created technician data from Firestore
-    const createdTechnicianDoc = await newTechnicianRef.get();
     const createdTechnician = createdTechnicianDoc.data();
-
     return res.status(201).json({
       message: 'Technician document created successfully',
       technician: createdTechnician,
     });
   } catch (error) {
     console.error('Error creating technician document', error);
-    return res.status(500).json({ message: 'Internal Server Error' });
-  }
-});
-
-router.get('/get-technician-details-by-user-id', async (req, res) => {
-  try {
-    const userId = req.query.userId;
-    const techniciansRef = admin.firestore().collection('technicians');
-    const querySnapshot = await techniciansRef.where('uid', '==', userId).get();
-
-    if (querySnapshot.empty) {
-      return res
-        .status(404)
-        .json({ message: 'No technician found for the specified userId.' });
-    }
-
-    // Assuming only one document is returned, you can directly access the data
-    const technicianData = querySnapshot.docs[0].data();
-
-    return res.status(200).json(technicianData);
-  } catch (error) {
-    console.error('Error retrieving technician details:', error);
     return res.status(500).json({ message: 'Internal Server Error' });
   }
 });
