@@ -24,6 +24,7 @@ import { fetchUser } from 'store/slices/userSlice';
 import {
   fetchServiceTicketsCreatedBy,
   fetchServiceTicketsAssignedToProvider,
+  fetchServiceTicketsAssignedToTechnician,
 } from 'store/slices/serviceTicketSlice';
 import { fetchAdministrator } from 'store/slices/administratorSlice';
 import { fetchCustomerByContactId } from 'store/slices/customerSlice';
@@ -79,17 +80,26 @@ export default function Home() {
     } else if (userData?.userType === UserType.TECHNICIAN) {
       dispatch(fetchTechnicianById(userData?.uid));
     }
+  }, [userData, dispatch]);
 
+  useEffect(() => {
     if (administratorData) {
       dispatch(fetchServiceTicketsAssignedToProvider(administratorData?.uid));
     } else if (contractorData) {
-      console.log(contractorData);
+      dispatch(fetchServiceTicketsAssignedToProvider(contractorData?.uid));
     } else if (customerData) {
       dispatch(fetchServiceTicketsCreatedBy(customerData?.uid));
     } else if (technicianData) {
-      console.log(technicianData);
+      dispatch(fetchServiceTicketsAssignedToTechnician(technicianData?.uid));
     }
-  }, [userData]);
+  }, [
+    userData,
+    dispatch,
+    administratorData,
+    contractorData,
+    customerData,
+    technicianData,
+  ]);
 
   const colors = [
     theme.palette.primary.light,

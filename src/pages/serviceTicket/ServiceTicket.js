@@ -199,7 +199,7 @@ const ServiceTicket = () => {
             variant='body2'
             sx={{ color: theme.palette.text.primary }}
           >
-            $5,000
+            ${serviceTicketData?.notToExceed}
           </Typography>
         </Grid>
         {userData?.userType === UserType.CONTRACTOR &&

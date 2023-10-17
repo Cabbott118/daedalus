@@ -146,17 +146,6 @@ const CreateCustomer = () => {
             </Grid>
             <Grid item xs={12}>
               <TextField
-                label='Zip Code'
-                fullWidth
-                {...register('zipCode', { required: true })}
-                error={errors.zipCode?.type === 'required'}
-                helperText={
-                  errors.zipCode?.type === 'required' && 'Zip Code is required'
-                }
-              />
-            </Grid>
-            <Grid item xs={12}>
-              <TextField
                 label='State'
                 select
                 fullWidth
@@ -169,6 +158,17 @@ const CreateCustomer = () => {
                   </MenuItem>
                 ))}
               </TextField>
+            </Grid>
+            <Grid item xs={12}>
+              <TextField
+                label='Zip Code'
+                fullWidth
+                {...register('zipCode', { required: true })}
+                error={errors.zipCode?.type === 'required'}
+                helperText={
+                  errors.zipCode?.type === 'required' && 'Zip Code is required'
+                }
+              />
             </Grid>
             <Grid item xs={12}>
               <FormLabel component='legend'>
