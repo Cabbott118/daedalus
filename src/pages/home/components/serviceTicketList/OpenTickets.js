@@ -74,25 +74,29 @@ const OpenTickets = ({ serviceTickets, value, index, ...other }) => {
     <div role='tabpanel' hidden={value !== index} {...other}>
       {value === index && (
         <div>
-          <Grid container>
-            <Grid item xs={12} md={6}>
-              <TextField
-                label='Sort by'
-                fullWidth
-                select
-                color='primary'
-                value={selectedSort}
-                onChange={handleSortChange}
-              >
-                <MenuItem value='option1'>Status: A - Z</MenuItem>
-                <MenuItem value='option2'>Status: Z - A</MenuItem>
-                <MenuItem value='option3'>Service Type: A - Z</MenuItem>
-                <MenuItem value='option4'>Service Type: Z - A</MenuItem>
-                <MenuItem value='option5'>Date: Latest First</MenuItem>
-                <MenuItem value='option6'>Date: Earliest First</MenuItem>
-              </TextField>
+          {serviceTickets.length > 0 ? (
+            <Grid container>
+              <Grid item xs={12} md={6}>
+                <TextField
+                  label='Sort by'
+                  fullWidth
+                  select
+                  color='primary'
+                  value={selectedSort}
+                  onChange={handleSortChange}
+                >
+                  <MenuItem value='option1'>Status: A - Z</MenuItem>
+                  <MenuItem value='option2'>Status: Z - A</MenuItem>
+                  <MenuItem value='option3'>Service Type: A - Z</MenuItem>
+                  <MenuItem value='option4'>Service Type: Z - A</MenuItem>
+                  <MenuItem value='option5'>Date: Latest First</MenuItem>
+                  <MenuItem value='option6'>Date: Earliest First</MenuItem>
+                </TextField>
+              </Grid>
             </Grid>
-          </Grid>
+          ) : (
+            <Typography>You don't have any open tickets</Typography>
+          )}
           {sortedServiceTickets.map((serviceTicket, index) => (
             <Box
               key={index}

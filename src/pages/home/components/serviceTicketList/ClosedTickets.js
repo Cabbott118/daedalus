@@ -11,7 +11,7 @@ const ClosedTickets = ({
   if (serviceTickets.length === 0)
     return (
       <div role='tabpanel' hidden={value !== index} {...other}>
-        <Typography>You don't have any closed tasks</Typography>
+        <Typography>You don't have any closed tickets</Typography>
       </div>
     );
 

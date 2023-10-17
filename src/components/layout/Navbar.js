@@ -8,7 +8,7 @@ import { ReactComponent as DaedalusFlying } from 'assets/images/daedalus.svg';
 
 // Constants
 import routes from 'constants/routes';
-import UserType from 'constants/userType';
+// import UserType from 'constants/userType';
 
 // Firebase
 import { getAuth, onAuthStateChanged } from 'firebase/auth';
@@ -60,14 +60,22 @@ export default function Navbar() {
   const dispatch = useDispatch();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
-  const [navLinks, setNavLinks] = useState([]);
+  const [businessData, setBusinessData] = useState(null);
   const [anchorEl, setAnchorEl] = useState(null);
   const [unreadNotifications, setUnreadNotifications] = useState(null);
 
   const { data: userData } = useSelector((state) => state.user);
+
   const { data: administratorData } = useSelector(
     (state) => state.administrator
   );
+
+  const { data: contractorData } = useSelector((state) => state.contractor);
+
+  const { data: customerData } = useSelector((state) => state.customer);
+
+  const { data: technicianData } = useSelector((state) => state.technician);
+
   const { data: notificationsData } = useSelector(
     (state) => state.notifications
   );
@@ -80,56 +88,30 @@ export default function Navbar() {
   }, [notificationsData]);
 
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (user) => {
-      if (user) {
-        setNavLinks([
-          {
-            name: userData?.fullName?.firstName,
-            route: `${routes.USER_DASHBOARD.replace(':uid', user?.uid)}`,
-            variant: 'text',
-          },
-          {
-            name: administratorData?.name,
-            route: `${routes.BUSINESS_DASHBOARD.replace(':uid', user?.uid)}`,
-            variant: 'text',
-          },
-          {
-            name: 'Notifications',
-            route: `${routes.NOTIFICATIONS.replace(':uid', user?.uid)}`,
-            variant: 'text',
-            badgeContent: unreadNotifications,
-          },
-        ]);
-      } else {
-        setNavLinks([
-          {
-            name: 'Login',
-            route: routes.LOGIN,
-            variant: 'contained',
-          },
-        ]);
-      }
-    });
+    const dataToUse = [
+      administratorData,
+      contractorData,
+      customerData,
+      technicianData,
+    ].find((data) => data?.uid);
 
-    return () => unsubscribe();
-  }, [auth, unreadNotifications]);
+    if (dataToUse) {
+      setBusinessData(dataToUse);
 
-  useEffect(() => {
-    if (!administratorData?.uid) return;
+      const q = query(
+        collection(db, 'notifications'),
+        where('notificationOwner', '==', dataToUse.uid),
+        orderBy('createdAt', 'desc')
+      );
 
-    const q = query(
-      collection(db, 'notifications'),
-      where('notificationOwner', '==', administratorData?.uid),
-      orderBy('createdAt', 'desc')
-    );
+      const unsubscribe = onSnapshot(q, (snapshot) => {
+        const notificationData = snapshot.docs.map((doc) => doc.data());
+        dispatch(fetchNotifications(dataToUse.uid));
+      });
 
-    const unsubscribe = onSnapshot(q, (snapshot) => {
-      const notificationData = snapshot.docs.map((doc) => doc.data());
-      dispatch(fetchNotifications(administratorData?.uid));
-    });
-
-    return () => unsubscribe();
-  }, [administratorData, db]);
+      return () => unsubscribe();
+    }
+  }, [administratorData, contractorData, customerData, technicianData, db]);
 
   const open = Boolean(anchorEl);
 
@@ -173,7 +155,7 @@ export default function Navbar() {
                   <>
                     <Drawer
                       userData={userData}
-                      businessData={administratorData}
+                      businessData={businessData}
                       unreadNotifications={unreadNotifications}
                       sx={{ position: 'relative' }}
                     />
@@ -262,24 +244,17 @@ export default function Navbar() {
         <Typography variant='overline' sx={{ ml: 2 }}>
           Business
         </Typography>
-        {userData?.userType === UserType.ADMIN ? (
-          <MenuItem
-            component={Link}
-            to={`${routes.ADMIN_DASHBOARD.replace(':uid', userData?.uid)}`}
-          >
-            Admin Dashboard
-          </MenuItem>
-        ) : (
-          <MenuItem
-            component={Link}
-            to={`${routes.BUSINESS_DASHBOARD.replace(
-              ':uid',
-              administratorData?.uid
-            )}`}
-          >
-            {`${administratorData?.businessName}`}
-          </MenuItem>
-        )}
+
+        <MenuItem
+          component={Link}
+          to={`${routes.BUSINESS_DASHBOARD.replace(
+            ':uid',
+            administratorData?.uid
+          )}`}
+        >
+          {`${administratorData?.name}`}
+        </MenuItem>
+
         <Divider />
         <MenuItem onClick={handleClose}>
           <ListItemIcon>

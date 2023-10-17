@@ -9,11 +9,6 @@ import TicketCounter from 'pages/home/components/TicketCounter';
 import WelcomeBanner from 'pages/home/components/WelcomeBanner';
 import CreateServiceTicketDialog from 'components/common/CreateServiceTicketDialog';
 
-// POC
-import CreateContractor from 'pages/create/contractor/CreateContractor';
-import CreateCustomer from 'pages/create/customer/CreateCustomer';
-import CreateTechnician from 'pages/create/technician/CreateTechnician';
-
 // Constants
 import UserType from 'constants/userType';
 
@@ -26,7 +21,10 @@ import { Box, Container, Grid, Typography, useTheme } from '@mui/material';
 // Redux
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchUser } from 'store/slices/userSlice';
-import { fetchServiceTicketsCreatedBy } from 'store/slices/serviceTicketSlice';
+import {
+  fetchServiceTicketsCreatedBy,
+  fetchServiceTicketsAssignedToProvider,
+} from 'store/slices/serviceTicketSlice';
 import { fetchAdministrator } from 'store/slices/administratorSlice';
 import { fetchCustomerByContactId } from 'store/slices/customerSlice';
 import { fetchContractorByContactId } from 'store/slices/contractorSlice';
@@ -83,7 +81,7 @@ export default function Home() {
     }
 
     if (administratorData) {
-      console.log(administratorData);
+      dispatch(fetchServiceTicketsAssignedToProvider(administratorData?.uid));
     } else if (contractorData) {
       console.log(contractorData);
     } else if (customerData) {
@@ -180,9 +178,6 @@ export default function Home() {
           </>
         )}
       </Container>
-      <CreateContractor />
-      <CreateCustomer />
-      <CreateTechnician />
     </>
   );
 }

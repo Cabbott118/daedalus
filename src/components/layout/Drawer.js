@@ -5,7 +5,7 @@ import Logout from 'components/common/Logout';
 
 // Constants
 import routes from 'constants/routes';
-import UserType from 'constants/userType';
+// import UserType from 'constants/userType';
 
 // MUI
 import {
@@ -19,14 +19,14 @@ import {
   ListItemButton,
   ListItemText,
   Typography,
-  useMediaQuery,
+  // useMediaQuery,
   useTheme,
 } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
 import PersonIcon from '@mui/icons-material/Person';
 import BusinessIcon from '@mui/icons-material/Business';
 import NotificationsIcon from '@mui/icons-material/Notifications';
-import AdminPanelSettingsIcon from '@mui/icons-material/AdminPanelSettings';
+// import AdminPanelSettingsIcon from '@mui/icons-material/AdminPanelSettings';
 
 // React Router
 import { Link } from 'react-router-dom';
@@ -83,43 +83,26 @@ const Drawer = ({ userData, businessData, unreadNotifications }) => {
           </ListItemButton>
         </ListItem>
       </List>
-      {userData?.userType !== UserType.ADMIN ? (
-        <List dense>
-          <Typography variant='overline' sx={{ p: 2 }}>
-            Business
-          </Typography>
-          <ListItem disablePadding>
-            <ListItemButton
-              component={Link}
-              to={`${routes.BUSINESS_DASHBOARD.replace(
-                ':uid',
-                businessData?.uid
-              )}`}
-            >
-              <BusinessIcon color='primary' />
-              <ListItemText
-                primary={`${businessData?.businessName} Dashboard`}
-                sx={{ pl: 2 }}
-              />
-            </ListItemButton>
-          </ListItem>
-        </List>
-      ) : (
-        <List dense>
-          <Typography variant='overline' sx={{ p: 2 }}>
-            Admin
-          </Typography>
-          <ListItem disablePadding>
-            <ListItemButton
-              component={Link}
-              to={`${routes.ADMIN_DASHBOARD.replace(':uid', userData?.uid)}`}
-            >
-              <AdminPanelSettingsIcon color='primary' />
-              <ListItemText primary='Admin Dashboard' sx={{ pl: 2 }} />
-            </ListItemButton>
-          </ListItem>
-        </List>
-      )}
+      <List dense>
+        <Typography variant='overline' sx={{ p: 2 }}>
+          Business
+        </Typography>
+        <ListItem disablePadding>
+          <ListItemButton
+            component={Link}
+            to={`${routes.BUSINESS_DASHBOARD.replace(
+              ':uid',
+              businessData?.uid
+            )}`}
+          >
+            <BusinessIcon color='primary' />
+            <ListItemText
+              primary={`${businessData?.name} Dashboard`}
+              sx={{ pl: 2 }}
+            />
+          </ListItemButton>
+        </ListItem>
+      </List>
       <List dense>
         <Divider />
         <ListItem>

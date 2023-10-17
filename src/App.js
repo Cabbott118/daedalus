@@ -24,17 +24,6 @@ import Dashboard from 'pages/dashboard/Dashboard';
 // Business
 import Business from 'pages/business/Business';
 
-// Customer
-// import CustomerEnrollment from 'pages/auth/CustomerEnrollment';
-import CreateCustomer from 'pages/create/customer/CreateCustomer';
-
-// Contractor
-// import ContractorEnrollment from 'pages/auth/ContractorEnrollment';
-import CreateContractor from 'pages/create/contractor/CreateContractor';
-
-// Technician
-import CreateTechnician from 'pages/create/technician/CreateTechnician';
-
 // Service Ticket
 import ServiceTicket from 'pages/serviceTicket/ServiceTicket';
 
@@ -156,15 +145,6 @@ function App() {
 
           <Route path={routes.LOGIN} element={<Login />} />
           <Route path={routes.SIGNUP} element={<Signup />} />
-          <Route path={routes.CREATE_CUSTOMER} element={<CreateCustomer />} />
-          <Route
-            path={routes.CREATE_CONTRACTOR}
-            element={<CreateContractor />}
-          />
-          <Route
-            path={routes.CREATE_TECHNICIAN}
-            element={<CreateTechnician />}
-          />
           <Route path={routes.FORGOT_PASSWORD} element={<ForgotPassword />} />
           <Route
             path={routes.FORGOT_PASSWORD_CONFRIMATION}
