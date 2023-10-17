@@ -26,39 +26,32 @@ import {
 } from '@mui/material';
 import InfoIcon from '@mui/icons-material/Info';
 
-// React Router
-import { useParams } from 'react-router-dom';
-
 // Redux
 import { useDispatch, useSelector } from 'react-redux';
-import {
-  fetchServiceTicketDetails,
-  updateServiceTicketTechnician,
-} from 'store/slices/serviceTicketSlice';
+import { updateServiceTicketTechnician } from 'store/slices/serviceTicketSlice';
 import { updateServiceTicketStatus } from 'store/slices/serviceTicketSlice';
 
 const ServiceTicket = () => {
-  const { uid } = useParams();
   const dispatch = useDispatch();
   const theme = useTheme();
 
   const { data: serviceTicketData, loading: serviceTicketLoading } =
     useSelector((state) => state.serviceTicket);
+
   const { data: userData, loading: userLoading } = useSelector(
     (state) => state.user
   );
 
-  useEffect(() => {
-    dispatch(fetchServiceTicketDetails(uid));
-  }, [uid]);
-
   const acceptServiceTicket = async () => {
     await dispatch(
-      updateServiceTicketStatus({ ticketId: uid, status: StatusType.ACCEPTED })
+      updateServiceTicketStatus({
+        ticketId: serviceTicketData?.uid,
+        status: StatusType.ACCEPTED,
+      })
     );
     await dispatch(
       updateServiceTicketTechnician({
-        ticketId: uid,
+        ticketId: serviceTicketData?.uid,
         technicianId: userData?.uid,
         firstName: userData?.fullName.firstName,
         lastName: userData?.fullName.lastName,
@@ -73,7 +66,7 @@ const ServiceTicket = () => {
   if (serviceTicketLoading)
     return (
       <Container>
-        <Typography variant='p'>Loading...</Typography>
+        <Typography variant='body1'>Loading...</Typography>
       </Container>
     );
 

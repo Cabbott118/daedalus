@@ -73,6 +73,7 @@ const technicianSlice = createSlice({
   name: 'technician',
   initialState: {
     data: null,
+    owned: [],
     loading: false,
     error: null,
   },
@@ -80,6 +81,7 @@ const technicianSlice = createSlice({
     clearTechnicianData: (state) => {
       return {
         data: null,
+        owned: [],
         loading: false,
         error: null,
       };
@@ -98,7 +100,7 @@ const technicianSlice = createSlice({
       .addCase(createTechnician.fulfilled, (state, action) => {
         return {
           ...state,
-          data: action.payload,
+          owned: [...state.owned, action.payload],
           loading: false,
           error: null,
         };
@@ -144,7 +146,7 @@ const technicianSlice = createSlice({
       .addCase(fetchTechnicianDetailsByOwnerId.fulfilled, (state, action) => {
         return {
           ...state,
-          data: action.payload,
+          owned: action.payload,
           loading: false,
           error: null,
         };

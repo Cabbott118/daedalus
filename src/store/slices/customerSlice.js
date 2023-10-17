@@ -126,6 +126,7 @@ const customerSlice = createSlice({
   name: 'customer',
   initialState: {
     data: null,
+    owned: [],
     loading: false,
     error: null,
   },
@@ -133,6 +134,7 @@ const customerSlice = createSlice({
     clearCustomerData: (state) => {
       return {
         data: null,
+        owned: [],
         loading: false,
         error: null,
       };
@@ -151,7 +153,7 @@ const customerSlice = createSlice({
       .addCase(createCustomer.fulfilled, (state, action) => {
         return {
           ...state,
-          data: action.payload,
+          owned: [...state.owned, action.payload],
           loading: false,
           error: null,
         };
@@ -174,7 +176,7 @@ const customerSlice = createSlice({
       .addCase(fetchCustomerByOwnerId.fulfilled, (state, action) => {
         return {
           ...state,
-          data: action.payload,
+          owned: action.payload,
           loading: false,
           error: null,
         };

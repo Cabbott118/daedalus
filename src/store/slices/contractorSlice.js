@@ -130,6 +130,7 @@ const contractorSlice = createSlice({
   name: 'contractor',
   initialState: {
     data: null,
+    owned: [],
     loading: false,
     error: null,
   },
@@ -137,6 +138,7 @@ const contractorSlice = createSlice({
     clearContractorData: (state) => {
       return {
         data: null,
+        owned: [],
         loading: false,
         error: null,
       };
@@ -155,7 +157,7 @@ const contractorSlice = createSlice({
       .addCase(createContractor.fulfilled, (state, action) => {
         return {
           ...state,
-          data: action.payload,
+          owned: [...state.owned, action.payload],
           loading: false,
           error: null,
         };
@@ -201,7 +203,7 @@ const contractorSlice = createSlice({
       .addCase(fetchContractorByOwnerId.fulfilled, (state, action) => {
         return {
           ...state,
-          data: action.payload,
+          owned: action.payload,
           loading: false,
           error: null,
         };

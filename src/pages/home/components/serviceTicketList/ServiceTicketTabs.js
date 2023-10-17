@@ -39,11 +39,8 @@ const ServiceTicketTabs = ({
     <Box>
       <Box sx={{ borderBottom: 1, borderColor: 'divider', mb: 3 }}>
         <Tabs value={selectedTab} onChange={handleTabChange}>
-          <Tab label='Open' sx={{ textTransform: 'none', minWidth: '150px' }} />
-          <Tab
-            label='Closed'
-            sx={{ textTransform: 'none', minWidth: '150px' }}
-          />
+          <Tab label='Open' sx={{ textTransform: 'none', width: '50%' }} />
+          <Tab label='Closed' sx={{ textTransform: 'none', width: '50%' }} />
         </Tabs>
       </Box>
 

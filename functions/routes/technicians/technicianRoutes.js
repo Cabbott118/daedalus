@@ -66,10 +66,15 @@ router.get('/get-technician-details-by-owner-id', async (req, res) => {
         .json({ message: 'No technician found for the specified owner' }); // Update the response message
     }
 
-    const doc = querySnapshot.docs[0]; // Assuming only one document is returned
-    const technicianData = doc.data();
+    const technicianDataArray = [];
 
-    return res.status(200).json(technicianData); // Update response message and variable names
+    // Iterate over the documents to collect all results
+    querySnapshot.forEach((doc) => {
+      const technicianData = doc.data();
+      technicianDataArray.push(technicianData);
+    });
+
+    return res.status(200).json(technicianDataArray); // Update response message and variable names
   } catch (error) {
     console.error('Error retrieving technician details:', error); // Update error message
     return res.status(500).json({ message: 'Internal Server Error' });

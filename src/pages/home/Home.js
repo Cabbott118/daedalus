@@ -107,7 +107,13 @@ export default function Home() {
     'white',
   ];
 
-  if (userLoading || administratorLoading)
+  if (
+    userLoading ||
+    administratorLoading ||
+    contractorLoading ||
+    customerLoading ||
+    technicianLoading
+  )
     return <Loader style={{ fill: theme.palette.primary.main }} />;
 
   if (!userData)
@@ -159,6 +165,16 @@ export default function Home() {
                 {administratorData && (
                   <Typography variant='subtitle1' component='h1'>
                     {administratorData?.name} - Daedalus
+                  </Typography>
+                )}
+                {contractorData && (
+                  <Typography variant='subtitle1' component='h1'>
+                    {contractorData?.name} - Daedalus
+                  </Typography>
+                )}
+                {customerData && (
+                  <Typography variant='subtitle1' component='h1'>
+                    {customerData?.name} - Daedalus
                   </Typography>
                 )}
               </Grid>

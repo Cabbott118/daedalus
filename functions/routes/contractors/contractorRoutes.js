@@ -75,13 +75,18 @@ router.get('/get-contractor-details-by-owner-id', async (req, res) => {
     if (querySnapshot.empty) {
       return res
         .status(404)
-        .json({ message: 'No contractor found for the specified owner' });
+        .json({ message: 'No contractors found for the specified owner' });
     }
 
-    const doc = querySnapshot.docs[0]; // Assuming only one document is returned
-    const contractorData = doc.data();
+    const contractorDataArray = [];
 
-    return res.status(200).json(contractorData);
+    // Iterate over the documents to collect all results
+    querySnapshot.forEach((doc) => {
+      const contractorData = doc.data();
+      contractorDataArray.push(contractorData);
+    });
+
+    return res.status(200).json(contractorDataArray);
   } catch (error) {
     console.error('Error retrieving contractor details:', error);
     return res.status(500).json({ message: 'Internal Server Error' });

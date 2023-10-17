@@ -75,10 +75,15 @@ router.get('/get-customer-details-by-owner-id', async (req, res) => {
         .json({ message: 'No customer found for the specified owner' });
     }
 
-    const doc = querySnapshot.docs[0]; // Assuming only one document is returned
-    const customerData = doc.data();
+    const customerDataArray = [];
 
-    return res.status(200).json(customerData);
+    // Iterate over the documents to collect all results
+    querySnapshot.forEach((doc) => {
+      const customerData = doc.data();
+      customerDataArray.push(customerData);
+    });
+
+    return res.status(200).json(customerDataArray);
   } catch (error) {
     console.error('Error retrieving customer details:', error);
     return res.status(500).json({ message: 'Internal Server Error' });

@@ -6,7 +6,6 @@ import UpdateDialog from 'pages/dashboard/components/UpdateDialog';
 import AccountComponent from 'pages/dashboard/components/account/AccountComponent';
 import ServiceTicketsComponent from 'pages/dashboard/components/serviceTickets/ServiceTicketsComponent';
 import BusinessInformationComponent from 'pages/dashboard/components/businessInformation/BusinessInformationComponent';
-import AdminComponent from 'pages/dashboard/components/admin/AdminComponent';
 
 // Constants
 import UserType from 'constants/userType';
@@ -21,7 +20,6 @@ import {
   useTheme,
 } from '@mui/material';
 import {
-  AdminPanelSettings,
   Person,
   Business,
   ListAlt,
@@ -43,12 +41,17 @@ export default function Dashboard() {
   const { data: userData, loading: userLoading } = useSelector(
     (state) => state.user
   );
-  // const { data: customerData, loading: customerLoading } = useSelector(
-  //   (state) => state.customer
-  // );
-  // const { data: contractorData, loading: contractorLoading } = useSelector(
-  //   (state) => state.contractor
-  // );
+
+  const { data: administratorData, loading: administratorLoading } =
+    useSelector((state) => state.administrator);
+
+  const { data: customerData, loading: customerLoading } = useSelector(
+    (state) => state.customer
+  );
+
+  const { data: contractorData, loading: contractorLoading } = useSelector(
+    (state) => state.contractor
+  );
 
   document.title = userData?.fullName?.firstName
     ? `${userData.fullName.firstName}'s Dashboard`
@@ -61,8 +64,8 @@ export default function Dashboard() {
     if (userData?.userType === UserType.CONTRACTOR) {
       setMenuItems(contractorNavItems);
     }
-    if (userData?.userType === UserType.ADMIN) {
-      setMenuItems(adminNavItems);
+    if (userData?.userType === UserType.ADMINISTRATOR) {
+      setMenuItems(administratorNavItems);
     }
   }, []);
 
@@ -97,14 +100,19 @@ export default function Dashboard() {
     },
   ];
 
-  const adminNavItems = [
+  const administratorNavItems = [
     {
       text: 'Account',
       icon: Person,
     },
     {
-      text: 'Admin',
-      icon: AdminPanelSettings,
+      text: 'Business Information',
+      icon: Business,
+    },
+
+    {
+      text: 'Service Tickets',
+      icon: ListAlt,
     },
   ];
 
@@ -126,13 +134,12 @@ export default function Dashboard() {
           // contractorData={contractorData}
         />
       );
-    if (activeItem === 'Admin') return <AdminComponent />;
   };
 
   return (
     <Container maxWidth='md'>
       <Grid container spacing={2}>
-        <Grid item container direction='column' xs={12} sm={4} spacing={2}>
+        <Grid item container direction='column' xs={12} md={4} spacing={2}>
           <Grid item>
             <Typography variant='h6' sx={{ color: theme.palette.text.primary }}>
               Menu
@@ -172,7 +179,7 @@ export default function Dashboard() {
           </Grid>
         </Grid>
 
-        <Grid item container direction='column' xs={12} sm={8} spacing={2}>
+        <Grid item container direction='column' xs={12} md={8} spacing={2}>
           <Grid item>
             <Typography variant='h6' sx={{ color: theme.palette.text.primary }}>
               {activeItem}
