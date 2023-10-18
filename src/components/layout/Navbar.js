@@ -200,6 +200,7 @@ export default function Navbar() {
                   to={routes.LOGIN}
                   sx={{
                     color: theme.palette.primary.main,
+                    fontWeight: 500,
                   }}
                 >
                   Login
@@ -221,10 +222,7 @@ export default function Navbar() {
         transformOrigin={{ horizontal: 'right', vertical: 'top' }}
         anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
       >
-        <MenuItem
-          component={Link}
-          to={`${routes.NOTIFICATIONS.replace(':uid', userData?.uid)}`}
-        >
+        <MenuItem component={Link} to={routes.NOTIFICATIONS}>
           <Typography variant='inherit' sx={{ mr: 3 }}>
             Notifications
           </Typography>
@@ -234,26 +232,13 @@ export default function Navbar() {
         <Typography variant='overline' sx={{ ml: 2 }}>
           Account
         </Typography>
-        <MenuItem
-          component={Link}
-          to={routes.USER_DASHBOARD.replace(':uid', userData?.uid)}
-        >
-          {`${userData?.fullName?.firstName}'s Dashboard`}
+        <MenuItem component={Link} to={routes.PROFILE}>
+          My profile
         </MenuItem>
         <Divider />
         <Typography variant='overline' sx={{ ml: 2 }}>
           Business
         </Typography>
-
-        <MenuItem
-          component={Link}
-          to={`${routes.BUSINESS_DASHBOARD.replace(
-            ':uid',
-            administratorData?.uid
-          )}`}
-        >
-          {`${administratorData?.name}`}
-        </MenuItem>
 
         <Divider />
         <MenuItem onClick={handleClose}>

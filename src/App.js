@@ -86,12 +86,8 @@ function App() {
               }
             >
               {/* Place your 'authenticated routes in here! They can be referenced by /user/<route> */}
-              <Route index path=':uid/dashboard' element={<Dashboard />} />
-              <Route
-                index
-                path=':uid/notifications'
-                element={<Notifications />}
-              />
+              <Route index path='profile' element={<Dashboard />} />
+              <Route index path='notifications' element={<Notifications />} />
             </Route>
 
             <Route
