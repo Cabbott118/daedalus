@@ -45,7 +45,7 @@ export default function Home() {
   const { serviceTickets, loading: serviceTicketsLoading } = useSelector(
     (state) => state.serviceTicket
   );
-
+  console.log(serviceTicketsLoading);
   const { data: administratorData, loading: administratorLoading } =
     useSelector((state) => state.administrator);
 
@@ -107,14 +107,14 @@ export default function Home() {
     'white',
   ];
 
-  if (
-    userLoading ||
-    administratorLoading ||
-    contractorLoading ||
-    customerLoading ||
-    technicianLoading
-  )
-    return <Loader style={{ fill: theme.palette.primary.main }} />;
+  // if (
+  //   userLoading ||
+  //   administratorLoading ||
+  //   contractorLoading ||
+  //   customerLoading ||
+  //   technicianLoading
+  // )
+  //   return <Loader style={{ fill: theme.palette.primary.main }} />;
 
   if (!userData)
     return (
@@ -126,7 +126,7 @@ export default function Home() {
 
   return (
     <>
-      <Box
+      {/* <Box
         sx={{
           height: 100,
           bgcolor: theme.palette.primary.dark,
@@ -152,7 +152,7 @@ export default function Home() {
             ></Box>
           );
         })}
-      </Box>
+      </Box> */}
 
       <Container maxWidth='md' sx={{ mt: 3 }}>
         {userData && (
@@ -161,7 +161,7 @@ export default function Home() {
               <Grid item xs={12}>
                 <WelcomeBanner userData={userData} theme={theme} />
               </Grid>
-              <Grid item xs={12}>
+              {/* <Grid item xs={12}>
                 {administratorData && (
                   <Typography variant='subtitle1' component='h1'>
                     {administratorData?.name} - Daedalus
@@ -177,7 +177,7 @@ export default function Home() {
                     {customerData?.name} - Daedalus
                   </Typography>
                 )}
-              </Grid>
+              </Grid> */}
             </Grid>
             <Grid container spacing={3} sx={{ mt: 5 }}>
               <Grid item xs={12} md={4}>

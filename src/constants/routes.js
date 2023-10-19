@@ -16,9 +16,9 @@ const routes = {
   MANAGE_BUSINESSES: '/manage-businesses',
 
   // Create
-  CREATE_CUSTOMER: '/create-customer',
-  CREATE_CONTRACTOR: '/create-contractor',
-  CREATE_TECHNICIAN: '/create-technician',
+  CREATE_CUSTOMER: '/manage-businesses/create-customer',
+  CREATE_CONTRACTOR: '/manage-businesses/create-contractor',
+  CREATE_TECHNICIAN: '/manage-businesses/create-technician',
 
   // User
   PROFILE: '/user/profile',

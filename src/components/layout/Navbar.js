@@ -8,7 +8,7 @@ import { ReactComponent as DaedalusFlying } from 'assets/images/daedalus.svg';
 
 // Constants
 import routes from 'constants/routes';
-// import UserType from 'constants/userType';
+import UserType from 'constants/userType';
 
 // Firebase
 import { getAuth, onAuthStateChanged } from 'firebase/auth';
@@ -33,6 +33,7 @@ import {
   Button,
   Container,
   Divider,
+  Grid,
   IconButton,
   ListItemIcon,
   Menu,
@@ -43,8 +44,7 @@ import {
   useMediaQuery,
   useTheme,
 } from '@mui/material';
-
-import Settings from '@mui/icons-material/Settings';
+import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 
 // React Router
 import { Link, Outlet } from 'react-router-dom';
@@ -58,10 +58,11 @@ export default function Navbar() {
   const auth = getAuth();
   const db = getFirestore();
   const dispatch = useDispatch();
-  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+  const isMobile = useMediaQuery(theme.breakpoints.down('md'));
 
   const [businessData, setBusinessData] = useState(null);
   const [anchorEl, setAnchorEl] = useState(null);
+  const [secondAnchorEl, setSecondAnchorEl] = useState(null);
   const [unreadNotifications, setUnreadNotifications] = useState(null);
 
   const { data: userData } = useSelector((state) => state.user);
@@ -123,97 +124,31 @@ export default function Navbar() {
     setAnchorEl(null);
   };
 
-  return (
-    <>
-      <Box sx={{ flexGrow: 1 }}>
-        <Container maxWidth='md'>
-          <AppBar
-            position='static'
-            color='transparent'
-            sx={{ boxShadow: 'none' }}
-          >
-            <Toolbar>
-              <Link to={routes.HOME} style={{ flexGrow: 1 }}>
-                <Button
-                  sx={{
-                    textTransform: 'none',
-                    color: theme.palette.text.primary,
-                  }}
-                >
-                  <DaedalusFlying
-                    height='50px'
-                    width='50px'
-                    style={{
-                      fill: theme.palette.primary.main,
-                      marginBottom: -10,
-                    }}
-                  />
-                </Button>
-              </Link>
-              {userData ? (
-                isMobile ? (
-                  <>
-                    <Drawer
-                      userData={userData}
-                      businessData={businessData}
-                      unreadNotifications={unreadNotifications}
-                      sx={{ position: 'relative' }}
-                    />
-                    <Badge
-                      badgeContent={unreadNotifications}
-                      color='error'
-                      sx={{
-                        position: 'absolute',
-                        top: 20,
-                        right: 25,
-                      }}
-                    />
-                  </>
-                ) : (
-                  <>
-                    <Tooltip title='Menu'>
-                      <IconButton
-                        onClick={handleClick}
-                        size='small'
-                        sx={{ ml: 2, position: 'relative' }}
-                        aria-controls={open ? 'account-menu' : undefined}
-                        aria-haspopup='true'
-                        aria-expanded={open ? 'true' : undefined}
-                      >
-                        <Avatar>{getUserInitials(userData?.fullName)}</Avatar>
-                        <Badge
-                          badgeContent={unreadNotifications}
-                          color='error'
-                          sx={{
-                            position: 'absolute',
-                            top: 10,
-                            right: 10,
-                          }}
-                        />
-                      </IconButton>
-                    </Tooltip>
-                  </>
-                )
-              ) : (
-                <MenuItem
-                  component={Link}
-                  to={routes.LOGIN}
-                  sx={{
-                    color: theme.palette.primary.main,
-                    fontWeight: 500,
-                  }}
-                >
-                  Login
-                </MenuItem>
-              )}
-            </Toolbar>
-          </AppBar>
-        </Container>
-      </Box>
+  const handleSecondMenuClick = (event) => {
+    setSecondAnchorEl(event.currentTarget);
+  };
+
+  const handleSecondMenuClose = () => {
+    setSecondAnchorEl(null);
+  };
+
+  const menuItems = [
+    { route: routes.PROFILE, label: 'Your profile' },
+    { route: routes.ACCOUNT, label: 'Account settings' },
+    { route: routes.NOTIFICATIONS, label: 'Notifications' },
+  ];
+
+  const secondMenuItems = [
+    { route: routes.MANAGE_BUSINESSES, label: 'Manage businesses' },
+  ];
+
+  const renderMenu = (anchorEl, handleClose, items) => {
+    const showLogoutCondition = items.length > 1;
+
+    return (
       <Menu
         anchorEl={anchorEl}
-        id='account-menu'
-        open={open}
+        open={Boolean(anchorEl)}
         onClose={handleClose}
         onClick={handleClose}
         sx={{
@@ -222,34 +157,138 @@ export default function Navbar() {
         transformOrigin={{ horizontal: 'right', vertical: 'top' }}
         anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
       >
-        <MenuItem component={Link} to={routes.NOTIFICATIONS}>
-          <Typography variant='inherit' sx={{ mr: 3 }}>
-            Notifications
-          </Typography>
-          <Badge badgeContent={unreadNotifications} color='error' />
-        </MenuItem>
-        <Divider />
-        <Typography variant='overline' sx={{ ml: 2 }}>
-          Account
-        </Typography>
-        <MenuItem component={Link} to={routes.PROFILE}>
-          My profile
-        </MenuItem>
-        <Divider />
-        <Typography variant='overline' sx={{ ml: 2 }}>
-          Business
-        </Typography>
-
-        <Divider />
-        <MenuItem onClick={handleClose}>
-          <ListItemIcon>
-            <Settings fontSize='small' />
-          </ListItemIcon>
-          Settings
-        </MenuItem>
-        <Divider />
-        <Logout />
+        {items.map((item) => (
+          <MenuItem
+            key={item.route}
+            component={Link}
+            to={item.route}
+            sx={{ fontSize: 18 }}
+          >
+            {item.label}
+          </MenuItem>
+        ))}
+        {showLogoutCondition && <Logout />}
       </Menu>
+    );
+  };
+
+  return (
+    <>
+      <AppBar position='sticky' color='transparent' sx={{ boxShadow: 'none' }}>
+        <Container maxWidth='md'>
+          <Toolbar>
+            <Grid
+              container
+              direction='row'
+              alignItems='center'
+              justifyContent='space-between'
+            >
+              <Grid item>
+                <Link to={routes.HOME}>
+                  <Button
+                    sx={{
+                      textTransform: 'none',
+                      color: theme.palette.text.primary,
+                    }}
+                  >
+                    <DaedalusFlying
+                      height='50px'
+                      width='50px'
+                      style={{
+                        fill: theme.palette.primary.main,
+                        marginBottom: -10,
+                      }}
+                    />
+                  </Button>
+                </Link>
+              </Grid>
+              <Grid item>
+                {userData ? (
+                  isMobile ? (
+                    <>
+                      <Drawer
+                        userData={userData}
+                        businessData={businessData}
+                        unreadNotifications={unreadNotifications}
+                        sx={{ position: 'relative' }}
+                      />
+                      <Badge
+                        badgeContent={unreadNotifications}
+                        color='error'
+                        sx={{
+                          position: 'absolute',
+                          top: 20,
+                          right: 25,
+                        }}
+                      />
+                    </>
+                  ) : (
+                    <>
+                      {userData?.userType !== UserType.TECHNICIAN && (
+                        <Button
+                          variant='outlined'
+                          endIcon={<ArrowDropDownIcon />}
+                          onClick={handleSecondMenuClick}
+                          color='inherit'
+                          sx={{
+                            borderRadius: 5,
+                            textTransform: 'none',
+                          }}
+                        >
+                          Menu
+                        </Button>
+                      )}
+                      <Tooltip title='Account menu'>
+                        <IconButton
+                          onClick={handleClick}
+                          size='small'
+                          sx={{
+                            ml: 2,
+                            position: 'relative',
+                          }}
+                          aria-controls={open ? 'account-menu' : undefined}
+                          aria-haspopup='true'
+                          aria-expanded={open ? 'true' : undefined}
+                        >
+                          <Avatar sx={{ bgcolor: '#333' }}>
+                            <Typography sx={{ fontWeight: 500 }}>
+                              {getUserInitials(userData?.fullName)}
+                            </Typography>
+                          </Avatar>
+                          <Badge
+                            badgeContent={unreadNotifications}
+                            color='error'
+                            sx={{
+                              position: 'absolute',
+                              top: 10,
+                              right: 10,
+                            }}
+                          />
+                        </IconButton>
+                      </Tooltip>
+                    </>
+                  )
+                ) : (
+                  <MenuItem
+                    component={Link}
+                    to={routes.LOGIN}
+                    sx={{
+                      color: theme.palette.primary.main,
+                      fontWeight: 500,
+                    }}
+                  >
+                    Login
+                  </MenuItem>
+                )}
+              </Grid>
+            </Grid>
+          </Toolbar>
+        </Container>
+      </AppBar>
+
+      {renderMenu(anchorEl, handleClose, menuItems)}
+      {renderMenu(secondAnchorEl, handleSecondMenuClose, secondMenuItems)}
+
       <Outlet />
     </>
   );

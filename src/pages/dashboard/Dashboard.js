@@ -29,9 +29,6 @@ import {
 
 // Redux
 import { useSelector } from 'react-redux';
-import CreateContractor from 'pages/create/contractor/CreateContractor';
-import CreateCustomer from 'pages/create/customer/CreateCustomer';
-import CreateTechnician from 'pages/create/technician/CreateTechnician';
 
 export default function Dashboard() {
   const theme = useTheme();
@@ -191,9 +188,6 @@ export default function Dashboard() {
           </Grid>
         </Grid>
       </Grid>
-      <CreateContractor />
-      <CreateCustomer />
-      <CreateTechnician />
     </Container>
   );
 }

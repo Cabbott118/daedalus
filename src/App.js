@@ -21,9 +21,6 @@ import Login from 'pages/auth/Login';
 import Signup from 'pages/auth/Signup';
 import Dashboard from 'pages/dashboard/Dashboard';
 
-// Business
-import Business from 'pages/business/Business';
-
 // Service Ticket
 import ServiceTicket from 'pages/serviceTicket/ServiceTicket';
 
@@ -33,11 +30,14 @@ import ForgotPassword from 'pages/forgotPassword/ForgotPassword';
 import ForgotPasswordConfirmation from 'pages/forgotPassword/ForgotPasswordConfirmation';
 import RequireAuth from 'routes/requireAuth';
 
-// Admin
-import Admin from 'pages/admin/Admin';
-
 // Notifications
 import Notifications from 'pages/notifications/Notifications';
+
+// Business Management
+import ManageBusiness from 'pages/manageBusiness/ManageBusiness';
+import CreateCustomer from 'pages/manageBusiness/createCustomer/CreateCustomer';
+import CreateContractor from 'pages/manageBusiness/createContractor/CreateContractor';
+import CreateTechnician from 'pages/manageBusiness/createTechnician/CreateTechnician';
 
 // React Router
 import { Outlet, Route, Routes } from 'react-router-dom';
@@ -72,62 +72,59 @@ function App() {
       <BrowserRouter>
         <Routes>
           <Route path={routes.HOME} element={<Navbar />}>
-            <Route
-              index // Equivalent to saying the page content for '/'
-              element={<Home />}
-            />
+            <Route index element={<Home />} />
 
             <Route
-              path={routes.USER} // place all routes that need user logged in under /user/
+              path={routes.USER}
               element={
                 <RequireAuth>
                   <Outlet />
                 </RequireAuth>
               }
             >
-              {/* Place your 'authenticated routes in here! They can be referenced by /user/<route> */}
               <Route index path='profile' element={<Dashboard />} />
               <Route index path='notifications' element={<Notifications />} />
             </Route>
 
             <Route
-              path={routes.BUSINESS_BASE} // place all routes that need user logged in under /business/
+              path={routes.MANAGE_BUSINESSES}
               element={
                 <RequireAuth>
+                  <ManageBusiness />
                   <Outlet />
                 </RequireAuth>
               }
             >
-              {/* Place your 'authenticated routes in here! They can be referenced by /business/<route> */}
-              <Route index path=':uid/dashboard' element={<Business />} />
+              <Route
+                index
+                path={routes.CREATE_CUSTOMER}
+                element={<CreateCustomer />}
+              />
+              <Route
+                index
+                path={routes.CREATE_CONTRACTOR}
+                element={<CreateContractor />}
+              />
+              <Route
+                index
+                path={routes.CREATE_TECHNICIAN}
+                element={<CreateTechnician />}
+              />
             </Route>
 
             <Route
-              path={routes.SERVICE_TICKET} // place all routes that need user logged in under /service-ticket/
+              path={routes.SERVICE_TICKET}
               element={
                 <RequireAuth>
                   <Outlet />
                 </RequireAuth>
               }
             >
-              {/* Place your 'authenticated routes in here! They can be referenced by /service-ticket/<route> */}
               <Route index path=':uid' element={<ServiceTicket />} />
             </Route>
 
             <Route
-              path={routes.ADMIN_BASE} // place all routes that need user logged in under /admin/
-              element={
-                <RequireAuth>
-                  <Outlet />
-                </RequireAuth>
-              }
-            >
-              {/* Place your 'authenticated routes in here! They can be referenced by /admin/<route> */}
-              <Route index path=':uid/dashboard' element={<Admin />} />
-            </Route>
-
-            <Route
-              path='*' // Providing a 404 page for '/' and thus the whole site.
+              path='*'
               element={
                 <Container maxWidth='sm'>
                   <Typography variant='h2'>404 Not Found</Typography>

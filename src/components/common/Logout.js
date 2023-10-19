@@ -1,5 +1,5 @@
 // MUI
-import { Button } from '@mui/material';
+import { Button, Divider } from '@mui/material';
 
 // React Router
 import { useNavigate, useLocation } from 'react-router-dom';
@@ -39,14 +39,17 @@ export default function Logout({ variant }) {
   };
 
   return (
-    <Button
-      color='error'
-      variant={variant}
-      fullWidth
-      onClick={handleLogout}
-      sx={{ textTransform: 'none' }}
-    >
-      Logout
-    </Button>
+    <>
+      <Divider light variant='middle' />
+      <Button
+        color='error'
+        variant={variant}
+        fullWidth
+        onClick={handleLogout}
+        sx={{ textTransform: 'none' }}
+      >
+        Logout
+      </Button>
+    </>
   );
 }
