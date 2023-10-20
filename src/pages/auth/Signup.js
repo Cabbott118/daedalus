@@ -8,6 +8,9 @@ import AuthenticationFooter from 'pages/auth/components/AuthenticationFooter';
 // Constants
 import routes from 'constants/routes';
 
+// Firebase
+import { getAuth, onAuthStateChanged } from 'firebase/auth';
+
 // Helpers
 import passwordMatch from 'services/helpers/passwordMatch';
 import errorTransformer from 'constants/errorTransformer';

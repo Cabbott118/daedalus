@@ -12,14 +12,14 @@ import CreateServiceTicketDialog from 'components/common/CreateServiceTicketDial
 import UserType from 'constants/userType';
 
 // Firebase
-import { getAuth, onAuthStateChanged } from 'firebase/auth';
+// import { getAuth, onAuthStateChanged } from 'firebase/auth';
 
 // MUI
 import { Box, Container, Grid, Typography, useTheme } from '@mui/material';
 
 // Redux
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchUser } from 'store/slices/userSlice';
+// import { fetchUser } from 'store/slices/userSlice';
 import {
   fetchServiceTicketsCreatedBy,
   fetchServiceTicketsAssignedToProvider,
@@ -33,7 +33,7 @@ import { fetchTechnicianById } from 'store/slices/technicianSlice';
 export default function Home() {
   document.title = 'Daedalus';
 
-  const auth = getAuth();
+  // const auth = getAuth();
   const theme = useTheme();
   const dispatch = useDispatch();
 
@@ -60,19 +60,18 @@ export default function Home() {
     (state) => state.technician
   );
 
-  useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, async (user) => {
-      if (user) {
-        await dispatch(fetchUser(user.uid));
-      }
-    });
-    return () => unsubscribe();
-  }, [auth, dispatch]);
+  // useEffect(() => {
+  //   const unsubscribe = onAuthStateChanged(auth, async (user) => {
+  //     if (user) {
+  //       await dispatch(fetchUser(user.uid));
+  //     }
+  //   });
+  //   return () => unsubscribe();
+  // }, [auth, dispatch]);
 
   useEffect(() => {
     if (userData?.userType === UserType.ADMINISTRATOR) {
       dispatch(fetchAdministrator(userData?.uid));
-      dispatch(fetchServiceTicketsAssignedToProvider(administratorData?.uid));
     } else if (userData?.userType === UserType.CONTRACTOR) {
       dispatch(fetchContractorByContactId(userData?.uid));
     } else if (userData?.userType === UserType.CUSTOMER) {

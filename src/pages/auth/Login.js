@@ -8,6 +8,9 @@ import AuthenticationFooter from 'pages/auth/components/AuthenticationFooter';
 // Constants
 import routes from 'constants/routes';
 
+// Firebase
+import { getAuth, onAuthStateChanged } from 'firebase/auth';
+
 // Helpers
 import errorTransformer from 'constants/errorTransformer';
 
@@ -22,11 +25,13 @@ import { Navigate } from 'react-router-dom';
 
 // Redux
 import { useDispatch, useSelector } from 'react-redux';
-import { loginUser, clearUserData } from 'store/slices/userSlice';
+import { loginUser, clearUserData, fetchUser } from 'store/slices/userSlice';
 
 export default function Login() {
   const pageName = 'Login';
   document.title = pageName;
+
+  const auth = getAuth();
 
   const [showPassword, setShowPassword] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
@@ -58,7 +63,16 @@ export default function Login() {
         setIsAlertShowing(false);
       }, 5000);
     }
-  }, [error, data]);
+  }, [error]);
+
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, async (user) => {
+      if (user) {
+        await dispatch(fetchUser(user.uid));
+      }
+    });
+    return () => unsubscribe();
+  }, [auth, dispatch]);
 
   if (data) {
     return <Navigate to={routes.HOME} replace />;
